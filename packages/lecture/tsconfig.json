@@ -4,6 +4,9 @@
   "compilerOptions": {
     "baseUrl": ".",
 
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+
     "noFallthroughCasesInSwitch": true,
     "noErrorTruncation": true,
     "noImplicitAny": true,
@@ -11,6 +14,9 @@
     "noImplicitThis": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
+
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
 
     "strict": true,
     "strictBindCallApply": true,
