@@ -1,0 +1,38 @@
+{
+  "folders": [
+		{
+			// Source code
+			"name": "root",
+			"path": "./"
+		},
+		{
+			// Lecture notes
+			"name": "lecture",
+			"path": "./packages/lecture/"
+		}
+	],
+  "extensions": {
+    "recommendations": ["arcanis.vscode-zipfs"],
+  },
+	"settings": {
+    "search.exclude": {
+    },
+	"files.exclude": {
+		"**/.yarn": true,
+		"yarn.lock": true,
+		"**/.pnp.*": true,
+		  "**/.git": true,
+		"**/.svn": true,
+		"**/.hg": true,
+		"**/CVS": true,
+		"**/.DS_Store": true,
+		"**/Thumbs.db": true,
+		".docusaurus": true,
+		"build": true,
+		".yarn": true,
+		"node_modules": true
+	  },
+    "typescript.tsdk": ".yarn/sdks/typescript/lib",
+    "typescript.enablePromptUseWorkspaceTsdk": true,  
+  }
+}
