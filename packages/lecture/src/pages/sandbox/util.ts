@@ -45,7 +45,7 @@ export function prepareHtmlContent(
 
   if (js.length > 0) {
     const scriptCustom = document.createElement("script");
-    scriptCustom.textContent = js;
+    scriptCustom.textContent = `(function(){\n${js}\n;})()`;
     doc.body.appendChild(scriptCustom);
   }
 
