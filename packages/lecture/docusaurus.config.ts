@@ -17,8 +17,8 @@ const resourceLoaderPlugin: PluginModule = () => {
 };
 
 const config: Config = {
-  title: "My Site",
-  tagline: "Dinosaurs are cool",
+  title: "Webpgroammierung",
+  tagline: "Long live the web",
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
@@ -29,8 +29,8 @@ const config: Config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: "facebook", // Usually your GitHub org/user name.
-  projectName: "docusaurus", // Usually your repo name.
+  organizationName: "blutorange", // Usually your GitHub org/user name.
+  projectName: "badd-web-programming", // Usually your repo name.
 
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
@@ -43,6 +43,7 @@ const config: Config = {
     locales: ["en"],
   },
 
+  
   presets: [
     [
       "classic",
@@ -76,7 +77,7 @@ const config: Config = {
     ],
   ],
 
-  plugins: [resourceLoaderPlugin],
+  plugins: [resourceLoaderPlugin, "docusaurus-plugin-image-zoom"],
 
   themeConfig: {
     // Replace with your project's social card
@@ -86,9 +87,9 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: "My Site",
+      title: "Webprogrammierung",
       logo: {
-        alt: "My Site Logo",
+        alt: "Logo Berufsakademie Dresden",
         src: "img/logo.svg",
       },
       items: [
@@ -137,25 +138,35 @@ const config: Config = {
             },
           ],
         },
-        {
-          title: "More",
-          items: [
-            {
-              label: "Blog",
-              to: "/blog",
-            },
-            {
-              label: "GitHub",
-              href: "https://github.com/blutorange/badd-web-programming",
-            },
-          ],
-        },
+        // {
+        //   title: "More",
+        //   items: [
+        //     {
+        //       label: "Blog",
+        //       to: "/blog",
+        //     },
+        //     {
+        //       label: "GitHub",
+        //       href: "https://github.com/blutorange/badd-web-programming",
+        //     },
+        //   ],
+        // },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Vorlesung Webprogrammierung, Inc. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
+    },
+    zoom: {
+      selector: ".markdown img",
+      background: {
+        light: 'rgb(255, 255, 255)',
+        dark: 'rgb(50, 50, 50)'
+      },
+      config: {
+        // options you can specify via https://github.com/francoischalifour/medium-zoom#usage
+      }
     },
   } satisfies Preset.ThemeConfig,
 };

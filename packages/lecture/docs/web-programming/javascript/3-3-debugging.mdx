@@ -1,0 +1,136 @@
+---
+id: debugging
+slug: /debugging
+sidebar_position: 3
+description: Untersuchung von JavaScript-Code mittels Debugging-Tools.
+---
+
+
+# Abschnitt 3 - Debugging
+
+Ein Programm ist schnell geschrieben. Nicht selten passiert es aber, dass unser
+Programm nicht so funktioniert wie gewünscht. Als gute Programmierer müssen wir
+dann Möglichkeiten kennen, Fehler zu untersuchen und zu beheben.
+
+Eine wichtige Fähigkeit ist dabei das Untersuchen von ausgeführten Code
+mittels Debugging.
+
+Gängig Browser wie Chromium oder Firefox stellen dabei umfangreiche Hilfswerkzeuge
+bereit, genannt Dev-Tools:
+
+- [Firefox DevTools User Docs](https://firefox-source-docs.mozilla.org/devtools-user/)
+- [Chrome DevTools](https://developer.chrome.com/docs/devtools)
+- [Safari Web Development Tools](https://developer.apple.com/safari/tools/)
+
+Die Verwendung wird in der Vorlesung live demonstriert. In diesem Abschnitt
+seien nochmal wesentliche Funktionalitäten kurz zusammengefasst.
+
+:::info
+Im Folgenden werden Screenshots von Chromium-basierten Browser verwendet, da
+diese aktuell am häufigsten verwendet werden. Dies stellt keinster Weise
+eine Empfehlung oder Werbung dar.
+:::
+
+Im `Sources`-Tab können wir unter `Snippets` JavaScript-Code für die genauere
+Untersuchung einfügen. Dies kann nützlich sein, wenn sich ein problematischer
+Code-Teil isolieren ist.
+
+![DevTools: Sources](/img/web/dev-tools-sources.png)
+
+Ebenfalls im `Sources`-Tab können wir per Ctrl+P nach eine JavaScript-Datei
+suchen, die in der aktuell geöffneten Seite verwendet wird.
+
+![DevTools: Sources, Search](/img/web/dev-tools-sources-search.png)
+
+Haben wir nun die Datei gefunden, können wir durch Klick links auf eine
+Code-Zeile einen Breakpoint setzen. Das Programm hält dann an dieser Stelle
+mit der Ausführung an, sodass wir es genauer untersuchen können.
+
+![DevTools: Sources, Breakpoint](/img/web/dev-tools-breakpoint.png)
+
+## Aktionen
+
+Im rechten Panel stehen uns nun verschiedene Möglichkeit zur Verfügung. Ganz
+oben sind die wichtigsten Aktion.
+
+![DevTools: Sources, Actions](/img/web/dev-tools-actions.png)
+
+Der Reihe nach von links nach rechts:
+
+* Ausführung fortsetzen. Sind wir fertig mit der Untersuchng, können wir hier
+  das Programm weiterführen.
+* Springen zur nächsten Codezeile. Führt die aktuelle Zeile aus und hält auf
+  der nächsten Zeile an.
+* Funktion betreten. Falls als nächstes eine Funktion ausgeführt wird, springt
+  in diese Funktion rein und hält am Anfang dieser Funktion an.
+* Funktion verlassen. Spring aus der aktuellen Funktion heraus und hält dort
+  an, wo die Funktion aufgerufen wurde.
+* Nächster Schritt. Ähnlich zu (3), betritt aber keine `async`-Funktionen.
+* Breakpoints deaktivieren. Deaktiviert alle Breakpoints. Kann nützlich sein,
+  wenn man nu kurzfristig das Programm nicht unterbrechen möchte.
+
+
+## Scope
+
+Im Reiter `Scope` auf der rechten Seite können wir uns alle verfügbaren
+Variablen und ihre Werte anschauen. Die Variablen sind dabei nach ihrem jeweiligen Scope
+gegliedert. Beispielsweise erzeugt ein If-Else-Block einen neuen Scope.
+
+Vorausgesetzt, wir verstehen, wie unser Programm funktionieren soll, können
+wir auf diese Weise prüfen, ob an einer bestimmten Stelle im Programm alle
+Variablen ihren erwarteten Wert haben. Ist dies nicht der Fall, muss der
+Fehler irgendwo vorher liegen, wo die Variablen ihren Wert erhalten haben.
+
+Haben alle Variablen den korrekten Wert, muss der Fehler irgendwo später im
+Programm liegen.
+
+An dieser Stelle wird auch noch einmal deutlich, warum es hilfreich ist, `const`
+statt `let` zu verwenden und Variablen nur wenn notwendig zu verändern. Beim
+Debugging ist es so einfacher, Probleme zu finden.
+
+![DevTools: Sources, Scope](/img/web/dev-tools-scope.png)
+
+## Call stack
+
+Programme bestehen aus Funktionen, welche ihrerseits andere Funktionen aufrufen.
+Diese können wieder andere Funktionen aufrufen. Auf diese Weise entsteht
+eine Stapel von Funktionsaufrufen. Ganz oben auf dem Stapel ist die aktuelle
+Funktion. Direkt darunter befindet sich die Funktion, welche die aktuelle Funktion
+aufgerufen hat. Ganz unten im Stapel ist die main-Funktion des Programms.
+
+Diesen Stapel von aufgerufenen Funktionen nennt man auch `Call Stack`, den
+wir rechts unter dem gleichnamigen Reiter einsehen können.
+
+Einerseits können wir so prüfen, ob die aktuelle Funktion wie erwartet aufgerufen
+wurde. Andereseits haben wir auch die Möglichkeit, durch Klick in eine andere
+Funktion reinzuspringen und dort zu prüfen, ob alle Variablen im Scope die
+korrekten Werte besitzen.
+
+![DevTools: Sources, Call Stack](/img/web/dev-tools-call-stack.png)
+
+## Watch
+
+Im obersten Reiter `Watch` haben wir die Möglichkeit, Ausdrück einzugeben,
+welche jedesmal ausgeführt und deren aktuelle Werte angezeigt werden.
+
+Das kann etwas nützlich sein, um einen berechneten Wert beim Schreiten durch
+den Code im Auge zu behalten.
+
+![DevTools: Sources, Watch](/img/web/dev-tools-watch.png)
+
+
+## Console
+
+Während wir uns in einem Breakpoint befinden, können wir auch die Konsole
+verwenden und mit den Variablen im aktuellen Scope arbeiten. Etwa können
+wir Ausdrücke eingeben, um eine bestimmte Eigenschaft aller Elemente eines
+Arrays auszugeben.
+
+## Weitere Möglichkeiten
+
+Die DevTools bieten noch viele weitere Möglicheiten, von denen wir uns hier nicht
+alle näher anschauen können.
+
+Beispielsweise könnten wir lokale Dateien aus dem Dateisystem hinzufügen, die
+in der aktuellen Seite verwendet werden. Dann können wir diese direkt in den
+Dev-Tools zu bearbeiten und dort Breakpoints zu setzen.
