@@ -5,6 +5,7 @@ import Link from "@docusaurus/Link";
 import { useEffect, useState, type MouseEvent, type ReactNode } from "react";
 
 import {
+  type AsyncResultHandler,
   evaluateJavaScript,
   type JsResult,
   loadCode,
@@ -51,10 +52,14 @@ function JsSnippetContent(props: JsSnippetProps): ReactNode {
     }
   }, [code.loading, props.path]);
 
+  const asyncResultHandler: AsyncResultHandler = (asyncResults) => {
+    setResult(asyncResults);
+  };
+
   const execute = (e: MouseEvent) => {
     e.preventDefault();
     if (!code.loading) {
-      setResult(evaluateJavaScript(code.value));
+      setResult(evaluateJavaScript(code.value, asyncResultHandler));
     }
   };
 

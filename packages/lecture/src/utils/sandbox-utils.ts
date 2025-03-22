@@ -19,6 +19,19 @@ a {
 
 export type Pending<T> = { loading: true } | { loading: false; value: T };
 
+export type AsyncResultHandler = (results: JsResult[]) => void;
+
+export interface JsResult {
+  type:
+    | "console-debug"
+    | "console-log"
+    | "console-error"
+    | "console-warn"
+    | "error"
+    | "result";
+  value: string;
+}
+
 export interface Serializer<T> {
   serialize: (v: T) => string;
   deserialize: (v: string) => T;
@@ -59,8 +72,8 @@ export function prepareHtmlContent(
 }
 
 export const PendingSerializer: Serializer<Pending<string>> = {
-  deserialize: value => ({loading: false, value}),
-  serialize: value => value.loading ? "" : value.value,
+  deserialize: (value) => ({ loading: false, value }),
+  serialize: (value) => (value.loading ? "" : value.value),
 };
 
 export const BooleanSerializer: Serializer<boolean> = {
@@ -90,12 +103,10 @@ export function useMappedLocalStorage<T>(
   ];
 }
 
-export interface JsResult {
-  type: "console-debug" | "console-log" | "console-error" | "console-warn" | "error" | "result";
-  value: string;
-}
-
-export function evaluateJavaScript(code: string): JsResult[] {
+export function evaluateJavaScript(
+  code: string,
+  asyncResultHandler?: AsyncResultHandler,
+): JsResult[] {
   const originalDebug = console.debug;
   const originalLog = console.log;
   const originalInfo = console.info;
@@ -106,35 +117,52 @@ export function evaluateJavaScript(code: string): JsResult[] {
     console.debug = console.info = (...args: unknown[]) => {
       results.push({
         type: "console-debug",
-        value: args.map((arg) => String(arg)).join("\t"),
+        value: args.map((arg) => stringify(arg)).join("\t"),
       });
       originalDebug.apply(console, args);
     };
     console.log = console.info = (...args: unknown[]) => {
       results.push({
         type: "console-log",
-        value: args.map((arg) => String(arg)).join("\t"),
+        value: args.map((arg) => stringify(arg)).join("\t"),
       });
       originalLog.apply(console, args);
     };
     console.warn = (...args: unknown[]) => {
       results.push({
         type: "console-warn",
-        value: args.map((arg) => String(arg)).join("\t"),
+        value: args.map((arg) => stringify(arg)).join("\t"),
       });
       originalWarn.apply(console, args);
     };
     console.error = (...args: unknown[]) => {
       results.push({
         type: "console-error",
-        value: args.map((arg) => String(arg)).join("\t"),
+        value: args.map((arg) => stringify(arg)).join("\t"),
       });
       originalError.apply(console, args);
     };
     try {
       // biome-ignore lint/security/noGlobalEval: We use it for our own code snippets
       const evalResult = eval.apply(null, [code]);
-      results.push({ type: "result", value: String(evalResult) });
+      if (evalResult instanceof Promise) {
+        evalResult.then(
+          (value) =>
+            asyncResultHandler?.([...results, { type: "result", value: stringify(value) }]),
+          (error) =>
+            asyncResultHandler?.([
+              ...results,
+              {
+                type: "error",
+                value: errorToString(error),
+              },
+            ]),
+        );
+      } else {
+        if (evalResult !== undefined) {
+          results.push({ type: "result", value: stringify(evalResult) });
+        }
+      }
     } catch (e) {
       originalError.apply(console, [e]);
       results.push({ type: "error", value: errorToString(e) });
@@ -164,4 +192,40 @@ function errorToString(e: unknown): string {
     return e.stack ?? e.message;
   }
   return String(e);
+}
+
+function stringify(value: unknown): string {
+  switch (typeof value) {
+    case "undefined":
+    case "boolean":
+    case "number":
+    case "bigint":
+    case "string":
+      return String(value);
+    case "symbol":
+      return "symbol";
+    case "function":
+      return value.toString();
+    case "object": {
+      if (value === null) {
+        return "null";
+      }
+      const instances = new Set();
+      // Don't fail on cyclic object graphs
+      const replacer = (key: unknown, value: unknown) => {
+        if (typeof value === "function") {
+          return value.toString();
+        }
+        if (typeof value === "object" && value !== null) {
+          if (instances.has(value)) {
+            return "circular";
+          }
+          instances.add(value);
+          return value;
+        }
+        return value;
+      };
+      return JSON.stringify(value, replacer);
+    }
+  }
 }

@@ -25,6 +25,7 @@ import {
   type Pending,
   loadCode,
   nonPending,
+  type AsyncResultHandler,
 } from "@site/src/utils/sandbox-utils";
 
 // @ts-expect-error
@@ -46,6 +47,10 @@ function useJs(): [Pending<string>, Dispatch<string>] {
       } else {
         setLocal(nonPending(code));
       }
+    } else {
+      if (!snippet) {
+        setLocal(nonPending(code));
+      }
     }
   }, [code, snippet, local.loading]);
 
@@ -64,8 +69,11 @@ function Sandbox(): ReactNode {
     false,
     BooleanSerializer,
   );
+  const asyncResultHandler: AsyncResultHandler = (asyncResults) => {
+    setResult(asyncResults);
+  };
   const [result, setResult] = useState(() =>
-    js.loading ? [] : evaluateJavaScript(js.value),
+    js.loading ? [] : evaluateJavaScript(js.value, asyncResultHandler),
   );
 
   const onReset = () => {
@@ -79,7 +87,7 @@ function Sandbox(): ReactNode {
   const evalResult = applyImmediately
     ? js.loading
       ? []
-      : evaluateJavaScript(js.value)
+      : evaluateJavaScript(js.value, asyncResultHandler)
     : result;
 
   const title = snippet ? `HTML Sandbox - ${snippet}` : "HTML Sandbox";
@@ -112,7 +120,8 @@ function Sandbox(): ReactNode {
             className="sandbox-js__button"
             label="Anwenden"
             onClick={() =>
-              !js.loading && setResult(evaluateJavaScript(js.value))
+              !js.loading &&
+              setResult(evaluateJavaScript(js.value, asyncResultHandler))
             }
           />
         )}
@@ -138,7 +147,7 @@ function Sandbox(): ReactNode {
                 key={index}
                 className={`sandbox-js__result sandbox-js__result--${r.type}`}
               >
-                {r.value}
+                  {r.value}
               </li>
             ))}
           </ul>

@@ -30,6 +30,13 @@
 
 .execute {
   right: 160px;
+  user-select: none;
+  &:hover {
+    text-decoration: underline;
+  }
+  &:active {
+    color: rgb(157, 102, 0);
+  }
 }
 
 
@@ -74,7 +81,7 @@
   color: rgb(190, 40, 20);
 }
 
-.resultLine--error {
+.resultLine-error {
   color: rgb(190, 40, 20);
 }
 

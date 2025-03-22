@@ -1,0 +1,463 @@
+---
+id: es2015
+slug: /es2015
+sidebar_position: 2
+description: Weitere Features der Programmiersprache, eingeführt ab ES2015.
+---
+
+import JsSnippet from "@site/src/components/JsSnippet";
+
+# Abschnitt 2 - ES2015
+
+Bisher haben wir die grundlegenden Funktionalitäten von JavaScript besprochen.
+Mitte 2015 wurde die [6. Version von EcmaScript](https://262.ecma-international.org/6.0/)
+veröffentlicht, welche daher auch als ES2015 oder ES6 bezeichnet wird.
+
+Die Revision hat der Programmiersprache wesentliche neue Möglichkeiten hinzugefügt,
+die den Programmieralltag erleichtern (wenn man sie denn erstmal gelernt hat!)
+
+Im Folgenden wollen wir uns die wesentlichen Neuerungen anschauen. Anmerkung:
+Einige Teile der Neuerungen wurden erst in den nachfolgenden Jahren veröffentlicht,
+wir werden diese ab in diesem Abschnitt mit behandeln.
+
+## Asynchrone Operationen
+
+Eins der wichtigsten Konzepte für die moderne Webentwicklung sind sogenannte
+Promises (Versprechen).
+
+Um zu verstehen, warum diese eingeführt wurden, müssen wir einen Schritt zurücktreten
+und uns anschauen, wie asynchrone Operationen bisher in JavaScript behandelt wurden.
+
+### Callbacks
+
+Nehmen wir an, wir haben ein Formular mit einem Eingabefeld für eine Postleitzahl.
+Nun wollen wir, dass bei der Eingabe nach möglichen zugehörigen Orten gesucht wird.
+Da wir selber keine Liste von Postleitzahlen und Orten pflegen möchten, müssen
+wir bei einem externen Dienst anfragen. An dieser Stellen gehen wir davon aus,
+dass wir eine Funktion `findCityForZipCode` haben. Als ersten Argument nimmt
+diese Funktion die Postleitzahl.
+
+Wir erhalten wir nun Zugriff auf den gefundenen Ort? Die erste Idee hierzu
+wäre vielleicht folgende:
+
+```js
+const city = findCityForZipCode("01309");
+```
+
+Was ist aber das Problem dabei? Im Allgeminen wird der Dienst eine Weile benötigen,
+bis der Ort gefunden ist. Damit die Funktion den Ort direkt als Rückgabewert
+zurückliefern kann, muss das Programm warten, bis die Suche abgeschlossen ist.
+
+Das bedeutet aber, dass in der Zwischenzeit nichts anderes getan werden kann.
+Im Bezug auf Webseiten würde das dazu führen, dass die Webseite in dieser Zeit
+eingefroren wirkt nicht mehr benutzt werden kann.
+
+Besser wäre es daher, der Funktion nur zu sagen, was getan werden soll, sobald
+der Ort gefunden wurde. Das können wir mit einer sogenanten Callback-Funktion
+erreichen:
+
+```js
+findCityForZipCode("01309", (city, error) => {
+  if (error) return;
+  console.log(city);
+});
+```
+
+Nun kann das Programm in der Zwischenzeit weiter ausgeführt werden. Die Callback-Funktion
+wird nur gemerkt und später ausgeführt. Dies nennt man eine _asynchrone_ Operation,
+da zwischen dem Start der Suche und dem Ende eine bestimmte Zeitspanne liegt,
+in der anderer Code ausgeführt werden kann.
+
+Was passiert, wenn wir nun weitere asynchrone Operationen ausführen wollen, die
+vom aktuellen Ergebnis abhängen? Beispielsweise, wenn wir nach eine Liste von
+Restaurant in dem Ort suchen wollen?
+
+```js
+findCityForZipCode("01309", (city, error) => {
+  if (error) return;
+  findMostFamousRestaurantForCity(city, (restaurant, error) => {
+    if (error) return;
+    findOpenHoursForRestaurant(restaurant, (hours, error) => {
+      if (error) return;
+      findUserFreeTimeForHours(hours, (freeTime, error) => {
+        if (error) return;
+        console.log(`Restaurant visit: ${freeTime}`);
+      });
+    });
+  });
+});
+```
+
+Wir erkennen unschwer, dass der Code immer geschachtelter und schwerer zu lesen
+wird. Auch macht es uns die Aufgabe nicht einfacher, den Code in kleinere
+Bestandteile aufzutrennen. Für dieses Problem hört man manchmal auch den
+Begriff [callback hell](https://en.wiktionary.org/wiki/callback_hell).
+
+### Promise
+
+Der erste Schritt, damit wir wieder Herr über die Lage werden, besteht in der
+Einführung des [Promise-Objektes](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Async_JS/Promises).
+
+:::info
+Das Konzept `Promise` gibt es auch in anderen Programmiersprachen. In C# etwa
+heißt es [Task](https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-programming/),
+in Java [CompletionStage](https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/util/concurrent/class-use/CompletionStage.html).
+:::
+
+Ein Promise ("Versprechen") kappselt einen Wert, der ist in Zukunft zur Verfügung
+stehen wird. Konkret kann ein Promise in 3 verschiedenen Zuständen sein:
+
+- `pending` - Der Wert wird noch ermittelt.
+- `settled` - Die Ermittlung des Werts wurde abgeschlossen.
+  - `resolved` - Der Wert wurde erfolgreich ermittelt.
+  - `rejects` - Es gab einen Fehler bei der Ermittlung des Werts.
+
+Bei unserem Beispiel mit der Ermittlung des Orts sieht das dann so aus:
+
+```js
+const promise = findCityForZipCode("01309");
+```
+
+Wichtig hierbei ist, dass die Funktion `findCityForZipCode` sofort ein Promise
+zurückliefert und weiterer Code ausgeführt werden kann, während die Ermittlung im
+Gange ist.
+
+Die Frage ist nun, wie greifen wir auf den Wert zu, sobald dieser zur Verfügung
+steht? Das `Promise` stellt hierzu eine Methode bereit:
+
+```js
+promise.then(city => console.log(city));
+```
+
+Im ersten Moment mag es den Anschein haben, dass wir nun wieder bei Callbacks
+sind und in das gleiche Problem geraten. Dies ist nicht der Fall -- der Vorteil
+von Promises ist, dass nach und nach immer wieder die `then`-Methode gerufen
+werden kann, ohne schachteln zu müssen:
+
+```js
+promise
+  .then(city => findMostFamousRestaurantForCity(city))
+  .then(restaurant => findOpenHoursForRestaurant(restaurant))
+  .then(hours => findUserFreeTimeForHours(hours))
+  .then(freeTime => console.log(`Restaurant visit: ${freeTime}`));
+```
+
+Um Fehler zu behandeln, können wir die Methode `catch` verwenden:
+
+```js
+promise 
+  .then(city => findMostFamousRestaurantForCity(city))
+  .then(restaurant => findOpenHoursForRestaurant(restaurant))
+  .then(hours => findUserFreeTimeForHours(hours))
+  .then(freeTime => console.log(`Restaurant visit: ${freeTime}`))
+  .catch(error => console.error("Could not find free time", error));
+```
+
+Beachte: Die `catch`-Methode ist nur einmal am Ende notwendig! Wenn eine der
+Suchoperationen fehlschlägt, werden nachfolgende Suchoperationen abgebrochen
+und direkt zum `catch` gesprungen.
+
+Hier ist ein interaktives Code-Beispiel dazu, wobei jede Suchoperation mit
+einer Wahrscheinlichkeit von 10% fehlschlägt. Mehrfach ausführen, um
+verschiedene Ergebnisse zu sehen!
+
+<JsSnippet path="promise-chain.js" toggleable nonDeterministic />
+
+Oft werden wir selber keine Promises erstellen, sondern mit Funktionen arbeiten,
+die Promises zurückliefern. Falls wir einmal aber doch selber Promises, erstellen
+müssen, gibt es dazu 2 Möglichkeiten.
+
+Ist bereits der Wert bekannt, können wir ein neues Promise im Status `resolved`
+erststellen mittels [Promise.resolve](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve)
+und [Promise.reject](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/reject):
+
+
+```js
+Promise.resolve("Success");
+Promise.reject("Error");
+```
+
+Dies hatten wir auch im oberen Beispiel zur Simulation der Suchfunktionen verwenden.
+
+Mittels `new Promise()` können wir ein komplett eigenes Promise erstellen. Ein
+typsiches Demo-Beispiel ist ein Timeout-Promise, welches einige Sekunden warten:
+
+<JsSnippet path="promise-timeout.js" toggleable />
+
+### Async / await
+
+Promises erleichtern und zwar die asynchrone Programmierung, sind aufgrund der
+vielen Funktionen aber immer noch nicht das Traumziel. Wäre es nicht schön,
+wenn wir wieder Code so schreiben könnten, wie wir es ganz am Anfang geplant hatten?
+
+```js
+const city = findCityForZipCode("01309");
+```
+
+Dies ist möglich, mit einer kleinen Anpassung! Um die Arbeit mit Promises
+zu vereinfachen, gibt es die Schlüsselwörter `async` und `await`. Zuerst
+markieren wir eine Funktion mit `async`. Das sorgt dafür, dass die Funktion
+immer ein Promise zurückliefert.
+
+<JsSnippet path="async-fn-basic.js" />
+
+Da die Funktion nun immer asynchron ist, können wir innerhalb der Funktion mittels
+`await` warten, bis ein Promise zu Ende ist. Die Ausführung der Funktion wird
+in der Zwischenzeit pausiert, sodass anderer Code ausgeführt werden kann.
+
+<JsSnippet path="promise-chain.js" toggleable nonDeterministic />
+
+:::info
+In vielen Umgebungen ist es inzwischen auch möglich, `await` im sogenannten
+`Top Level` zu verwenden, also außerhalb von Funktionen. 
+:::
+
+## Klassen
+
+:::warning
+Einige Funktionalitäten wie private Felder sind recht neu und stehen nur in
+neueren Browsern zur Verfügung. Vor der Verwendung sollten die Zielbrowser
+geprüft werden.
+:::
+
+JavaScript unterstützt auch Klassen und Aspekte der objektorientierten Programmierung.
+Objektorientierten Programmierung liegt außerhalb des Umfangs dieser Veranstaltung,
+daher sei an dieser Stelle nur kurz darauf hingewiesen. Die Syntax für Klassen
+ist der von Java ähnlich.
+
+<JsSnippet path="classes-basic.js" toggleable />
+
+## Arbeiten mit null und undefined
+
+In Sprachen, wo es einen speziellen Wert gibt, wenn kein anderer Wert verfügbar
+ist, muss auf diesen Fall geprüft werden, sonst gibt es einen Fehler. In
+JavaScript resultiert folgender Code etwa in einem
+[TypeError](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError):
+
+<JsSnippet path="null-error.js" toggleable />
+
+Wenn wir uns nicht sicher sein können, dass ein Wert nie `undefined` oder `null`
+sein kann, müssen wir darauf prüfen:
+
+```js
+function startsWith(value, prefix) {
+  value = value !== undefined && value != null ? value : "";
+  prefix = prefix !== undefined && prefix != null ? prefix : "";
+  return value.substring(0, prefix.length) === prefix;
+}
+```
+
+Dies ist aber sehr umständlich. In JavaScript gibt es 2 verschiedene Operatoren,
+um die Arbeit mit `undefined` und `null` zu vereinfachen. Gemein ist ihnen, dass
+sie alle ein Fragezeichen (`?`) enthalten. Das Fragezeichen steht für optional, also
+dafür, dass nur möglicherweise ein Wert vorhanden ist.
+
+__[Nullish coalescing operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing)__
+
+:::info
+nullish bedeutet `null` oder `undefined`. Koaleszieren bedeutet Zusammenführen.
+:::
+
+Mittels `a ?? b` wird der Default-Wert `b` verwendet, wenn `a` keinen Wert hat.
+
+<JsSnippet path="nullish-coalescing.js" toggleable />
+
+__[Optional chaining operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining)__
+
+Mittels `a?.b` wird auf die Eigenschaft `b` eines Objekts zugegriffen, aber nur,
+wenn `a` einen Wert hat.
+
+<JsSnippet path="optional-chaining.js" toggleable />
+
+Der Operator kann auch für Funktinsaufrufe verwendet werden. `a?.()` ruft die
+Funktion `a` auf, aber nur, wenn `a` einen Wert hat.
+
+<JsSnippet path="optional-chaining-fn.js" toggleable />
+
+## Spread und Destrukturierung
+
+In JavaScript verwenden wir häufig Objekte und Array und müssen hierbei auf
+deren Eigenschaft zugreifen. Um später einfach darauf zuzugreifen, können wir
+die Eigenschaften lokalen Variablen zuweisen.
+
+Wenn ein Objekt mehrer Eigenschaften hat, gibt es eine Schreibweise, um einfacher
+mehrere Variablen den Eigenschaften des Objekts zuzuweisen ("Destrukturierung"):
+
+<JsSnippet path="destruct-object.js" />
+
+Das gleiche ist auch für Arrays möglich:
+
+<JsSnippet path="destruct-array.js" toggleable />
+
+Besonders nützlich kann das bei Funktionsparametern sein:
+
+```jsx
+function Details({summary, description}) {
+  return <details>
+    <summary>{summary}</summary>
+    <div>{description}</div>
+  </details>;
+}
+
+Details({summary: "Hello world", description: "Are you having a good day?"});
+```
+
+Umgedreht wollen wir manchmal Objekte nicht auseinandernehmen, sondern
+zusammenbauen. Um ein neues Objekt zu erstellen, welches alle Eigenschaften
+eines anderen Objekts hat, steht uns der Spread-Operator zur Verfügung:
+
+<JsSnippet path="spread-object.js" />
+
+Analog ist das auch mit Arrays möglich:
+
+<JsSnippet path="spread-array.js" toggleable />
+
+## Set und Map
+
+Listen oder Mengen von Elementen sind ein grundlegendes Toolset bei der Programmierung.
+In der Praxis ist es selten, dass ein konkreter Einzelfall behandelt werden muss.
+Meist muss ein Programm mit einer Menge von Eingabewerten zurechtkommen
+
+* Webshop mit Warenkorb mit n Artikeln
+* MMORPG-Videospiel mit n Spieler und m Gegnern
+* Formularanwendung mit n Eingabefeldern
+
+Wir kennen bereits Arrays, um Elemente in einer bestimmten Reihenfolge zu speichern.
+Mit Set und Map stehen noch zwei weitere mächtige Datenstrukturen bereit, um
+mit Elementen zu arbeiten.
+
+__Set__
+
+Ein [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set)
+verhält sich wie eine mathematische Menge. Die Reihenfolge ist egal und es sind
+keine Duplikate erlaubt. Wir können damit etwa prüfen, ob es Duplikate gibt.
+
+<JsSnippet path="set.js" toggleable />
+
+__Map__
+
+Eine [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
+verhält sich wie eine mathematische Abbildung von Elementen einer Menge A zu Elementen
+einer Menge B. Die Reihenfolge ist egal, Elemente sind anderen Elementen zugewiesen.
+Wir können damit etwa schnell einen Kunden nachschauen, wenn wir dessen ID kennen.
+
+<JsSnippet path="map.js" toggleable />
+
+## Iterable und Generator-Funktionen
+
+:::info
+In Java steht eine ähnliche Funktionalität unter dem Namen
+[Stream](https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/util/stream/Stream.html)
+zur Verfügung. In C# lässt sich dies mit
+[LINQ-Expressions](https://learn.microsoft.com/en-us/dotnet/csharp/linq/) erreichen.
+:::
+
+Das [Iteration-Protokoll](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols)
+erlaubt den schrittweisen Zugriff auf Elemente von etwa Arrays, Sets und Maps.
+
+Objekte, die aus Elementen bestehen, haben eine spezielle Property [Symbol.iterator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/iterator).
+Damit können wir ein Objekt erhalten, was den Zugriff auf die Elemente erlaubt:
+
+<JsSnippet path="iterator.js" toggleable />
+
+Noch mag die Sinnhaftigkeit uns noch nicht klar werden. Bevor wir uns dem widmen,
+schauen wir uns noch an, wie wir selber Objekte erstellen können, über die
+iteriert werden kann. Dies ist möglich mit sogenannten
+[Generator-Funktionen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*),
+welche einene Stern `*` am Anfang haben:
+
+<JsSnippet path="generator-fn-basic.js" toggleable />
+
+Der Vorteil von Generatoren besteht darin, dass die Elemente erst erzeugt und
+verarbeitet werden, wenn dies unbedingt notwendig ist. Als extremes Beispiel
+können wir sogar Iteratoren aus (abzählbar) _unendlich_ vielen Elementen
+erzeugen und darauf Operationen anwenden, solange wir uns irgendwann einschränken:
+
+<JsSnippet path="generator-fn-infinite.js" toggleable />
+
+Im Vergleich zu den [map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map)-
+und [filter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)-Methoden
+von Arrays besteht zudem der Vorteil, dass nicht ständig intermediäre Arrays
+erzeugt werden. Dies kann zur Speicherproblemen führen, wenn die Anzahl der
+Element groß ist.
+
+Ein Manko ist aktuell noch, dass die Schreibweise zur Verkettung von Operationen
+auf Iterable schwer zu lesen ist. Falls das TC39-Proposal
+[Pipeline-Operator](https://github.com/tc39/proposal-pipeline-operator) in
+JavaScript aufgenommen wird, könnte man das etwa wie folgt schreiben:
+
+```js
+integers
+  |> map(%, x => x * x)
+  |> filter(%, x => x % 3 === 0)
+  |> limit(%, 20)
+```
+
+## ESM
+
+Selten ist es so, dass wir Programme schreiben, die auf wenige Hunderte Zeilen
+Code und in eine Datei passen. Der Übersichtlichkeit halber ist es sinnvoll,
+Code entsprechend seiner Funktionalität in mehrere Dateien aufzutrennen.
+
+Es stellt sich dann allerdings die Frage, wie eine Datei Code aus einer anderen
+Datei verwenden kann.
+
+Hierzu stellt die Programmiersprache ESM (EcmaScript-Module) bereit.
+
+Jede Datei ist ein _Modul_ mit einem eigenen Scope. Das bedeutet, alle Variablen
+und Funktionen sind erstmal nur in dieser Datei und nirgends anders verfügbar.
+
+Falls das Modul nun bestimmte Funktionalitäten anderen Modulen bereitstellen
+möchte, muss es dies explizit durch ein `export`-Statement tun. Das folgende
+ist ein Auszug aus der Bibliothek [esprima](https://github.com/jquery/esprima),
+eine in JavaScript geschriebene Bibliothek zum Parsen von JavaScript-Code.
+
+```js
+// scanner.js
+function hexValue() { /* ... */ }
+
+function octalValue() { /* ... */ }
+
+export class Scanner {
+  // ...
+}
+```
+
+`hexValue` und `octalValue` sind Hilfsfunktionen, welche nur innerhalb des
+Moduls [scanner.js](https://github.com/jquery/esprima/blob/512cd66c6ffd6083144b0150f09670e426252776/src/scanner.ts)
+bereitstehen.
+
+Die Klasse `Scanner` wird exportiert und kann dann in anderen Modulen mittels
+einem `import`-Statement importiert werden.
+
+```js
+// parser.js
+import { Scanner } from "./scanner.js";
+
+export class Parser {
+  constructor() {
+    this.scanner = new Scanner(code, this.errorHandler);
+  }
+}
+```
+
+Wie wir sehen, exportiert das Modul [parser.js](https://github.com/jquery/esprima/blob/512cd66c6ffd6083144b0150f09670e426252776/src/parser.ts)
+ebenfalls wieder eine Klasse `Parser`, die wiederum in einem anderen Modul
+verwendet werden kann. Auf diese Weise können wir komplexe Programme in
+logische Bestandteile zerlegen.
+
+In Browsern werden solche ESM-Module bereit unterstützt. Hierzu muss der
+Typ eines eingebundenen Scripts auf `module` gesetzt werden:
+
+```html
+<script type="module" src="https://app.unpkg.com/lodash-es@4.17.21/files/throttle.js"></script>
+```
+
+Vorteile sind etwa
+
+- Einzelne Dateien sind individuell cachebar
+- Es müssen nur die Dateien geladen werden, die wirlich benötigt werden
+
+Ein wesentlicher Nachteil ist, dass für jede Datei eine separate Anfrage an
+den Server gestellt werden musss. Die Verwendung von HTTP/2 bzw HTTP/3 kann
+diesen Nachteil aber abmildern.
