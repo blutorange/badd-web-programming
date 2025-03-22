@@ -1,0 +1,39 @@
+---
+id: basics
+slug: /basics
+sidebar_position: 1
+description: Grundlegende Programmierprinzipien von JavaScript.
+---
+
+import JsSnippet from "@site/src/components/JsSnippet";
+
+# Abschnitt 1 - Grundlagen
+
+JavaScript ist eine Multi-Paradigma-Programmiersprache. Das heißt grob, wir
+können damit auf verschiedene Weisen programmieren. In der Programmierung gibt
+es verschiedene Ansätze zum Aufbau eines Programms, mit JavaScript können diese
+alle verwendet und auch kombiniert werden. 3 wichtige Prinzipien mit einem kurzen
+Teaser:
+
+**Imperative Programmierung**
+
+Z.B. die Programmiersprache [C](https://www.c-language.org/). Es wird imperativ
+durch Anweisung der Reihe nach beschrieben, welche Befehle der Computer ausführen soll.
+
+<JsSnippet path="factorial-imperative.js" toggleable />
+
+**Objektorientierte Programmierung**
+
+Z.B. [Java](https://dev.java/). Es gibt konzeptionell nur noch Objekte, welche
+untereinander durch den Austausch von Nachrichten kommunizieren und interagieren.
+
+<JsSnippet path="factorial-object.js" toggleable />
+
+**Funktionale Programmierung**
+
+Z.B. [Haskell](https://www.haskell.org/). Mathematische Betrachtung. Daten
+können nicht verändert, sondern nur transformiert werden. Diese Transformation
+geschieht mittels reinen Funktionen (Abbildungen), die keinerlei Nebeneffekte
+aufweisen.
+
+<JsSnippet path="factorial-functional.js" toggleable />

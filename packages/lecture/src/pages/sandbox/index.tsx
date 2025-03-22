@@ -15,105 +15,30 @@ import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
 import { TabView, TabPanel } from "primereact/tabview";
 
-import InitialHtml from "./initial.html";
-const InitialCss = `html {
-  font-family: sans-serif;
-  font-size: 16px;
-}
-
-body {
-  margin: 1em;
-}
-
-h1 {
-  font-size: 1.5em;
-}
-
-aside {
-  float: right;
-  max-width: 30%;
-  background: #f3f3f3;
-  padding: 1em;
-}
-
-footer {
-  margin-top: 2em;
-  border-top: 1px solid #ccc;
-}
-`;
-
-const InitialJs = `
-let lastX = 0, lastY = 0;
-document.addEventListener("mousemove", (e) => {
-    const distanceMoved = Math.sqrt((e.clientX - lastX) ** 2 + (e.clientY - lastY) ** 2);
-    const randomColor = Math.floor(Math.random() * 2 ** 24).toString(16).padStart(6, "0");
-    const points = [];
-    for (let i = 0; i < distanceMoved + 1; i+=3) {
-        const ratio = i / distanceMoved;
-        const x = lastX + ratio * (e.clientX - lastX);
-        const y = lastY + ratio * (e.clientY - lastY);
-        const point = document.createElement("div");
-        point.style.width = "3px"
-        point.style.height = "3px"
-        point.style.position = "fixed"
-        point.style.left = \`\${x}px\`
-        point.style.top = \`\${y}px\`
-        point.style.background = \`#\${randomColor}\`;
-        point.style.pointerEvents = "none";
-        document.body.append(point);
-        points.push(point);
-    }
-
-    lastX = e.clientX;
-    lastY = e.clientY;
-
-    let opacity = 1;
-    const fade = () => {
-        opacity -= 0.03;
-        for (const point of points) {
-            point.style.opacity = String(opacity);
-        }
-        if (opacity > 0) {
-            requestAnimationFrame(fade);
-        } else {
-            points.forEach(point => point.remove());
-        }
-    };
-    requestAnimationFrame(fade);
-}, { passive: true });
-`;
-
 import {
   BooleanSerializer,
   IntegerSerializer,
   prepareHtmlContent,
   useMappedLocalStorage,
-} from "./util";
+} from "@site/src/utils/sandbox-utils";
 
-function applyHtml(
-  ref: RefObject<HTMLIFrameElement | null>,
-  html: string,
-  css: string,
-  js: string,
-  colorMode: ColorMode,
-) {
-  const preparedHtmlContent = prepareHtmlContent(html, css, js, colorMode);
-  const iframe = ref.current;
-  const iframeDoc = iframe?.contentDocument;
-  if (iframe && iframeDoc) {
-    try {
-      iframeDoc.open();
-      iframeDoc.write(preparedHtmlContent);
-      iframeDoc.close();
-    } catch (e) {
-      console.log("Could not write content to iframe", e);
-    }
-  }
+import InitialHtml from "!!raw-loader!./initial.html";
+import InitialCss from "!!raw-loader!./initial.css";
+// @ts-expect-error
+import InitialJs from "!!raw-loader!./initial.js";
+
+export default function SandboxPage(): ReactNode {
+  return (
+    <Layout>
+      <PrimeReactProvider value={{ locale: "en" }}>
+        <Sandbox />
+      </PrimeReactProvider>
+    </Layout>
+  );
 }
 
 function Sandbox(): ReactNode {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  // const outputRef = useRef<HTMLPreElement>(null);
 
   const { colorMode } = useColorMode();
 
@@ -219,12 +144,23 @@ function Sandbox(): ReactNode {
   );
 }
 
-export default function SandboxPage(): ReactNode {
-  return (
-    <Layout>
-      <PrimeReactProvider value={{ locale: "en" }}>
-        <Sandbox />
-      </PrimeReactProvider>
-    </Layout>
-  );
+function applyHtml(
+  ref: RefObject<HTMLIFrameElement | null>,
+  html: string,
+  css: string,
+  js: string,
+  colorMode: ColorMode,
+) {
+  const preparedHtmlContent = prepareHtmlContent(html, css, js, colorMode);
+  const iframe = ref.current;
+  const iframeDoc = iframe?.contentDocument;
+  if (iframe && iframeDoc) {
+    try {
+      iframeDoc.open();
+      iframeDoc.write(preparedHtmlContent);
+      iframeDoc.close();
+    } catch (e) {
+      console.log("Could not write content to iframe", e);
+    }
+  }
 }

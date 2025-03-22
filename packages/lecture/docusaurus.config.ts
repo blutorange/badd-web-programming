@@ -10,7 +10,6 @@ const resourceLoaderPlugin: PluginModule = () => {
     configureWebpack: () => {
       return {
         module: {
-          rules: [{ test: /\.html$/i, type: "asset/source" }],
         },
       };
     },
@@ -100,7 +99,8 @@ const config: Config = {
           label: "Tutorial",
         },
         { to: "/blog", label: "Blog", position: "left" },
-        { to: "/sandbox", label: "Sandbox", position: "left" },
+        { to: "/sandbox", label: "Sandbox (HTML)", position: "left" },
+        { to: "/sandbox-js", label: "Sandbox (JS)", position: "left" },
         {
           href: "https://github.com/blutorange/badd-web-programming",
           label: "GitHub",

@@ -24,6 +24,7 @@
     "primeflex": "^4.0.0",
     "primereact": "^10.9.2",
     "prism-react-renderer": "^2.3.0",
+    "raw-loader": "^4.0.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-use-localstorage": "^3.5.3",
@@ -34,7 +35,7 @@
     "@docusaurus/module-type-aliases": "3.7.0",
     "@docusaurus/tsconfig": "3.7.0",
     "@docusaurus/types": "3.7.0",
-    "@types/react": "^19.0.10",
+    "@types/react": "^18.3.12",
     "typescript": "~5.7.0"
   },
   "browserslist": {

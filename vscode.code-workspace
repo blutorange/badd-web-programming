@@ -17,6 +17,7 @@
 	"settings": {
     "search.exclude": {
     },
+	"editor.tabSize": 2,
 	"[json]": {
 		"editor.defaultFormatter": "biomejs.biome"
 	},
