@@ -14,6 +14,7 @@ import {
 export interface JsSnippetProps {
   title?: string;
   path: string;
+  nonDeterministic?: boolean;
   toggleable?: boolean;
 }
 
@@ -67,9 +68,12 @@ function JsSnippetContent(props: JsSnippetProps): ReactNode {
       >
         In Sandbox öffnen
       </Link>
-      {result === undefined && !code.loading && (
-        <Link onClick={execute} className={`${styles.headerButton} ${styles.execute}`}>
-          Ausführen
+      {(result === undefined || props.nonDeterministic) && !code.loading && (
+        <Link
+          onClick={execute}
+          className={`${styles.headerButton} ${styles.execute}`}
+        >
+          {result === undefined ? "Ausführen" : "Erneut ausführen"}
         </Link>
       )}
       {result && (
