@@ -2,7 +2,13 @@ import "./layout.css";
 
 import Layout from "@theme/Layout";
 
-import { type Dispatch, type ReactNode, useEffect, useState } from "react";
+import {
+  type Dispatch,
+  type ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { Editor as MonacoEditor } from "@monaco-editor/react";
 
@@ -24,6 +30,7 @@ import {
 // @ts-expect-error
 import InitialJs from "!!raw-loader!./initial.js";
 import useLocalStorage from "react-use-localstorage";
+import { useMonacoResize } from "@site/src/utils/monaco";
 
 function useJs(): [Pending<string>, Dispatch<string>] {
   const url = new URL(window.location.href);
@@ -49,6 +56,8 @@ function Sandbox(): ReactNode {
   const url = new URL(window.location.href);
   const snippet = url.searchParams.get("snippet");
 
+  const monacoContainerRef = useRef<HTMLDivElement | null>(null);
+  const [onJsMount] = useMonacoResize(monacoContainerRef);
   const [js, setJs] = useJs();
   const [applyImmediately, setApplyImmediately] = useMappedLocalStorage(
     "sandbox_js_immediate",
@@ -109,14 +118,14 @@ function Sandbox(): ReactNode {
         )}
       </div>
       <div className="sandbox-js__code">
-        <div className="sandbox-js__code-left">
+        <div className="sandbox-js__code-left" ref={monacoContainerRef}>
           {js.loading ? (
             "loading..."
           ) : (
             <MonacoEditor
               value={js.value}
               language="javascript"
-              options={{ automaticLayout: true }}
+              onMount={onJsMount}
               onChange={(value) => onJsChange(value ?? "")}
             />
           )}

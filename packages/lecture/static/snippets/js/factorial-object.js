@@ -1,3 +1,4 @@
+// Dependency injection for service components
 class ComponentRegistry {
   static #instance = new ComponentRegistry();
   #bound;
@@ -26,7 +27,8 @@ class ComponentRegistry {
   }
 }
 
-class NativeLogger {
+// Simple logger service that uses the native console mechanism
+class NativeLoggerService {
   #name;
 
   constructor(name) {
@@ -54,12 +56,13 @@ class NativeLogger {
   }
 }
 
-class NativeCalculator {
+// Simple calculator service that uses builtin functions on 64 bit floats
+class FloatCalculatorService {
   factorial(x) {
     if (Number.isNaN(x)) return x;
     if (x === 0) return 1;
     if (x > 170) {
-      ComponentRegistry.instance.logger.debug(`Number exceed limit for factorial ${x}`);
+      ComponentRegistry.instance.logger.debug(`Number exceeds limit for factorial ${x}`);
       return Number.POSITIVE_INFINITY;
     }
     if (x < 0) throw new Error("Cannot compute factorial for negative numbers!");
@@ -75,12 +78,13 @@ class NativeCalculator {
   }
 }
 
+// Wire up our application with the services of our choice
 ComponentRegistry.instance.bind({
-  calculator: new NativeCalculator(),
-  logger: new NativeLogger("[factorial-object.js]"),
+  calculator: new FloatCalculatorService(),
+  logger: new NativeLoggerService("[factorial-object.js]"),
 });
 
-// Logs a debug message
+// Should log a debug message
 ComponentRegistry.instance.calculator.factorial(300);
 
 // Should print 5! * 5! = 14400

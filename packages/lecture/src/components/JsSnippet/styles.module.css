@@ -48,8 +48,9 @@
 .result {
   white-space: pre;
   font-family: monospace;
-  padding: 16px;
+  padding: 16px 16px 4px 16px;
   background-color: #f6f7f8;
+  border-bottom: 1px solid #c9cdd1;
 }
 
 .resultLine {

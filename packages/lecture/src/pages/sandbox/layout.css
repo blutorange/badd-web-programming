@@ -49,6 +49,8 @@
 .sandbox__code-left .p-tabview-panels {
     flex-grow: 1;
     flex-shrink: 1;
+    flex-basis: 0;
+    min-height: 0;
 }
 
 .sandbox__code-left .p-tabview-panel {

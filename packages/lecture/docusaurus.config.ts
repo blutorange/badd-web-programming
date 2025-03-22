@@ -52,7 +52,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            "https://github.com/blutorange/badd-web-programming/tree/main/packages/lecture/docs/",
+            "https://github.com/blutorange/badd-web-programming/tree/main/packages/lecture/",
         },
         blog: {
           showReadingTime: true,

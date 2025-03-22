@@ -26,6 +26,7 @@ import InitialHtml from "!!raw-loader!./initial.html";
 import InitialCss from "!!raw-loader!./initial.css";
 // @ts-expect-error
 import InitialJs from "!!raw-loader!./initial.js";
+import { useMonacoResize } from "@site/src/utils/monaco";
 
 export default function SandboxPage(): ReactNode {
   return (
@@ -41,6 +42,11 @@ function Sandbox(): ReactNode {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const { colorMode } = useColorMode();
+
+  const monacoContainerRef = useRef<HTMLDivElement | null>(null);
+  const [onJsMount] = useMonacoResize(monacoContainerRef);
+  const [onCssMount] = useMonacoResize(monacoContainerRef);
+  const [onHtmlMount] = useMonacoResize(monacoContainerRef);
 
   const [html, setHtml] = useLocalStorage("sandbox_html", InitialHtml);
   const [css, setCss] = useLocalStorage("sandbox_css", "");
@@ -110,7 +116,7 @@ function Sandbox(): ReactNode {
               <MonacoEditor
                 value={html}
                 language="html"
-                options={{ automaticLayout: true }}
+                onMount={onHtmlMount}
                 onChange={(value) => setHtml(value ?? "")}
               />
             </TabPanel>
@@ -118,7 +124,7 @@ function Sandbox(): ReactNode {
               <MonacoEditor
                 value={css}
                 language="css"
-                options={{ automaticLayout: true }}
+                onMount={onCssMount}
                 onChange={(value) => setCss(value ?? "")}
               />
             </TabPanel>
@@ -126,7 +132,7 @@ function Sandbox(): ReactNode {
               <MonacoEditor
                 value={js}
                 language="javascript"
-                options={{ automaticLayout: true }}
+                onMount={onJsMount}
                 onChange={(value) => setJs(value ?? "")}
               />
             </TabPanel>
