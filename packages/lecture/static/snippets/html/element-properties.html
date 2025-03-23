@@ -1,0 +1,11 @@
+<input id="input" type="text" autocomplete="new-password"></input>
+<button id="text" type="button">Als Klartextfeld</button>
+<button id="password" type="button">Als Passwortfeld</button>
+<button id="checkbox" type="button">Als Checkbox</button>
+
+<script>
+  const input = document.getElementById("input");
+  document.getElementById("text").addEventListener("click", () => input.type = "text");
+  document.getElementById("password").addEventListener("click", () => input.type = "password");
+  document.getElementById("checkbox").addEventListener("click", () => input.type = "checkbox");
+</script>

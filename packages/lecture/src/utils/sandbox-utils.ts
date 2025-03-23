@@ -24,14 +24,16 @@ export type Pending<T> =
 
 export type AsyncResultHandler = (results: JsResult[]) => void;
 
+export type JsResultType =
+  | "console-debug"
+  | "console-log"
+  | "console-error"
+  | "console-warn"
+  | "error"
+  | "result";
+
 export interface JsResult {
-  type:
-    | "console-debug"
-    | "console-log"
-    | "console-error"
-    | "console-warn"
-    | "error"
-    | "result";
+  type: JsResultType;
   value: string;
 }
 
@@ -67,7 +69,7 @@ export function prepareHtmlContent(
 
   if (js.length > 0) {
     const scriptCustom = document.createElement("script");
-    scriptCustom.textContent = `(function(){\n${js}\n;})()`;
+    scriptCustom.textContent = `document.addEventListener("readystatechange", function(){if(document.readyState!=="complete")return;\n${js}\n;})`;
     doc.body.appendChild(scriptCustom);
   }
 
@@ -156,31 +158,19 @@ export function evaluateJavaScript(
   const results: JsResult[] = [];
   try {
     console.debug = console.info = (...args: unknown[]) => {
-      results.push({
-        type: "console-debug",
-        value: args.map((arg) => stringify(arg)).join("\t"),
-      });
+      results.push(logToJsResult("console-debug", args));
       originalDebug.apply(console, args);
     };
     console.log = console.info = (...args: unknown[]) => {
-      results.push({
-        type: "console-log",
-        value: args.map((arg) => stringify(arg)).join("\t"),
-      });
+      results.push(logToJsResult("console-log", args));
       originalLog.apply(console, args);
     };
     console.warn = (...args: unknown[]) => {
-      results.push({
-        type: "console-warn",
-        value: args.map((arg) => stringify(arg)).join("\t"),
-      });
+      results.push(logToJsResult("console-debug", args));
       originalWarn.apply(console, args);
     };
     console.error = (...args: unknown[]) => {
-      results.push({
-        type: "console-error",
-        value: args.map((arg) => stringify(arg)).join("\t"),
-      });
+      results.push(logToJsResult("console-error", args));
       originalError.apply(console, args);
     };
     try {
@@ -234,6 +224,37 @@ export async function loadCode(
   } catch (e) {
     return "";
   }
+}
+
+export function captureLogEntries(
+  window: typeof globalThis,
+  onLogEntry:(entry: JsResult) => void,
+) {
+  const originalLog = window.console.log;
+  const originalDebug = window.console.debug;
+  const originalInfo = window.console.info;
+  const originalWarn = window.console.warn;
+  const originalError = window.console.error;
+  window.console.log = (...args) => {
+    originalLog.apply(window.console, args);
+    onLogEntry(logToJsResult("console-log", args));
+  };
+  window.console.info = (...args) => {
+    originalInfo.apply(window.console, args);
+    onLogEntry(logToJsResult("console-log", args));
+  };
+  window.console.debug = (...args) => {
+    originalDebug.apply(window.console, args);
+    onLogEntry(logToJsResult("console-debug", args));
+  };
+  window.console.warn = (...args) => {
+    originalWarn.apply(window.console, args);
+    onLogEntry(logToJsResult("console-warn", args));
+  };
+  window.console.error = (...args) => {
+    originalError.apply(window.console, args);
+    onLogEntry(logToJsResult("console-error", args));
+  };
 }
 
 function errorToString(e: unknown): string {
@@ -310,4 +331,11 @@ function getSnippetPath(url: URL, type: string): string | undefined {
     return undefined;
   }
   return path.endsWith(`.${type}`) ? path : `${path}.${type}`;
+}
+
+function logToJsResult(type: JsResultType, args: unknown[]): JsResult {
+  return {
+    type,
+    value: args.map((arg) => stringify(arg)).join("\t"),
+  };
 }

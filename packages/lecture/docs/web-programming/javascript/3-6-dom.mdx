@@ -1,0 +1,448 @@
+---
+id: dom
+slug: /dom
+sidebar_position: 6
+description: DOM-API zur programmatischen Interaktion mit dem HTML.
+---
+
+import JsSnippet from "@site/src/components/JsSnippet";
+import HtmlSnippet from "@site/src/components/HtmlSnippet";
+import Link from "@docusaurus/Link";
+
+# Abschnitt 6 - DOM API
+
+Ausgeschrieben steht `DOM API` für
+
+> Document Object Model Application Programming Interface
+
+Vermutlich wird diese Aneinanderreihung von Worten nicht jedem etwas sagen.
+Vereinfach gesprochen ist die DOM API eine Menge von Funktionen, die im JavaScript
+benutzt werden können, um mit dem DOM (also dem HTML einer Webseite) zu interagieren.
+
+Die Spezifikation ist bei [WhatWG](https://dom.spec.whatwg.org/) zu finden
+und recht umfangreich. Es handelt sich dabei um einen "Living Standard", der
+kontinuierlich weiterentwickelt und nicht in feste Versionen unterteilt wird.
+
+In diesem Abschnitt wollen wir uns anschauen, wie einige grundlegende
+Anforderungen mit der DOM API bewerkstelligt werden können. In der Praxis
+wird es so sein, dass man nach entsprechenden Funktionen suchen muss, wenn
+oder falls man diese bei der Programmierung benötigt.
+
+## Node und Element
+
+Die Objekte, mit denen gearbeitet wird, sind sogenannte `Node`. Jeder Teil
+des HTML entspricht einer Node. Betrachten wir beispielsweise das folgende HTML:
+
+```html
+<html>
+  <head></head>
+  <body>
+    <button type="button">Klick mich</button>
+  </body>
+</html>
+```
+
+Dieses besteht auf folgenden Node:
+
+- `DOCUMENT_NODE`, welche das komplette HTML-Dokument darstellt.
+  - `<html>` vom Typ `ELEMENT_NODE`
+    - `<head>` vom Typ `ELEMENT_NODE`
+    - `<body>` vom Typ `ELEMENT_NODE`
+      - `<button>` vom Typ `ELEMENT_NODE`
+        - `type="button"` vom Typ `ATTRIBUTE_NODE`
+        - `Klick mich` vom Typ `TEXT_NODE`
+
+Hier ist ein Beispiel in der Sandbox, wo alle Node im HTML dynamisch gefunden
+und ausgegeben werden: 
+
+<p>
+  <Link to="/sandbox?snippet=node-hierarchy" target="_blank" rel="noopener noreferrer">Node-Hierarchie</Link>
+</p>
+
+Hieran können wir 2 grundlegende Fakten über Node ablesen:
+
+- Jede Node hat einen Typ, der von der Funktion im HTML abhängt.
+- Jede Node kann Kinder-Node haben. Hierdurch wird die geschachtelte Struktur
+  von HTML abgebildet. 
+
+In der Praxis wird es so sein, dass wir im häufig nur mit Element-Node arbeiten
+werden. `Element` ist eine Subklasse von `Node`, wovon es weiter die Subklasse
+`HTMLElement` gibt, welche unsere bekannten HTML-Elemente beschreibt. Es gibt
+auch noch die Subklasse `SVGElement`, welche verwendet wird, wenn Vektor-Grafiken
+in einer Webseite eingebunden sind.
+
+Für jedes Element aus dem HTML gibt es desweiteren noch eine spezielle Subklasse
+von `HTMLElement`. Für `<div>` die Klasse `HTMLDivElement`, für `<form>` die
+Subklasse `HTMLFormElement`, usw.
+
+Zwei spezielle Eigenschaften, die jedem Element zur Verfügung steht, sind 
+[innerHTML](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML) und
+[textContent](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent).
+Mit der ersten können wir den Inhalt des Elements auf ein beliebiges HTML-Schnippsel
+setzen, mit der zweiten können wir den Textinhalt auf einen beliebigen Wert setzen.
+
+Der Unterschied besteht darin, wie HTML-Tags im Wert behandelt werden und wird
+im folgenden Beispiel illustriert:
+
+<p>
+  <Link to="/sandbox?snippet=text-content-vs-inner-html" target="_blank" rel="noopener noreferrer">textContent vs. innerHTML</Link>
+</p>
+
+:::warning
+innerHTML sollte niemals verwendet werden, wenn der Wert nicht aus einer vertrauenswürdigen
+Quelle stammt, also etwa von Nutzereingaben! Das ist eine Ursache für eine
+bekanntes Sicherheitsproblem namens [XSS](https://owasp.org/www-community/attacks/xss/)
+(cross-site scripting).
+:::
+
+Schließlich hat jedes HTMLElement in Abhängigkeit vom Typ noch bestimmte Eigenschaften.
+Ein `HTMLInputElement` etwa beschreibt einen `<input>`. Die Eigenschaft `type`
+entspricht `<input type="checkbox">`. Die Eigenschaft `checked` erlaubt die Abfrage,
+ob eine Checkbox angehakt ist oder nicht. Die Eigenschaft `value` erlaubt den
+Zugriff auf den aktuellen Wert.
+
+<HtmlSnippet path="element-properties" toggleable />
+
+## Finden von Elementen
+
+Der Einstiegspunkt ist immer das Document, welches die Webseite darstellt und
+alle Elemente enthält. [Document](https://developer.mozilla.org/en-US/docs/Web/API/Document)
+ist eine Klasse, von der es immer genau eine Instanz gibt. Auf diese Instanz
+können wir über die globale Variable `document` zugreifen.
+
+Um ein bestimmtes Element im DOM zu finden, gibt es verschiedene Möglichkeiten.
+
+Wollen wir ein Element anhand seiner ID finden:
+
+```js
+document.getElementById("first_name");
+```
+
+Wollen wir eine Elemente anhand eines Klassennamen finden:
+
+```js
+docment.getElementsByClassName("required")
+```
+
+Wir müssen beachten, dass hier eine Liste von Elementen zurückkommt, da mehrere
+Elemente die gleiche Klasse haben können, aber eine ID eindeutig ist.
+
+Weitere Möglichkeiten sind `document.getElementsByName` zur Suche anhand
+des `<input name="email">` und `document.getElementsByTagName` zur Suche
+anhand des Typs eines Elements (z.B. `input` oder `article`).
+
+Während all diese Möglichkeiten ihre Berechtigung haben, wird besonders die
+Suche anhand des Klassennamen häufig verwendet. JavaScript für ein bestimmtes
+Feature sollte so generisch geschrieben werden, dass es für alle Elemente mit
+diesem Feature in einer Webseite funktioniert. Über Klassennamen wird gesteuert,
+welche Element das Feature haben.
+
+Ein Beispiel für ein Feature ist ein Passwortfeld mit ein Umschalter zur
+Anzeige des Klartexts:
+
+<p>
+  <Link to="/sandbox?snippet=password-toggle" target="_blank" rel="noopener noreferrer">Passwort-Umschalter</Link>
+</p>
+
+Falls wir bereits ein Element gefunden haben und die Suche auch dieses Elemente
+und seinen Kinderelemente beschränken wollen, können wir `getElementsByClassName`
+auch auf das jeweilige Element (statt auf das Document) anwenden:
+
+```js
+const fieldset = document.getElementById("fieldset_contact_data");
+fieldset.getElementsByClassName("required");
+```
+
+In der Praxis hat sich aber eine weitere Möglichkeit zum Zugriff auf Elemente
+bewährt: die Suche anhand eines CSS-Selektors:
+
+```js
+// Findet das erste passende Element
+document.querySelector(".dynamic-row:nth-child(2) > [data-name^=user_]");
+
+// Findet alle passenden Elemente
+document.querySelectorAll("article img");
+```
+
+Bisher haben wir immer im gesamten Subbaum eines Elements (Kinder, Kinder der Kinder etc.)
+gesucht. Um direkt nur auf die Kindelemente eines Elements zuzugreifen, gibt
+es eine entsprechende Methode:
+
+```js
+const fieldset = document.querySelector("fieldset");
+for (const child of fieldset.children) {
+  console.log(child);
+}
+```
+
+Falls wir andersherum nicht in den Kinderelementen suchen wollen, sondern
+in den Elternelementen, steht uns dafür auch eine entsprechende Funktion zur
+Verfügung.
+
+```js
+const input = document.getElementById("email");
+const fieldset = input.closest("fieldset");
+```
+
+## Ändern von Elementen
+
+Bisher haben wir nur nach Elementen gesucht. Nachdem wir Elemente gefunden
+haben, möchten wir diese verändern. Beispielsweise könnten wir ein Formular
+mit einem Auswahlfeld für die Anzahl der Kinder haben und möchten in Abhängigkeit
+der Anzahl entsprechend viele Eingabefelder für den Namen der Kinder anzeigen.
+
+<p>
+  <Link to="/sandbox?snippet=elements-by-count" target="_blank" rel="noopener noreferrer">Dynamische Erzeugung von Fieldsets</Link>
+</p>
+
+Für die verschiedenen Arten von Änderungen gibt es verschiedene Möglichkeiten:
+
+__Eigenschaften verändern__
+
+Wollen wir einfach nur eine Eigenschaft eines Elements verändert, brauchen wir
+nur den neuen gewünschten Wert zuweisen:
+
+```js
+document.querySelector("input").type = "email";
+```
+
+__Neues Kindelement hinzufügen__
+
+Zuerst müssen wir ein neues Element erstellen. Dies ist möglich per
+`document.createElement`. Um das Element dann an das Ende der Liste der
+Kinderelemente hinzuzufügen:
+
+```js
+// Eregbnis:
+// <fieldset><input></input><input></input></fieldset>
+const input1 = document.createElement("input");
+const input2 = document.createElement("input");
+document.querySelector("fieldset").append(input1, input2);
+```
+
+Um ein Element an einer bestimmten Stelle vor oder nach einem Element einzufügen,
+können wir `before` und `after` verwenden. Nehmen wir an, das HTML war vorher:
+
+
+```html
+<fieldset>
+  <input></input>
+  <textarea></textarea>
+</fieldset>
+```
+
+Und wir wenden folgendes Script an:
+
+```js
+const select = document.createElement("select");
+const p = document.createElement("p");
+document.querySelector("fieldset input").after(select);
+document.querySelector("fieldset textarea").before(p);
+```
+
+Dann erhalten wir danach das folgende HTML:
+
+```html
+<fieldset>
+  <input></input>
+  <select></select>
+  <p></p>
+  <textarea></textarea>
+</fieldset>
+```
+
+__Elemente entfernen__
+
+Um ein Element zu entfernen, brauchen wir einfach nur die Methode `remove`
+zu nutzen:
+
+```js
+document.querySelector("input").remove();
+```
+
+## Ereignisse
+
+Wie wir bereits sahen, ist JavaScript ereignisbasiert. Die DOM API stellt
+viele Ereignisse bereit, auf die wir bei Bedarf reagieren können.
+
+Um auf Ereignis zu reagieren, müssen wir zuerst einen Event Listener registrieren.
+Dies geschieht immer mittels der Methode `addEventListener`. Sollten wir nicht
+mehr weiter auf ein Event lauschen wollen, können wir den Event-Listener wieder
+entfernen mittels `removeEventListener`.
+
+```js
+const onChange = event => console.log("Change on element", event.target);
+const input = document.querySelector("input");
+input.addEventListener("change", onChange);
+input.removeEventListener("change", onChange);
+```
+
+:::warning
+Um einen Event-Listener zu entfernen, müssen wir exakt die gleiche Funktion
+übergeben, die wir bei `addEventListener` verwendet hatten. Folgendes wird
+_nicht_ funktionieren:
+
+```js
+const input = document.querySelector("input");
+input.addEventListener("change", event => console.log("Change on element", event.target));
+input.removeEventListener("change", event => console.log("Change on element", event.target));
+```
+:::
+
+Welche Ereignisse es alles gibt übersteigt den Umfang dieser Vorlesung. Einfach
+gesagt verhält es sich aber so, dass es für nahezu alle Interaktionen, die der Nutzer
+mit einer Webseite durchführt, entsprechende Ereignisse gibt.
+
+In Chromium-basierten Browser gibt es in den Dev-Tools die Hilfsfunktion
+`monitorEvents(element)`, womit wir uns in der Konsole alle Ereignissse ausgegeben
+lassen können, die auf einem Element eintreten. Das kann helfen, herauszufinden,
+ob und wann welches Event ausgelöst wird.
+
+Wichtiger ist noch ein Grundverständnis für die Funktionsweise von Events im DOM.
+2 wichtige Begriffe hierbei sind `event bubbling` und `capture phase`. Um das zu
+verstehen, betrachten wir einmal das Event [pointermove](https://developer.mozilla.org/en-US/docs/Web/API/Element/pointermove_event).
+
+Dieses Event tritt immer ein, wenn der Nutzer mit einem Pointer (Maus, Touch-Pen etc.)
+über den Bildschirm fährt. Nun ist es so, dass jedes Event immer mit einem
+Element verbunden ist. Beim Bewegen des Pointers ist es das Element, über dem
+sich der Pointer gerade befindet. Wenn wir auf diesem Element einen Event-Listener
+registriert hatten, wird dieser ausgeführt.
+
+Doch was ist, wenn wir nicht auf diesem Element, sondern auf einem der Eltern
+des Elements den Event-Listener registriert hatten? Logisch betrachtet ist der
+Pointer auch über diesem Element und sollte daher den Listener auslösen.
+
+Aus diesem Grund wird es in der DOM-API so gehandhabt, dass ein Event nicht nur
+auf dem Element eintritt, wo es initial ausgelöst wurde, sondern auch auf allen
+Elternelementen. Das ist in der folgenden Abbildung illustriert:
+
+![Capture- und Bubble-Phase](/img/web/event-phases.png)
+
+Das Aufrufen von Event-Listener geschieht in 2 Phasen: Capture und Bubble.
+
+In der ersten Capture-Phase wird vom `Document` zum `Textarea`-Element gegangen
+und alle Event-Listener ausgeführt.
+
+In der zweiten Bubble-Phase wird wieder von der `Textarea` zum `Document` gegangen
+und ebenfalls alle Event-Listener ausgeführt. Man sagt umgangssprachlich auch,
+"das Event bubbele nach oben."
+
+Ob wir einen Event-Listener in der Bubble- oder Capture-Phase registrieren,
+hängt davon ab, wie wir `addEventListener` aufrufen:
+
+```js
+// Bubble-Phase
+document.querySelector("fieldset").addEventListener("pointermove", callback);
+
+// Capture-Phase
+document.querySelector("fieldset").addEventListener("pointermove", callback, { capture: true });
+```
+
+:::warning
+Beim Entfernen per `removeEventListener` muss ebenfalls `{ capture : true }` mit
+übergeben werden.
+:::
+
+Jedem Event-Listener wird ein Event-Objekt mitgegeben, worüber wir Zugriff auf
+verschiedene Eigenschaften erhalten können. Bei einem `pointermove`  etwa können
+wir mittels `clientX` / `clientY` Zugriff auf die aktuelle Position des Pointers
+gelangen.
+
+```js
+document.querySelector("fieldset").addEventListener("pointermove", event => {
+  console.log(event.clientX, event.clientY);
+});
+```
+
+Zwei wichtige Eigenschaften, die jedes Event, besitzt, sind `target` und
+`currentTarget`. `target` ist immer das Element, auf dem das Ereignis ursprünglich
+eintrat, in unserem obigen Beispiel also das die `<textarea>`. `currentTarget`
+ist immer das Element der Capture- oder Bubble-Phase, das gerade verarbeitet wird.
+
+```js
+document.querySelector("fieldset").addEventListener("pointermove", event => {
+  console.log(event.target, event.currentTarget);
+});
+```
+
+Letztlich hat jedes Event auch noch die 2 Methoden `stopPropagation` und
+`preventDefault`.
+
+Mit [stopPropagation](https://developer.mozilla.org/en-US/docs/Web/API/Event/stopPropagation)
+können wir verhindern, dass das die Capture- bzw. Bubble-Phase weiter ausgeführt
+wird. Es werden dann keine weiteren Event-Listener mehr ausgeführt. Ein Beispiel
+ist etwa ein E-Mail-Posteingang, wo eine Liste aller E-Mail untereinander
+angezeigt wird. Klickt man auf eine E-Mail wird deren Inhalt angezeigt. Zudem
+ist aber innerhalb jedem E-Mail-Eintrag in der Liste noch ein Button zum Löschen
+der E-Mail. Um zu verhindern,  dass beim Klick auf den Löschen-Button die E-Mail
+geöffnet wird, können wir `stopPropagation` verwenden.
+
+<p>
+  <Link to="/sandbox?snippet=stop-propagation" target="_blank" rel="noopener noreferrer">E-Mail-Liste mit Lösch-Button</Link>
+</p>
+
+[preventDefault](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault)
+verhindert das _Default_-Verhalten bei dem jeweiligen Event. Beispielsweise wird
+beim `click` eines Links (`<a>`) standardmäßig auf die Zielseite weitergeleitet,
+beim `submit` eines Formulars (`<form>`) wird standardmäßig das Formular abgesendet.
+Diese Aktionen können wir mit `preventDefault` verhindern.
+
+```js
+document.querySelector("a").addEventListener("click", e => e.preventDefault());
+```
+
+:::info
+Nicht für jedes Event wird die Capture- und Bubble-Phase durchlaufen. Dies ist
+etwa beim [blur](https://developer.mozilla.org/en-US/docs/Web/API/Element/blur_event)
+der Fall, welches ausgelöst wird, wenn ein Eingabefeld verlassen wird.
+:::
+
+## Window-Scope
+
+[Window](https://developer.mozilla.org/en-US/docs/Web/API/Window) repräsentiert
+das Browser-Fenster und steht über die Variable `window` bereit. Ein Window
+verfügt Eigenschaften wie `window.innerHeight` zum Ermitteln der Höhe des
+Fensters.
+
+Gleichzeitig repräsentiert `window` auch den globalen Scope, welcher allem
+JavaScript-Code zur Verfügung steht. Wenn wir etwa folgendes HTML haben:
+
+```html
+<html>
+  <body>
+    <script>
+      var randomNumber = Math.random();
+      window.randomNumber2 = Math.random();
+    </script>
+    <script>
+      console.log(window.randomNumber);
+      console.log(window.randomNumber2);
+    </script>
+  </body>
+<html>
+```
+
+Dann wird durch dieses Script eine globale Variable `randomNumber` definiert
+(ein weiteres Argument gegen `var`, mit `const` und `let` wäre das nicht passiert).
+
+Diese globale Variable steht dann im globalen Window-Scope via `window.randomNumber`
+zur Verfügung.
+
+Auch wenn es in Einzelfällen erforderlich sein kann, sollte auf die Verwendung
+von globalen Variabel soweit möglich verzichtet werden. Werden Web-Apps komplexer,
+besteht Gefahr, dass sich gleichnamige globale Variablen aus verschiedenen
+Scripten überschneiden und generell der Überblick verloren geht.
+
+:::info
+Die Variable `window` kann überschrieben werden:
+
+```js
+(function(window){
+  // Code innerhalb dieser Funktion kann nicht per window auf das globale Window zugreifen
+})("fakeWindow");
+```
+
+Alternativ können wir [globalThis](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis)
+verwenden, um auf das globale Window-Objekt zuzugreifen. Dieses kann nicht
+überschrieben werden. 
+:::

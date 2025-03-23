@@ -5,7 +5,15 @@ import "primeflex/primeflex.css";
 import Layout from "@theme/Layout";
 import { useColorMode, type ColorMode } from "@docusaurus/theme-common";
 
-import { useRef, type ReactNode, useEffect, type RefObject } from "react";
+import {
+  useRef,
+  type ReactNode,
+  useEffect,
+  type RefObject,
+  type Dispatch,
+  useState,
+  type SetStateAction,
+} from "react";
 
 import { Editor as MonacoEditor } from "@monaco-editor/react";
 
@@ -16,10 +24,12 @@ import { TabView, TabPanel } from "primereact/tabview";
 
 import {
   BooleanSerializer,
+  captureLogEntries,
   IntegerSerializer,
   prepareHtmlContent,
   useCode,
   useMappedLocalStorage,
+  type JsResult,
 } from "@site/src/utils/sandbox-utils";
 
 import { useMonacoResize } from "@site/src/utils/monaco";
@@ -49,6 +59,7 @@ function Sandbox(): ReactNode {
   const [onCssMount] = useMonacoResize(monacoContainerRef);
   const [onHtmlMount] = useMonacoResize(monacoContainerRef);
 
+  const [logEntries, setLogEntries] = useState<JsResult[]>([]);
   const [html, setHtml, resetHtml] = useCode(
     "sandbox_html",
     "html",
@@ -81,7 +92,14 @@ function Sandbox(): ReactNode {
       return;
     }
     if (applyImmediately || contentRef.current?.childElementCount === 0) {
-      applyHtml(contentRef, html.value, css.value, js.value, colorMode);
+      applyHtml(
+        contentRef,
+        html.value,
+        css.value,
+        js.value,
+        colorMode,
+        setLogEntries,
+      );
       return () => {
         if (applyImmediately && contentRef.current !== null) {
           contentRef.current.innerHTML = "";
@@ -94,10 +112,6 @@ function Sandbox(): ReactNode {
   return (
     <div className="sandbox">
       <h1>HTML Sandbox</h1>
-      <p>
-        Einfache Sandbox, hier kann man HTML-Schnippsel schreiben und
-        ausprobieren.
-      </p>
       <div className="sandbox__options">
         <div className="inline-flex align-items-center">
           <Checkbox
@@ -120,7 +134,14 @@ function Sandbox(): ReactNode {
             className="sandbox__button"
             label="Anwenden"
             onClick={() =>
-              applyHtml(contentRef, html.value, css.value, js.value, colorMode)
+              applyHtml(
+                contentRef,
+                html.value,
+                css.value,
+                js.value,
+                colorMode,
+                setLogEntries,
+              )
             }
           />
         )}
@@ -173,6 +194,17 @@ function Sandbox(): ReactNode {
           <div className="sandbox__iframe-container" ref={contentRef} />
         </div>
       </div>
+      <div className="sandbox__console">
+        {logEntries.map((entry, index) => (
+          <li
+            // biome-ignore lint/suspicious/noArrayIndexKey: There's no ID
+            key={index}
+            className={`sandbox__result sandbox__result-${entry.type}`}
+          >
+            {entry.value}
+          </li>
+        ))}
+      </div>
     </div>
   );
 }
@@ -183,6 +215,7 @@ function applyHtml(
   css: string,
   js: string,
   colorMode: ColorMode,
+  setLogEntries: Dispatch<SetStateAction<JsResult[]>>,
 ) {
   const container = ref.current;
   if (container === null) {
@@ -193,9 +226,14 @@ function applyHtml(
   iframe.classList.add("sandbox__iframe");
   container.innerHTML = "";
   container.appendChild(iframe);
+  const iframeWin = iframe.contentWindow;
   const iframeDoc = iframe.contentDocument;
-  if (iframeDoc) {
+  if (iframeWin && iframeDoc) {
+    setLogEntries([]);
     try {
+      captureLogEntries(iframeWin as unknown as typeof globalThis, (entry) =>
+        setLogEntries((entries) => [...entries, entry]),
+      );
       iframeDoc.open();
       iframeDoc.write(preparedHtmlContent);
       iframeDoc.close();
