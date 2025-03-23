@@ -244,6 +244,37 @@ setzen. Ein Problem, was sonst etwa entstehen kann: Was gibt der folgende Code a
 
 <JsSnippet path="auto-semicolon-insertion.js" toggleable />
 
+## Vergleichsoperationen
+
+Wir können ganz normal `<` und `>` sowie `<=` und `>=` verwenden, um Zahlen
+und Strings zu vergleichen.
+
+Mit den Operatoren `===` und `!==` können wir prüfen, ob 2 Werte gleich oder
+ungleich sind.
+
+Historisch gibt es noch die Operatoren `==` und `!=`. Diese werden nur noch selten
+oder gar nicht mehr verwendet, da ihnen [komplexe Regeln](https://tc39.es/ecma262/#sec-islooselyequal)
+unterliegen, wie Werte miteinander verglichen werden. Die Regeln für `===` sind
+hingegen [wesentlich einfacher](https://tc39.es/ecma262/#sec-isstrictlyequal). So
+einfach, dass wir uns diese Regeln hier anschauen können. Um zwei Werte `x` und
+`y` mittels `===` zu vergleichen:
+
+1. Ist `typeof x` !== `typeof y`, sind die Werte ungleich.
+2. Sind x und y vom Typ `object`, gibt `true` zurück, wenn es exakt die gleichen Objekte sind (reference-equal), sonst `false`.
+3. Andernfalls gib `true` zurück, wenn der Inhalt der Werte gleich ist (`equal-by-value`), sonst `false`.
+
+<JsSnippet path="triple-equal.js" toggleable />
+
+Als Programmierer sollten wir keine Funktionalitäten verwenden, von denen wir
+nicht genau wissen, wie diese funktionieren. Bei `==` ist das nicht immer klar.
+Programmieren wir gut, tritt zudem selten der Fall auf, dass wir Werte unterschiedlichen
+Typs vergleichen müssen. Weiterhin erfüllt `==` einige
+wesentliche Eigenschaften von
+[Äquivalenzrelationen](https://de.wikiversity.org/wiki/%C3%84quivalenzrelation/Einf%C3%BChrung/Textabschnitt)
+nicht. Im Folgenden einige Beispiele für seltsame Eigenschaften von `==`: 
+
+<JsSnippet path="double-equal.js" toggleable />
+
 ## Kontrollstrukturen
 
 Kontrollstrukturen ermöglichen es, zu beinflussen, welcher Code in welcher

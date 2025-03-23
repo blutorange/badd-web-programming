@@ -1,0 +1,10 @@
+const user = { age: 20 };
+console.log(undefined === undefined);
+console.log(undefined === null);
+console.log(1 === 1);
+console.log(1 === 2);
+console.log(Number.NaN === Number.NaN);
+console.log(1 === "1");
+console.log("1" === "1");
+console.log(user === user);
+console.log({ age: 20 } === { age: 20 });

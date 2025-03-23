@@ -72,6 +72,5 @@ export async function loadAndSetHtmlCode(
   path: string,
 ): Promise<void> {
   const code = await loadCode("html", path);
-  console.log(code);
   setCode({ loading: false, value: code });
 }

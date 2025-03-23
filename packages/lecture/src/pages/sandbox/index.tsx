@@ -80,6 +80,7 @@ function Sandbox(): ReactNode {
 
   const onReset = () => {
     if (contentRef.current !== null) {
+      destroyOldIFrame(contentRef.current);
       contentRef.current.innerHTML = "";
     }
     resetHtml();
@@ -102,6 +103,7 @@ function Sandbox(): ReactNode {
       );
       return () => {
         if (applyImmediately && contentRef.current !== null) {
+          destroyOldIFrame(contentRef.current);
           contentRef.current.innerHTML = "";
         }
       };
@@ -224,6 +226,7 @@ function applyHtml(
   const preparedHtmlContent = prepareHtmlContent(html, css, js, colorMode);
   const iframe = document.createElement("iframe");
   iframe.classList.add("sandbox__iframe");
+  destroyOldIFrame(container);
   container.innerHTML = "";
   container.appendChild(iframe);
   const iframeWin = iframe.contentWindow;
@@ -232,7 +235,7 @@ function applyHtml(
     setLogEntries([]);
     try {
       captureLogEntries(iframeWin as unknown as typeof globalThis, (entry) =>
-        setLogEntries((entries) => [...entries, entry]),
+        setLogEntries((entries) => [entry,...entries]),
       );
       iframeDoc.open();
       iframeDoc.write(preparedHtmlContent);
@@ -242,3 +245,9 @@ function applyHtml(
     }
   }
 }
+
+function destroyOldIFrame(container: HTMLDivElement) {
+  const oldIframe  = container.querySelector("iframe");
+  oldIframe?.contentWindow?.dispatchEvent(new Event("beforeunload"));
+}
+
