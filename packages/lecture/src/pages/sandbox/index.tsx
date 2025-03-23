@@ -5,7 +5,6 @@ import "primeflex/primeflex.css";
 import Layout from "@theme/Layout";
 import { useColorMode, type ColorMode } from "@docusaurus/theme-common";
 
-import useLocalStorage from "react-use-localstorage";
 import { useRef, type ReactNode, useEffect, type RefObject } from "react";
 
 import { Editor as MonacoEditor } from "@monaco-editor/react";
@@ -19,14 +18,16 @@ import {
   BooleanSerializer,
   IntegerSerializer,
   prepareHtmlContent,
+  useCode,
   useMappedLocalStorage,
 } from "@site/src/utils/sandbox-utils";
+
+import { useMonacoResize } from "@site/src/utils/monaco";
 
 import InitialHtml from "!!raw-loader!./initial.html";
 import InitialCss from "!!raw-loader!./initial.css";
 // @ts-expect-error
 import InitialJs from "!!raw-loader!./initial.js";
-import { useMonacoResize } from "@site/src/utils/monaco";
 
 export default function SandboxPage(): ReactNode {
   return (
@@ -39,7 +40,7 @@ export default function SandboxPage(): ReactNode {
 }
 
 function Sandbox(): ReactNode {
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
 
   const { colorMode } = useColorMode();
 
@@ -48,9 +49,13 @@ function Sandbox(): ReactNode {
   const [onCssMount] = useMonacoResize(monacoContainerRef);
   const [onHtmlMount] = useMonacoResize(monacoContainerRef);
 
-  const [html, setHtml] = useLocalStorage("sandbox_html", InitialHtml);
-  const [css, setCss] = useLocalStorage("sandbox_css", "");
-  const [js, setJs] = useLocalStorage("sandbox_js", "");
+  const [html, setHtml, resetHtml] = useCode(
+    "sandbox_html",
+    "html",
+    InitialHtml,
+  );
+  const [css, setCss, resetCss] = useCode("sandbox_css", "css", InitialCss);
+  const [js, setJs, resetJs] = useCode("sandbox_js", "js", InitialJs);
   const [applyImmediately, setApplyImmediately] = useMappedLocalStorage(
     "sandbox_immediate",
     false,
@@ -63,15 +68,27 @@ function Sandbox(): ReactNode {
   );
 
   const onReset = () => {
-    setHtml(InitialHtml);
-    setCss(InitialCss);
-    setJs(InitialJs);
+    if (contentRef.current !== null) {
+      contentRef.current.innerHTML = "";
+    }
+    resetHtml();
+    resetCss();
+    resetJs();
   };
 
   useEffect(() => {
-    if (applyImmediately) {
-      applyHtml(iframeRef, html, css, js, colorMode);
+    if (html.loading || css.loading || js.loading) {
+      return;
     }
+    if (applyImmediately || contentRef.current?.childElementCount === 0) {
+      applyHtml(contentRef, html.value, css.value, js.value, colorMode);
+      return () => {
+        if (applyImmediately && contentRef.current !== null) {
+          contentRef.current.innerHTML = "";
+        }
+      };
+    }
+    return () => {};
   }, [html, css, js, applyImmediately, colorMode]);
 
   return (
@@ -98,11 +115,13 @@ function Sandbox(): ReactNode {
           label="Zurücksetzen"
           onClick={() => onReset()}
         />
-        {!applyImmediately && (
+        {!html.loading && !css.loading && !js.loading && !applyImmediately && (
           <Button
             className="sandbox__button"
             label="Anwenden"
-            onClick={() => applyHtml(iframeRef, html, css, js, colorMode)}
+            onClick={() =>
+              applyHtml(contentRef, html.value, css.value, js.value, colorMode)
+            }
           />
         )}
       </div>
@@ -113,37 +132,45 @@ function Sandbox(): ReactNode {
             onTabChange={(e) => setActiveIndex(e.index)}
           >
             <TabPanel header="HTML">
-              <MonacoEditor
-                value={html}
-                language="html"
-                onMount={onHtmlMount}
-                onChange={(value) => setHtml(value ?? "")}
-              />
+              {html.loading ? (
+                "...loading"
+              ) : (
+                <MonacoEditor
+                  value={html.value}
+                  language="html"
+                  onMount={onHtmlMount}
+                  onChange={(value) => setHtml(value ?? "")}
+                />
+              )}
             </TabPanel>
             <TabPanel header="CSS">
-              <MonacoEditor
-                value={css}
-                language="css"
-                onMount={onCssMount}
-                onChange={(value) => setCss(value ?? "")}
-              />
+              {css.loading ? (
+                "...loading"
+              ) : (
+                <MonacoEditor
+                  value={css.value}
+                  language="css"
+                  onMount={onCssMount}
+                  onChange={(value) => setCss(value ?? "")}
+                />
+              )}
             </TabPanel>
             <TabPanel header="JavaScript">
-              <MonacoEditor
-                value={js}
-                language="javascript"
-                onMount={onJsMount}
-                onChange={(value) => setJs(value ?? "")}
-              />
+              {js.loading ? (
+                "...loading"
+              ) : (
+                <MonacoEditor
+                  value={js.value}
+                  language="javascript"
+                  onMount={onJsMount}
+                  onChange={(value) => setJs(value ?? "")}
+                />
+              )}
             </TabPanel>
           </TabView>
         </div>
         <div className="sandbox__code-right">
-          <iframe
-            className="sandbox__iframe"
-            title="HTML-Sandbox"
-            ref={iframeRef}
-          />
+          <div className="sandbox__iframe-container" ref={contentRef} />
         </div>
       </div>
     </div>
@@ -151,16 +178,23 @@ function Sandbox(): ReactNode {
 }
 
 function applyHtml(
-  ref: RefObject<HTMLIFrameElement | null>,
+  ref: RefObject<HTMLDivElement | null>,
   html: string,
   css: string,
   js: string,
   colorMode: ColorMode,
 ) {
+  const container = ref.current;
+  if (container === null) {
+    return;
+  }
   const preparedHtmlContent = prepareHtmlContent(html, css, js, colorMode);
-  const iframe = ref.current;
-  const iframeDoc = iframe?.contentDocument;
-  if (iframe && iframeDoc) {
+  const iframe = document.createElement("iframe");
+  iframe.classList.add("sandbox__iframe");
+  container.innerHTML = "";
+  container.appendChild(iframe);
+  const iframeDoc = iframe.contentDocument;
+  if (iframeDoc) {
     try {
       iframeDoc.open();
       iframeDoc.write(preparedHtmlContent);

@@ -3,9 +3,7 @@ import "./layout.css";
 import Layout from "@theme/Layout";
 
 import {
-  type Dispatch,
   type ReactNode,
-  useEffect,
   useRef,
   useState,
 } from "react";
@@ -22,40 +20,13 @@ import {
   BooleanSerializer,
   useMappedLocalStorage,
   evaluateJavaScript,
-  type Pending,
-  loadCode,
-  nonPending,
   type AsyncResultHandler,
+  useCode,
 } from "@site/src/utils/sandbox-utils";
 
 // @ts-expect-error
 import InitialJs from "!!raw-loader!./initial.js";
-import useLocalStorage from "react-use-localstorage";
 import { useMonacoResize } from "@site/src/utils/monaco";
-
-function useJs(): [Pending<string>, Dispatch<string>] {
-  const url = new URL(window.location.href);
-  const snippet = url.searchParams.get("snippet");
-  const key = snippet ? `sandbox_js_${snippet}` : "sandbox_js";
-  const [local, setLocal] = useState<Pending<string>>({ loading: true });
-  const [code, setCode] = useLocalStorage(key, "");
-
-  useEffect(() => {
-    if (local.loading) {
-      if (snippet) {
-        loadCode("js", snippet).then((code) => setLocal(nonPending(code)));
-      } else {
-        setLocal(nonPending(code));
-      }
-    } else {
-      if (!snippet) {
-        setLocal(nonPending(code));
-      }
-    }
-  }, [code, snippet, local.loading]);
-
-  return [local, (x) => (snippet ? setLocal(nonPending(x)) : setCode(x))];
-}
 
 function Sandbox(): ReactNode {
   const url = new URL(window.location.href);
@@ -63,7 +34,7 @@ function Sandbox(): ReactNode {
 
   const monacoContainerRef = useRef<HTMLDivElement | null>(null);
   const [onJsMount] = useMonacoResize(monacoContainerRef);
-  const [js, setJs] = useJs();
+  const [js, setJs] = useCode("sandbox_code_js", "js", InitialJs);
   const [applyImmediately, setApplyImmediately] = useMappedLocalStorage(
     "sandbox_js_immediate",
     false,

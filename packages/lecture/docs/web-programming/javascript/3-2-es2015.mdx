@@ -227,6 +227,27 @@ ist der von Java ähnlich.
 
 <JsSnippet path="classes-basic.js" toggleable />
 
+Eine kleines Detail im Zusammenhang mit Klassen wollen wir aber noch einmal
+genauer beleuchten. Mittels dem speziellen Schlüsselwort `this` können wir
+innerhalb einer Methode auf die aktuelle Instanz der Klasse zugreifen.
+
+Funktionen mit der Schreibweise `function() { ... }` stammen aus der Entstehungsphase
+der Programmiersprache. Diese wurden damals so konzipiert, dass der Wert `this`
+innerhalb von `function() { ... }` davon abhängt, wie die Funktion aufgerufen wird.
+
+<JsSnippet path="this-context-set.js" toggleable />
+
+Dieses Verhalten hat sich als problematisch und Quelle für Fehler herausgestellt,
+da wir als Programmierer nie sicher sein können, wir unserer Funktion von Code
+aufgerufen wird, der vielleicht sogar von anderen Programmierern geschrieben wurde.
+
+Wie im vorigen Abschnitt erwähnt, wuden Arrow-Funktionen später in die
+Programmiersprache eingefügt und beheben dieses Problem. Innerhalb einer
+Arrow-Funktion bedeutet `this` immer genau das Gleich, was es auch außerhalb
+der Arrow-Funktion bedeutet hatte.
+
+<JsSnippet path="classes-this-context.js" toggleable />
+
 ## Arbeiten mit null und undefined
 
 In Sprachen, wo es einen speziellen Wert gibt, wenn kein anderer Wert verfügbar
@@ -450,7 +471,7 @@ In Browsern werden solche ESM-Module bereit unterstützt. Hierzu muss der
 Typ eines eingebundenen Scripts auf `module` gesetzt werden:
 
 ```html
-<script type="module" src="https://app.unpkg.com/lodash-es@4.17.21/files/throttle.js"></script>
+<script type="module" src="https://unpkg.com/lodash-es@4.17.21/throttle.js"></script>
 ```
 
 Vorteile sind etwa

@@ -1,0 +1,9 @@
+<button id="demo" type="button">Klick mich</button>
+<output id="count" for="demo"></output>
+<script>
+  let count = 0;
+  document.getElementById("demo").addEventListener("click", () => {
+    count += 1;
+    document.getElementById("count").textContent = `clicked ${count} times`;
+  });
+</script>

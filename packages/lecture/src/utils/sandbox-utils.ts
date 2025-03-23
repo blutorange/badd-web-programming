@@ -1,4 +1,5 @@
 import type { ColorMode } from "@docusaurus/theme-common";
+import { useEffect, useState, type Dispatch } from "react";
 import useLocalStorage from "react-use-localstorage";
 
 const parser = new DOMParser();
@@ -17,7 +18,9 @@ a {
 }
 `;
 
-export type Pending<T> = { loading: true } | { loading: false; value: T };
+export type Pending<T> =
+  | { readonly loading: true }
+  | { readonly loading: false; readonly value: T };
 
 export type AsyncResultHandler = (results: JsResult[]) => void;
 
@@ -103,6 +106,44 @@ export function useMappedLocalStorage<T>(
   ];
 }
 
+export function useCode(
+  keyPrefix: string,
+  type: "js" | "html" | "css",
+  initial: string,
+): [current: Pending<string>, set: Dispatch<string>, reset: () => void] {
+  const url = new URL(window.location.href);
+  const snippet = getSnippetPath(url, type);
+  const key = snippet ? `${keyPrefix}_${snippet}` : keyPrefix;
+
+  const [local, setLocal] = useState<Pending<string>>({ loading: true });
+  const [code, setCode] = useLocalStorage(key, initial);
+
+  useEffect(() => {
+    if (local.loading) {
+      if (snippet) {
+        loadCode(type, snippet).then((code) => setLocal(nonPending(code)));
+      } else {
+        setLocal(nonPending(code));
+      }
+    } else {
+      if (!snippet) {
+        setLocal(nonPending(code));
+      }
+    }
+  }, [code, type, snippet, local.loading]);
+
+  return [
+    local,
+    (x) => (snippet ? setLocal(nonPending(x)) : setCode(x)),
+    () => {
+      if (!snippet) {
+        setCode(initial);
+      }
+      setLocal({ loading: true });
+    },
+  ];
+}
+
 export function evaluateJavaScript(
   code: string,
   asyncResultHandler?: AsyncResultHandler,
@@ -148,7 +189,10 @@ export function evaluateJavaScript(
       if (evalResult instanceof Promise) {
         evalResult.then(
           (value) =>
-            asyncResultHandler?.([...results, { type: "result", value: stringify(value) }]),
+            asyncResultHandler?.([
+              ...results,
+              { type: "result", value: stringify(value) },
+            ]),
           (error) =>
             asyncResultHandler?.([
               ...results,
@@ -181,10 +225,15 @@ export async function loadCode(
   type: "js" | "html" | "css",
   path: string,
 ): Promise<string> {
-  const code = await import(
-    `!!raw-loader!../../static/snippets/${type}/${path}`
-  );
-  return code.default;
+  const resolvedPath = path.endsWith(`.${type}`) ? path : `${path}.${type}`;
+  try {
+    const code = await import(
+      `!!raw-loader!../../static/snippets/${type}/${resolvedPath}`
+    );
+    return code.default;
+  } catch (e) {
+    return "";
+  }
 }
 
 function errorToString(e: unknown): string {
@@ -213,6 +262,9 @@ function stringify(value: unknown): string {
       const instances = new Set();
       // Don't fail on cyclic object graphs
       const replacer = (key: unknown, value: unknown) => {
+        if (value === undefined) {
+          return "undefined";
+        }
         if (typeof value === "function") {
           return value.toString();
         }
@@ -220,12 +272,42 @@ function stringify(value: unknown): string {
           if (instances.has(value)) {
             return "circular";
           }
+          if (value === window || value === document) {
+            return String(value);
+          }
+          if (Object.keys(value).length > 50) {
+            return String(value);
+          }
+          if (value instanceof Node) {
+            return stringifyNode(value);
+          }
           instances.add(value);
           return value;
         }
         return value;
       };
-      return JSON.stringify(value, replacer);
+      return JSON.stringify(value, replacer, 2);
     }
   }
+}
+
+function stringifyNode(node: Node): string {
+  const attributeList: string[] = [];
+  if (node instanceof Element && node.attributes.length > 0) {
+    attributeList.push("");
+    const attributes = node.attributes;
+    for (let i = 0; i < attributes.length; i += 1) {
+      const attribute = attributes.item(i);
+      attributeList.push(`${attribute?.nodeName}=${attribute?.nodeValue}`);
+    }
+  }
+  return `<${node.nodeName}${attributeList.join(" ")} />`;
+}
+
+function getSnippetPath(url: URL, type: string): string | undefined {
+  const path = url.searchParams.get("snippet");
+  if (path === undefined || path === null || path.length === 0) {
+    return undefined;
+  }
+  return path.endsWith(`.${type}`) ? path : `${path}.${type}`;
 }

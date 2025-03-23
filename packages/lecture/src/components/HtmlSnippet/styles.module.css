@@ -1,0 +1,44 @@
+.htmlSnippetContainer {
+  margin-bottom: var(--ifm-leading);
+  position: relative;
+}
+
+.htmlSnippet {
+}
+
+.summary {
+  font-size: 15.2px;
+  font-weight: 500;
+  padding: 12px 16px;
+  background-color: #f6f8fa;
+}
+
+.headerButton {
+  position: absolute;
+  box-sizing: content-box;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  padding: 12px 16px;
+  height: 26px;
+  top: 0;
+}
+
+.trySandbox {
+  right: 0;
+}
+
+.execute {
+  right: 160px;
+  user-select: none;
+  &:hover {
+    text-decoration: underline;
+  }
+  &:active {
+    color: rgb(157, 102, 0);
+  }
+}
+
+.codeBlock {
+  margin-bottom: 0 !important;
+}

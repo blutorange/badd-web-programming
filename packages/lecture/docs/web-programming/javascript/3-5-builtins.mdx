@@ -1,0 +1,219 @@
+---
+id: builtins
+slug: /builtins
+sidebar_position: 5
+description: Eingebaute Standardbibliothek wie JSON, Date und RegExp.
+---
+
+import JsSnippet from "@site/src/components/JsSnippet";
+
+# Abschnitt 5 - Builtin Objects
+
+In diesem Abschnitt wollen wir uns einige hilfreiche Objekte anschauen, die
+von der Programmiersprache JavaScript bereits mitgeliefert werden (Standard-Bibliothek).
+
+Wir werden nur beispielshaft einige Funktionen uns anschauen. Wichtig ist zu verstehen,
+dass JavaScript diverse Funktionalitäten bereits mitbringt. Bei Bedarf können
+diese immer in der Spezfikation oder Dokumentation angeschaut werden. Die
+[MDN WebDocs](https://developer.mozilla.org/en-US/) sind eine gute Ressource.
+
+## Number
+
+Einige Methoden, um mit Zahlen zu arbeiten. Siehe auch
+[MDN WebDocs - Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)
+
+- `(255).toString(16)`
+- `(0.123456789).toFixed(2)`
+- `(4_249).toExponential(3)`
+
+Um einen String in eine Zahl umzuwandeln, gibt es 2 statische Hilfsmethoden:
+
+- `Number.parseInt("42")` - Für eine Ganzzahl
+- `Number.parseFloat("42.24")` - Für eine Gleitkommazahl
+
+## String
+
+Viele Methoden, um mit Zeichenketten zu arbeiten. Siehe auch
+[MDN WebDocs - String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+- `"Hallo Welt".substring(0, 5)`
+- `"hallo".toUpperCase()`
+- `"file.js".endsWith(".js")`
+
+## Array
+
+Wir haben Arrays bereits als wichtige Datenstruktur kennengelernt, um mit mehreren
+gleichartigen Elementen zu arbeiten.
+
+Arrays haben einige Methoden, um mit diesen Elementen zu arbeiten. Siehe auch
+[MDN WebDocs - String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
+
+- `[1, 2, 3].join("|")` - Alle Elemente zu einem String verbinden.
+- `[1, 2, 3].map(x => x * 2)` - Alle Elemente in andere Elemente überführen
+- `[1, 2, 3]`.filter(x => x % 2 === 0) - Bestimmte Elemente herausfiltern
+
+## Date
+
+Date ist eine Klasse, um mit Datums- und Zeitwerten zu arbeiten. Das aktuelle
+Datum erhalten wir mittels `new Date()`.
+
+Siehe
+[MDN WebDocs - Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
+
+:::info
+Das Date-Klasse ähnelt der [gleichnamigen Klasse](https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/util/Date.html)
+in Java und weist die gleichen Probleme auf. Zeitzonen werden nicht ausreichend
+beachtet, Zeitpunkte und Darstelung von Zeitpunkten in verschiedenen Ländern und
+Kulturen werden miteinande vermischt. In Java wurde mittlerweile eine neue
+[Time-API](https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html)
+eingeführt, welche diese und andere Probleme adressiert. 
+
+Für JavaScript gibt
+es das TC39-Proposal [Temporal](https://github.com/tc39/proposal-temporal), was
+eine analoge API vorschlägt. Siehe auch die
+[MDN WebDocs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal)
+hierzu. Im [nightly-Build von Firefox](https://developer.mozilla.org/en-US/blog/javascript-temporal-is-coming/)
+und über [ein Feature-Flag in Deno](https://deno.com/blog/v1.40#temporal-api)
+kann diese API bereits ausprobiert werden.
+:::
+
+Ein wichtiges Konzept bei der Arbeit mit Datumswerten ist die sogenannte
+UNIX-Zeitstempel. Hier handelt es sich um eine standardisierte Weise, einen Zeitpunkt
+als reine Zahl zu beschreiben. Ein UNIX-Zeitstempel für einen Zeitpunkt `T` ist
+definiert als die Zeitdifferenz zum Bezugszeitpunkt `01. Januar 1970, 00:00 Uhr`.
+
+Ein UNIX-Zeitstempel wird oft in Sekunden oder Millisekunden angegeben.
+Mittels `Date.now()` können wir direkt auf die Anzahl der Millsekunden zugreifen:
+
+<JsSnippet path="date-now.js" nonDeterministic />
+
+Date stellt Methoden bereit, mit denen wir auf die Teile eines Datums zugreifen können:
+
+- `new Date().getDate()` - Tag des Monats, z.B. 23 am 23. März
+- `new Date().getMonth()` - Monat des Jahrs, _beginnend bei 0_, z.B. 2 für März
+- `new Date().getFullYear()` - Jahreszahl, z.B. 2025
+- `new Date().getHours()` - Stunde, z.B. 12 für 12:27 Uhr
+- `new Date().getMinutes()` - Minute, z.B. 27 für 12:27 Uhr
+
+## RegExp
+
+Mit der RegExp-Klasse können wir ["reguläre" Ausdrücke](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions)
+ausführen. Englisch heißen diese `regular expression` und werden oft zu `RegExp`
+oder `regex` abgekürzt.
+
+:::info
+Im ursprünglichen Sinne bezeichnet "regulär" nur eine kleine Untermenge von dem,
+was Programmierer aktuell unter RegExp verstehen. Durch diese Einschränkung
+ist es echten regulären Ausdrücken möglich, schnell ausgeführt zu werden (lineare
+in Größe des Inputs).
+
+Bei RegExp, wie diese in den meisten Programmiersprachen implementiert sind, ist
+dies nicht mehr gegeben. Man versuche etwa einmal, folgende RegExp auszuführen.
+Vorsicht: Das dauert so lange, dass der Rechner nie damit fertig wird. Der Tab
+muss möglicherweise nach Ausführung geschlossen werden, um das Script abzubrechen.
+
+```js
+/^(1+)*$/.test("111111111111111111111111111111111111111111111x")
+```
+:::
+
+Vereinfacht gesagt ist eine RegExp eine Muster, das gegen eine Zeichenkette (String)
+getestet werden kann. Fals wir etwa wissen wollen, ob ein String nur aus den Ziffern
+0-9 besteht, können wir diese wie folgt tun:
+
+<JsSnippet path="regexp-test.js" />
+
+:::info
+Es gibt 2 Möglichkeiten, um RegExp zu erzeugen. Entweder durch Erstellen einer
+neuen Instanz der Klasse `new RegExp("^\\d+$")` oder durch die spezielle
+Schreibweise `/^\d+$/`. Letztere ist vorteilhaft, da hier kein String verwendet
+werden muss, in dem noch einmal separat Sondernzeichen escaped werden müssen.
+:::
+
+Mit `^` sagen wir, dass wir am Anfang des Strings anfangen wollen. `[0-9]` sind
+die Zeichen von 0 bis 9. `+` bedeutet, dass diese Zeichen mehrfach vorkommen
+dürfen. `$` schließlich bezeichnet das Ende des Strings. In anderen Worten: Das Muster
+beschreibt Strings, die zwischen Anfang und Ende nur die Ziffern 0-9 enthalten.
+
+Manchmal wollen wir nicht nur wissen, ob ein String einem bestimmten Muster
+entspricht, sondern wir wollen auch einen String in seine Bestandteile auseinander
+nehmen. Nehmen wir etwa an, wir haben als Eingabe Strings mit einem Datumswert
+im Format `01.11.2025` (Tag, Monat, Jahr). Wir möchten gerne den Tag, den Monat
+und das Jahr als Zahl erhalten.
+
+Dazu können wir sogenannte  [Capture-Gruppen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Capturing_group)
+verwenden. Wenn wir einen Teil einer RegExp mit runden Klammern `(...)` umgeben,
+können wir später auf die entsprechenden Teie zugreifen:
+
+<JsSnippet path="regexp-capture-group.js" toggleable />
+
+Der Übersichtlichkeit halber können wir Capture-Gruppen auch Namen geben:
+
+<JsSnippet path="regexp-capture-group-named.js" toggleable />
+
+## JSON
+
+JSON steht für `JavaScript Object Notation`. Inzwischen ist dieser Name nur
+noch historisch sinnvoll, JSON ist ein von JavaScript unabhängiger Standard,
+um Daten zu beschreiben und zwischen Programmen und verschiedenen Rechnern
+auzutauschen.
+
+Siehe [RFC7159](https://datatracker.ietf.org/doc/html/rfc7159) für die Spezfikation,
+[json.org](https://www.json.org/json-en.html) für eine visuelle Illustration.
+
+JSON wurde bewusst einfach gehalten und hat sich als universelles Datenaustauschformat
+bewährt. REST-APIs sind Schnittstellen, die Webdienste anbieten, um mit diesen
+zu kommunizieren und verwenden oft JSON. Beispielsweise hat Wikimedia eine solche
+REST-API, um auf verschiedene Funktionalitäten zuzugreifen, etwa zum Finden von
+noch nicht übersetzten Artikeln:
+
+> https://en.wikipedia.org/api/rest_v1/data/recommendation/article/creation/translation/de?count=24
+
+JSON basiert auf der Art und Weise, wie in JavaScript Objekte und Arrays dargestellt
+werden. Im Vergleich zu JavaScript sind Anführungszeichen aber Pflich. Es gibt
+bei JSON 6 verschiedene Datentypen:
+
+- `null`
+- Wahrheitswert (`true` oder `false`)
+- Zahl
+- String
+- Array
+- Objekt
+
+Ein Beispiel für JSON-Daten:
+
+```json
+{
+  "name": "Picard",
+  "age": 80,
+  "active": false,
+  "hobbies": [
+    "Archaeology",
+    "Earl Grey"
+  ]
+}
+```
+
+Um ein Objekt in einen JSON-String zu serialisieren, verwenden wir die Funktion
+`JSON.stringify`:
+
+<JsSnippet path="json-stringify.js" toggleable />
+
+Um einen serialisierten JSON-String in ein JavaScript-Objekt umzuwandeln, verwenden
+wir die Funktion `JSON.parse`:
+
+<JsSnippet path="json-parse.js" toggleable />
+
+:::info
+[YAML](https://yaml.org/) (`YAML Ain't Markup Language`) ist ein Format mit einem
+ähnlichen Zweck und Umfang wie JSON. Es zeichnet sich dadurch aus, dass es
+für Computer schwieriger, für Menschen aber einfacher zu lesen ist.
+:::
+
+:::warning
+Ein weiteres Datenaustauschformat ist [XML](https://www.w3.org/TR/2008/REC-xml-20081126/)
+(`eXtensible Markup Language`). Im Gegensatz zu JSON ist dies weitaus komplexer.
+Ein bekannter Anwendungsfall ist das Protokoll [SOAP](https://www.w3.org/TR/soap12/).
+Ursprünglich für `Simple Object Access Protocol` stand, was sich aber als fraglich
+erwiesen hat.
+:::
