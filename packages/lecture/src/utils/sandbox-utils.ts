@@ -24,6 +24,8 @@ export type Pending<T> =
 
 export type AsyncResultHandler = (results: JsResult[]) => void;
 
+export type CodeType = "ts" | "js" | "html" | "css";
+
 export type JsResultType =
   | "console-debug"
   | "console-log"
@@ -110,7 +112,7 @@ export function useMappedLocalStorage<T>(
 
 export function useCode(
   keyPrefix: string,
-  type: "js" | "html" | "css",
+  type: CodeType,
   initial: string,
 ): [current: Pending<string>, set: Dispatch<string>, reset: () => void] {
   const url = new URL(window.location.href);
@@ -144,6 +146,22 @@ export function useCode(
       setLocal({ loading: true });
     },
   ];
+}
+
+import { transformSync } from "@swc/wasm-web";
+
+export function evaluateTypeScript(
+  code: string,
+  asyncResultHandler?: AsyncResultHandler,
+): JsResult[] {
+  let javaScript: string;
+  try {
+    javaScript = transformSync(code, {sourceMaps: "inline", filename: "file.ts"}).code;
+  } catch (e) {
+    console.error("Unable to transpile JavaScript", e);
+    return [];
+  }
+  return evaluateJavaScript(javaScript, asyncResultHandler);
 }
 
 export function evaluateJavaScript(
@@ -211,10 +229,7 @@ export function evaluateJavaScript(
   }
 }
 
-export async function loadCode(
-  type: "js" | "html" | "css",
-  path: string,
-): Promise<string> {
+export async function loadCode(type: CodeType, path: string): Promise<string> {
   const resolvedPath = path.endsWith(`.${type}`) ? path : `${path}.${type}`;
   try {
     const code = await import(
@@ -228,7 +243,7 @@ export async function loadCode(
 
 export function captureLogEntries(
   window: typeof globalThis,
-  onLogEntry:(entry: JsResult) => void,
+  onLogEntry: (entry: JsResult) => void,
 ) {
   const originalLog = window.console.log;
   const originalDebug = window.console.debug;

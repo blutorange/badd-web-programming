@@ -3148,6 +3148,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@swc/wasm-web@npm:^1.11.12":
+  version: 1.11.12
+  resolution: "@swc/wasm-web@npm:1.11.12"
+  checksum: 10c0/f8ed9b3c232252a7e17abc2007ba26abc080ac74c3c2534832a2a09b483d98e805eb4824849c186aa5db1fbc87a9b65fe0ddacc7f669e4fb6a49652bdc607f2e
+  languageName: node
+  linkType: hard
+
 "@szmarczak/http-timer@npm:^5.0.1":
   version: 5.0.1
   resolution: "@szmarczak/http-timer@npm:5.0.1"
@@ -7830,6 +7837,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lz-string@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "lz-string@npm:1.5.0"
+  bin:
+    lz-string: bin/bin.js
+  checksum: 10c0/36128e4de34791838abe979b19927c26e67201ca5acf00880377af7d765b38d1c60847e01c5ec61b1a260c48029084ab3893a3925fd6e48a04011364b089991b
+  languageName: node
+  linkType: hard
+
 "make-fetch-happen@npm:^14.0.3":
   version: 14.0.3
   resolution: "make-fetch-happen@npm:14.0.3"
@@ -9330,9 +9346,11 @@ __metadata:
     "@docusaurus/types": "npm:3.7.0"
     "@mdx-js/react": "npm:^3.0.0"
     "@monaco-editor/react": "npm:^4.7.0"
+    "@swc/wasm-web": "npm:^1.11.12"
     "@types/react": "npm:^18.3.12"
     clsx: "npm:^2.0.0"
     docusaurus-plugin-image-zoom: "npm:^3.0.1"
+    lz-string: "npm:^1.5.0"
     monaco-editor: "npm:^0.52.2"
     primeflex: "npm:^4.0.0"
     primereact: "npm:^10.9.2"

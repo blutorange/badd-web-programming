@@ -4,4 +4,82 @@ slug: /types
 sidebar_position: 10
 ---
 
+import JsSnippet from "@site/src/components/JsSnippet";
+import TsSnippet from "@site/src/components/TsSnippet";
+
 # Abschnitt 10 - TypeScript
+
+Bisher konnten wir in JavaScript-Dateien alles schreiben, was wir wollten, und
+vom Browser ausführen lassen. Manchmal sind bei diesem Versuch Scherben geflogen
+und wir haben Fehler vom Browser erhalten.
+
+Wäre es nicht aber schön, wenn die IDE oder ein Checker schon vor Ausführung
+des Codes auf potentielle Fehler prüfen könnte? Auch wenn dabei nicht alle
+Fehler und Bugs auffalen, ist es hilfreich, die Menge an Fehlern zu reduzieren.
+Zudem besteht die Gefahr, dass wir beim Ausführen von Code Fehler übersehen,
+die in Code-Teilen stecken, die nur selten  ausgeführt werden (Fehlerbehandlung,
+Edge Cases).
+
+Dies ist die Idee von Typen-Checkern und einem Typen-System.
+
+Mit Typ ist die Art von Wert gemeint, die eine Variable besitzt. Als Programmierer
+legen wir für jede Variable fest, welchen Typ diese hat. Der Type-Checker kann
+dann prüfen, ob diese Typen durch das gesamte Programm hinweg konsistent sind.
+Sind sie es nicht, wird ein Fehler gemeldet. Andernfalls ist gewährleistet, dass
+die Variablen auch zur Laufzeit den entsprechenden Typ haben. Durch diese
+Vorgehensweise werden einige typische Fehler wie `xxx is not a function`
+in folgenden Code vermieden:
+
+<JsSnippet path="undefined-not-function" />
+
+## Typensysteme für JavaScript
+
+Mit zunehmender Komplexität von JavaScript-Code und Webanwendungen wurden
+verschiedene Typensysteme für JavaScript entwickelt:
+
+- [TypeScript](https://www.typescriptlang.org/) unter der Federführung von Microsoft
+- [Flow](https://flow.org/), unter der Federführung von Facebook
+- [Elm](https://elm-lang.org/), wobei es sich aber um eine funktionale Sprache
+  handelt, die zwar in JavaScript übersetzt wird, aber nur noch wenig mit JavaScript
+  zu tun hat.
+
+Im grundlegenden Gebrauch sind beide Typensystem sehr ähnlich. Der folgende
+Code ist sowohl gültiges TypeScript als auch gültiges Flow:
+
+<TsSnippet path="append-to-list" />
+
+Inzwischen hat TypeScript am meisten Verwendung gefunden, daher wollen wir uns
+in diesem Abschnitt TypeScript etwas genauer anschauen.
+
+## Design-Goals
+
+Keine Runtime, nur Typen Annotationen
+
+## Transpilation
+
+:::info
+Aufgrund der großen Beliebtheit von Typen in JavaScript gibt es ein TC39-Proposal,
+Raum für Typen-Annotationen in der Syntax von JavaScript zu schaffen:
+[Type Annotations](https://github.com/tc39/proposal-type-annotations). Diese müssen
+als Art Kommentar verstanden werden -- JavaScript selber prüft diese nicht. Dafür
+wären immer noch 3rd-Party-Tools notwendig. Vorteil wäre aber eine einheitliche
+Sytnax und die Möglichkeit, typenannotiertes JavaScript ohne Transformationschritt
+direkt auszuführen.
+:::
+
+## Basis-Typen
+
+undefined, string, number, boolean, array, object
+
+union type
+
+## DefinitelyTyped
+
+https://github.com/DefinitelyTyped/DefinitelyTyped
+
+## Soundness
+
+Pitfalls, not sound
+
+optional
+
