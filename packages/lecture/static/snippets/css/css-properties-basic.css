@@ -1,0 +1,41 @@
+details {
+  color: #666;
+  background-color: #f1f1f1;
+  border: 1px solid #e3e3e3;
+  border-radius: 12px;
+  cursor: help;
+  padding: 1em 2em 2em;
+  margin: 2em;
+  transition: background-color 0.3s;
+
+  div {
+    margin: 1em 0;
+  }
+
+  &:hover {
+    background-color: #f7eded;
+  }
+}
+
+summary {
+  font-size: 16px;
+  color: darkblue;
+  padding: 1em 0;
+
+  &::first-letter {
+    font-size: 125%;
+    font-weight: bold;
+  }
+}
+
+.left {
+  text-align: left;
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}

@@ -214,7 +214,7 @@ Kinderelemente hinzuzufügen:
 
 ```js
 // Eregbnis:
-// <fieldset><input></input><input></input></fieldset>
+// <fieldset><input /><input /></fieldset>
 const input1 = document.createElement("input");
 const input2 = document.createElement("input");
 document.querySelector("fieldset").append(input1, input2);
@@ -226,7 +226,7 @@ können wir `before` und `after` verwenden. Nehmen wir an, das HTML war vorher:
 
 ```html
 <fieldset>
-  <input></input>
+  <input />
   <textarea></textarea>
 </fieldset>
 ```
@@ -244,7 +244,7 @@ Dann erhalten wir danach das folgende HTML:
 
 ```html
 <fieldset>
-  <input></input>
+  <input />
   <select></select>
   <p></p>
   <textarea></textarea>
