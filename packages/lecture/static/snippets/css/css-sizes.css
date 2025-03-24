@@ -1,0 +1,33 @@
+html {
+  font-size: 20px;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+section {
+  font-size: 1.5rem;
+}
+
+article {
+  font-size: 0.75em;
+}
+
+.left {
+  width: 30%;
+  height: 4em;
+  background-color: green;
+  display: inline-block;
+}
+
+.right {
+  width: 30%;
+  height: 4em;
+  background-color: blue;
+  display: inline-block;
+}

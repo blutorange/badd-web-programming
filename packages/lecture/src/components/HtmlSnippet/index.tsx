@@ -9,6 +9,7 @@ import { loadCode, type Pending } from "@site/src/utils/sandbox-utils";
 export interface HtmlSnippetProps {
   title?: string;
   path: string;
+  type?: "html" | "js" | "css",
   nonDeterministic?: boolean;
   toggleable?: boolean;
 }
@@ -41,9 +42,9 @@ function HtmlSnippetContent(props: HtmlSnippetProps): ReactNode {
 
   useEffect(() => {
     if (code.loading) {
-      loadAndSetHtmlCode(setCode, props.path);
+      loadAndSetHtmlCode(setCode, props.type ?? "html", props.path);
     }
-  }, [code.loading, props.path]);
+  }, [code.loading, props.type, props.path]);
 
   return (
     <>
@@ -59,7 +60,7 @@ function HtmlSnippetContent(props: HtmlSnippetProps): ReactNode {
         className={styles.codeBlock}
         title={props.title ?? props.path}
         showLineNumbers={true}
-        language="html"
+        language={props.type ?? "html"}
       >
         {code.loading ? "loading..." : code.value}
       </CodeBlock>
@@ -69,8 +70,9 @@ function HtmlSnippetContent(props: HtmlSnippetProps): ReactNode {
 
 export async function loadAndSetHtmlCode(
   setCode: (code: Pending<string>) => void,
+  type: "html" | "js" | "css",
   path: string,
 ): Promise<void> {
-  const code = await loadCode("html", path);
+  const code = await loadCode(type, path);
   setCode({ loading: false, value: code });
 }

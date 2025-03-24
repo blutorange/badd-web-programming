@@ -110,7 +110,7 @@ Nachdem wie Elemente selektiert haben, geben wir eine Liste von Eigenschaften
 an, die wir auf einen anderen Wert setzen wollen. Hier ein Beispiel mit
 einigen häufig verwendeten Properties:
 
-<HtmlSnippet path="css-properties-basic" toggleable />
+<HtmlSnippet path="css-properties-basic" toggleable type="css" />
 
 Je nach Zählweise kann man [über 1700](https://www.w3.org/Style/CSS/all-properties.en.html)
 verschiedene CSS-Properties zählen. Eine Erklärung all dieser Eigenschaften
@@ -237,20 +237,265 @@ einer solchen Regel:
 }
 ```
 
+## Vererbung
+
+Wir haben gesehen, dass wir das Styling der Eigenschaften von HTML-Elementen
+beeinflussen können. Einen Effekt hatten wir bisher noch nicht genauer betrachtet.
+Wie beeinflussen Eigenschaften eines HTML-Elements die Eigenschaften der
+Kinderelemente?
+
+Im CSS gibt es einige Eigenschaften,
+[die vererbt werden](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascade/Inheritance).
+
+Um das zu illustrieren, schauen wir uns folgendes Beipsiel an:
+
+<HtmlSnippet path="css-inheritance" type="css" />
+
+Obwohl wir nur auf dem `<fieldset>`-Element die Eigenschaft `color: darkred`
+gesetzt haben, ist der gesamte Inhalt im Fieldset rot.
+
+Das liegt daran, dass `color` eine vererbbare Eigenschaft ist. Vererbbare Eigenschaften
+werden immer automatisch auf alle Kinderelemente angewandt. Der geerbte Wert wird
+aber nur verwendet, solange am Kindelemente nicht explizit ein anderer Wert
+gesetzt wurde:
+
+<HtmlSnippet path="css-inheritance-override" type="css" />
+
+Ein typischer Anwendungsfall besteht daran, wenn wir eine Standard-Schriftart
+und Größe für die gesamte Seite setzen möchten. Auch `font-size` und `font-family`
+sind vererbbare Eigenschaften:
+
+```css
+html {
+  font-size: 14pt;
+  font-family: serif;
+}
+```
+
+Ob eine Eigenschaft vererbbar ist oder nicht, können wir beispielsweise definiert
+MDN WebDocs entnehmen:
+
+> https://developer.mozilla.org/en-US/docs/Web/CSS/font-size#formal_definition
+
+Beispiele für nicht vererbbare Eigenschaften sind etwa `padding` (Abstand)
+oder `border` (Umrandung). 
+
 ## Kaskadierung
 
-Spezifizität, !important, Layer
+Bisher haben wir uns auf einfache CSS-Dateien mit wenigen Regeln beschränkt. In
+der Praxis auf Webseiten mit vielen CSS-Regeln passiert es aber nicht selten,
+dass verschiedene CSS-Regeln in Konflikt miteinander stehen:
 
-User Agent, ...
+<HtmlSnippet path="css-conflict" type="css" />
+
+Wir werden diese Konflikte aufgelöst?
+
+Im Folgenden werden wir die Konfliktlösung etwas vereinfacht darstellen. Alle
+Details finden sich bei [MDN WebDocs - Cascade](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascade/Cascade)
+oder in [CSS Cascading and Inheritance Level 4, § 6. Cascading](https://drafts.csswg.org/css-cascade/#cascading).
+
+Im Wesentlichen besteht die Konfliktlösung aus 3 Schritten:
+
+1. Es gewinnt die CSS-Regel, die aus dem Ursprung mit höchster Priorität stammt.
+2. Bei gleichen Ursprung: Es gewinnt die CSS-Regel mit der höchsten Spezifizität.
+3. Bei gleicher Spezifizität: Es gewinnt die CSS-Regel, die in der CSS-Datei zuletzt steht. 
+
+__Ursprung__
+
+Mögliche Ursprünge einer CSS-Regel sind (von höchster zu niedrigster Priorität):
+
+1. User-Agent-CSS mit `!important`.
+2. User-CSS mit `!important`.
+3. Autor-CSS mit `!important`.
+4. Autor-CSS
+5. User-CSS
+6. User-Agent-CSS
+
+Dabei bedeutet:
+
+- Autor-CSS, welches vom Autor der Webseite, also uns Programmierern stammt.
+- User-CSS, was der Nutzer hinterlegt hat , um CSS auf der Webseite
+  zu überschreiben. Tritt eher selten auf.
+- User-Agent-CSS: CSS, welches der Browser standardmäßig mit ausliefert. Die meisten
+  Browser bringen grundlegendes CSS mit, damit etwa Listen oder Fieldsets ein
+  grundlegendes Styling haben.
+
+Bei der Entwicklung von Webseiten haben wir es häufig nur mit einem Ursprung
+zu tun, dem `Autor-CSS` von uns.
+
+[!important](https://developer.mozilla.org/en-US/docs/Web/CSS/important) ist ein
+Flag, welches wir an jeder CSS-Eigenschaft setzen können, um dieser (gemäß obiger
+Regeln) mehr Gewicht zu verleihen:
+
+```css
+.hidden {
+  display: none !important;
+}
+```
+
+:::info
+In einigen Fällen kann die Verwendung von `!important` durchaus sinnvoll sein,
+um andere CSS-Regeln zu überschreiben. Meistens sollten  wir aber darauf
+verzichten, unser CSS reviewen und ein bessere Lösung finden. Kurzfristig könen
+wir mit `!important` zwar dafür sorgen, dass unsere CSS-Regeln angewandt wird,
+langfristig stoßen wir aber erneut auf Konflikte, wenn viele CSS-Regeln
+`!important` verwenden.  Ein `!very-important` gibt es nicht.
+:::
+
+__Spezifizität__
+
+Weisen 2 CSS-Regeln den gleichen Ursprung auf, wird die Spezifizität der Selektoren
+miteinander verglichen.
+
+Die Spezifizität eines Selektors ist ein Tripel von positiven Ganzzahlen und ergibt
+sich aus den darin verwendeten Bestandteilen.
+
+Der Vergleich 2 Spezifizitäten geschient von links nach rechts. Sind `(x1, x2, x3)`
+und `(y1, y2, y3)` 2 Spezifizitäten, wird zuerst `x1` und `y1` verglichen. Es gewinnt
+die Spezifizität mit dem höchsten Werte. Sind beide Werte gleich, wird `x2` mit
+`y2` verglichen und es gewinnt der höchsten Wert. Sind diese ebenfalls gleich, wird
+`x3` mit `y3` verglichen. Beispiel:
+
+- `(1, 1000, 20)` < `(2, 0, 0)`, weil `1 < 2`
+- `(9, 7, 3)` > `(9, 7, 2)`, weil `3 > 2`
+
+Die 3 Werte `(x1, x2, x3)` des Spezifizitäten-Tripel ergeben sich wie folgt:
+
+- `x1` - Anzahl der ID-Selektoren, z.B. `#blue-sky`
+- `x2` - Anzahl der Klassenselektoren, z.B. `.green-tea`
+- `x3` - Anzahl der Elementselektoren, z.B. `p` oder `input`
+
+Es gibt bei der Berechnung der Spezifizität noch einige Details zu beachten, auf
+die wir hier verzichten und die bei [MDN WebDocs - Specificity](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascade/Specificity)
+nachgelesen werden können.
+
+Kehren wir noch einmal zurück zu unseren anfänglichen Beispiel:
+
+```css
+/* Spezifizität (1, 0, 0) */
+#blue-sky {
+  color: blue;
+}
+
+/* Spezifizität (0, 1, 0) */
+.green-tea {
+  color: green;
+}
+
+/* Spezifizität (0, 0, 1) */
+p {
+  color: red;
+}
+```
+
+Es gewinnt daher der erste ID-Selektor und das Element erhählt die Farbe Blau.
+
+Das Anwenden dieser Regeln nennt man Kaskadierung. [Kaskade](https://de.wiktionary.org/wiki/Kaskade)
+stammt ab vom lateinischen `casicare` "Fallen" und bezeichnet einen stufenförmigen
+Wasserfall.
+
+![Kaskade (stufenförmiger Wasserfall)](/img/web/cascade.jpg)
+
+Bildlich können wir uns es vielleicht so vorstellen, dass die Regeln, von höchster
+zu niedrigster Priorität von oben nach unten herunterfallen.  Regeln niedrigerer
+Priorität werden somit von denen höherer Priorität verdrängt / fortgestoßen.
 
 ## Farben und Einheiten
 
-px, pt, em, rem, vh etc.
+CSS beschreibt das Layout und Design. Dazu gehören auch Farben- und Größenangaben.
 
-ff3300, rgba() hsl() ...
+__Farben__
+
+Farben können wir im CSS auf verschiedene Weisen angeben:
+
+- `rgb(255, 0, 0)` - Angabe der Rot-, Grün- und Blau-Komponente vom [RGB-Farbraum](https://developer.mozilla.org/en-US/docs/Glossary/RGB).
+- `#ff0000` - Auch RGB, aber Darstellung im Hexadezimalformat.
+- `hsl(270deg 100% 50%)` - Angabe von Hue (Farbton), Saturation (Sättigung) und Lightness (Helligkeit).
+
+Weitere Farbräume sind etwa noch
+[hwb](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/hwb),
+[lch](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/lch),
+[lab](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/lab),
+[oklab](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklab) oder
+[oklch](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklch).
+
+Zudem gibt es noch einige [Farbnamen](https://drafts.csswg.org/css-color/#named-colors)
+wie `yellow` oder `darkorange`, die wir verwenden können. Diese sind für Testzwecke
+hilfreich, in der Praxis ist aber die Verwendung eines konkreten Farbcodes zu empfehlen.
+
+Falls wir Transparenz möchten, kann noch ein vierter Wert zwischen 0 (transparent / durchsichtig)
+und 1  (opaque / undurchsichtig) ergänzt werden:
+
+<HtmlSnippet path="css-transparency" type="css" toggleable />
+
+__Größenangaben__
+
+Größenangaben benötigen wir etwa für Schriftgrößen und Abstände. CSS stellt
+eine umfangreiche Menge von Einheiten zur Verfügung, um Größen anzugeben.
+Einige wichtige sind:
+
+- `px` - Angabe in Pixeln. Browser auf mobile Geräte mit hochauflösenden Displays
+  setzen meist 1 CSS Pixel auf 2 oder mehr physische Pixel, damit Inhalte auf
+  Webseiten nicht zu klein sind. 
+- `pt` - Typografischer Punkt, etwas größer als 1 Pixel.
+- `em` - Relativ zur Schriftgröße des aktuellen Elements. Wenn das Element aktuell
+  etwa Schriftgröße `12px` hat, ist `1em = 1px`.
+- `rem` - Ähnlich wie `em`, aber relative zur Schriftgröße des Wurzel-HTML-Elements.
+- `%` - Relativ zu einem Bezugsmaß, das von der konkreten Verwendung abhängt.
+  Beispielsweise bedeutet `width: 50%` halb so breit wie das Elternelement.
+- `vw` - Steht für `Viewport Width`. `100vw` ist die Breite des Browser-Fensters.
+  Kann z.B. nützlich sein, um die Maximalbreite enes Overlay-Dialogs zu setzen.
+- `vh` - `Viewport Height`, `100vh` ist die Höhe des Browser-Fensters.
+- `mm` / `cm` - Steht für Millimeter und Centimeter, __ist aber nicht zwangsläufig__
+  auch eine Millimeter oder Zentimeter. Auf Computerbildschirmen kann die Größe
+  anders sein. Beim Ausdrucken sollte `mm` und `cm` das korrekte Maß haben.
+
+Siehe auch [W3C - CSS tips & tricks](https://www.w3.org/Style/Examples/007/units.en.html).
+
+`px` ist of ein gutes Wahl für Größenangaben und garantiert, dass Linie mit einem
+Vielfachen von `1px` auch scharf dargestellt werden.
+
+Für Schriftgrößen ist `em` empfehlenswert. Der Browser des Geräts, wo die Webseite
+dargestellt wird, kann die Schriftgröße vom `html`-Element entsprechend der
+Geräteeinstellungen setzen. Sehbeinderte Nutzer könnten diese etwa höher setzen.
+Alle Texte, die `em` verwenden, sind dann relativ zu dieser Größe. Aus dem
+gleichen Grund kann auch `rem` sinnvoll sein, was immer relativ zur Schriftgröße
+vom `html`-Element ist.
+
+<HtmlSnippet path="css-sizes" type="css" toggleable />
 
 ## Box-Model
 
-margin, border, padding, content 
+Das Box-Model ist ein weiteres grundlegendes Konzept von CSS. Jedes Element
+wird dabei als Box betrachtet, die 4 Eigenschaften hat:
 
-negative margins
+- Content: Der Inhalt des Elements selber.
+- Padding: Innerer Abstand um das Element herum.
+- Border: Umrandung um das Element.
+- Margin: Äußerer Abstand um das Element herum.
+
+Padding ist innerhalb der Border, Margin außerhalb der Border.
+
+<HtmlSnippet path="box-model" type="css" toggleable />
+
+![CSS-Box-Model](/img/web/css-box-model.png)
+
+In anderen Worten, Padding wird benutzt, um den Inhalt eines Elements vom
+einzurücken, Margin wird verwendet, um ein Element von anderen Elementen zu trennen.
+
+Die Eigenschaften `width` und `height` geben die Größe eines Elements an.
+Standardmäßig beziehen sich diese nur auf den Inhalt ohne die Umrandung. Durch
+Setzen von `box-sizing: border-box` können wir erreichen, dass diese beiden
+Eigenschaften die Größe inklusive Rand verändern. Das ist oft nützlich, wenn
+wir die Gesamtgröße setzen wollen und die Größe der Umrandung (Border) die
+Gesamtgröße nicht ändern soll.
+
+<HtmlSnippet path="box-sizing" type="css" toggleable />
+
+:::warning
+Manchmal werden negative Margins verwendet, z.B. `margin: -10px`. Dies ist
+wohldefiniert, kann aber für schwer verständliche Layout-Probleme sorgen. Wir
+sollten daher auf solche negative Margins verzichten. Oft habe ich ich gesehen,
+dass diese nur als Workaround für ein anderes Problem mit dem CSS-Code
+verwendet wurden.
+:::

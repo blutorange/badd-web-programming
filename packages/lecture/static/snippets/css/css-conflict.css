@@ -1,0 +1,13 @@
+/* <p id="blue-sky" class="green-tea" >*/
+
+#blue-sky {
+  color: blue;
+}
+
+.green-tea {
+  color: green;
+}
+
+p {
+  color: red;
+}
