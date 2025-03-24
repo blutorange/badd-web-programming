@@ -1,0 +1,16 @@
+p {
+  font-family: serif;
+}
+
+p::first-letter {
+  font-size: 3em;
+  font-weight: bold;
+}
+
+p::first-line {
+  letter-spacing: 1px;
+}
+
+input::placeholder {
+  color: darkorange;
+}

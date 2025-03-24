@@ -1,0 +1,15 @@
+@layer common, custom;
+
+@layer common {
+  #list {
+    color: blue;
+  }
+}
+
+@layer custom {
+  /* This rule wins despite having a lower specificity. */
+  /* Try removing the layers, and the text will be blue */
+  .list {
+    color: darkgoldenrod;
+  }
+}

@@ -1,0 +1,28 @@
+table {
+  width: 100%;
+  border: 1px solid #ccc;
+}
+
+thead {
+  background-color: #333;
+  color: white;
+}
+
+tbody tr:nth-child(2n) {
+  background-color: #f1f1f1;
+}
+
+tbody tr:nth-child(2n + 1) {
+  background-color: #f3f8f8;
+}
+
+tbody tr {
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: orange;
+  }
+}
+
+body {
+  margin: 2em;
+}

@@ -1,0 +1,20 @@
+button::before {
+  content: "\2648";
+  margin-right: 1em;
+}
+
+button::after {
+  content: "\26c4";
+  margin-left: 1em;
+}
+
+button {
+  border: none;
+  padding: 1em 2em;
+  border-radius: 8px;
+  color: #333;
+  font-size: 22px;
+  &:hover {
+    background-color: orange;
+  }
+}

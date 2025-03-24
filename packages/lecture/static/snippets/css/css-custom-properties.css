@@ -1,0 +1,30 @@
+:root {
+  --theme-color: orange;
+  --theme-color-dark: darkorange;
+}
+
+h1 {
+  color: var(--theme-color-dark);
+}
+
+input {
+  color: var(--theme-color-dark)
+}
+
+button {
+  padding: 1em 4em;
+  background-color: var(--theme-color);
+  &:hover {
+    background-color: var(--theme-color-dark);
+  }
+}
+
+footer {
+  margin-top: 2em;
+  border-top: 1px solid var(--theme-color);
+}
+
+footer p::first-letter {
+  font-size: 1.5em;
+  color: var(--theme-color-dark);
+}

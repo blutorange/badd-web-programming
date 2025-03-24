@@ -1,0 +1,9 @@
+.fancy-button {
+  padding: 1em 3em;
+  background-color: black;
+  color: white;
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: #633;
+  }
+}
