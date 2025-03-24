@@ -1,11 +1,7 @@
 // Findet die ersten 20 durch 3 teilbaren Quadratzahlen
-const first200SquareNumbersDivisibleBy3 = limit(
-  filter(
-    map(integers(), (x) => x * x),
-    (x) => x % 3 === 0,
-  ),
-  20,
-);
+const first200SquareNumbersDivisibleBy3 
+  = limit(filter(map(integers(), square), isDivisibleBy(3)), 20);
+
 for (const x of first200SquareNumbersDivisibleBy3) {
   console.log(x);
 }
@@ -47,4 +43,12 @@ function* integers() {
   while (true) {
     yield i++;
   }
+}
+
+function square(x) {
+  return x * x;
+}
+
+function isDivisibleBy(n) {
+  return (x) => x % n === 0;
 }

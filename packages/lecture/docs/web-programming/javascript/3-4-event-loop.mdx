@@ -55,25 +55,7 @@ als `Event Loop` bezeichnet.
 
 In welcher Reihenfolge werden diese Log-Nachrichten ausgegeben?
 
-```js
-// Aufgrund von technische Einschränkungen aktuell nicht in der Sandbox möglich
-// Einfach einmal in der Konsole der Dev-Tools ausführen
-console.log("a")
-setTimeout(() => console.log("b"), 0);
-Promise.resolve().then(() => console.log("c"));
-setTimeout(() => console.log("d"), 0);
-console.log("e");
-```
-
-:::info
-Wer obiges Beispiel ausprobiert, wird feststellen, dass `d` vor `c` ausgegeben
-wird. Dies liegt daran, dass die Warteschlange noch einmal zwischen 2 Arten
-von Tasks unterscheidet: Normale `Task` und
-[Microtask](https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide).
-Microtasks haben höhere Priorität und werden vor den Tasks ausgeführt. Ein
-`Promise` erzeugt einen solchen Microtask, während `setTimeout` einen Task erzeugt.
-:::
-
+<JsSnippet path="event-loop-order" />
 
 Dieses Vorgehen von JavaScript stellt zudem auch sicher, dass typische Probleme
 paralleler Programmierung (z.B. Race-Condition, inkonsistenter Zustand,
@@ -84,3 +66,11 @@ zumindestens gemildert werden. Es ist für uns Programmierer auch einfacher,
 Wer schon einmal mit `synchronized` in Java, `MethodImplOptions.Synchronized`
 in C# oder Locks / Mutex im Allgemeinen gearbeitet hat: Diese Konstrukte sind
 aufgrund des Execution Model von JavaScript nicht erforderlich.
+
+:::info
+Wer obiges Beispiel ausprobiert, wird feststellen, dass `c` vor `d` ausgegeben
+wird. Dies liegt daran, dass die Warteschlange noch einmal zwischen 2 Arten von
+Tasks unterscheidet: Normale `Task` und [Microtask](https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide).
+Microtasks haben höhere Priorität und werden vor den Tasks ausgeführt. Ein
+`Promise` erzeugt einen solchen Microtask, während `setTimeout` einen Task erzeugt.
+:::

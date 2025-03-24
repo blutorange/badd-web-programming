@@ -4,11 +4,15 @@ import Layout from "@theme/Layout";
 
 import {
   type ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
 
 import { Editor as MonacoEditor } from "@monaco-editor/react";
+import type { editor } from "monaco-editor";
 
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primeflex/primeflex.css";
@@ -22,6 +26,7 @@ import {
   evaluateJavaScript,
   type AsyncResultHandler,
   useCode,
+  type JsResult,
 } from "@site/src/utils/sandbox-utils";
 
 // @ts-expect-error
@@ -34,41 +39,51 @@ function Sandbox(): ReactNode {
 
   const monacoContainerRef = useRef<HTMLDivElement | null>(null);
   const [onJsMount] = useMonacoResize(monacoContainerRef);
-  const [js, setJs] = useCode("sandbox_code_js", "js", InitialJs);
+
+  const [js, setJs, resetJs] = useCode("sandbox_code_js", "js", InitialJs);
   const [applyImmediately, setApplyImmediately] = useMappedLocalStorage(
     "sandbox_js_immediate",
     false,
     BooleanSerializer,
   );
-  const asyncResultHandler: AsyncResultHandler = (asyncResults) => {
-    setResult(asyncResults);
-  };
-  const [result, setResult] = useState(() =>
-    js.loading ? [] : evaluateJavaScript(js.value, asyncResultHandler),
-  );
+  const [result, setResult] = useState<JsResult[] | undefined>(undefined);
 
   const onReset = () => {
-    setJs(InitialJs);
+    resetJs();
+    setResult(undefined);
+  };
+  const onJsChange = (value: string) => setJs(value);
+  const onApply = () => {
+    if (!js.loading) {
+      setResult(evaluateJavaScript(js.value, "sandbox_js", onAsyncResult));
+    }
   };
 
-  const onJsChange = (value: string) => {
-    setJs(value);
-  };
+  const jsOptions = useMemo<editor.IStandaloneEditorConstructionOptions>(
+    () => ({ readOnly: js.loading }),
+    [js.loading],
+  );
 
-  const evalResult = applyImmediately
-    ? js.loading
-      ? []
-      : evaluateJavaScript(js.value, asyncResultHandler)
-    : result;
+  const onAsyncResult: AsyncResultHandler = useCallback(
+    (asyncResults) => setResult(asyncResults),
+    [],
+  );
+
+  const hasResult = result !== undefined;
+  useEffect(() => {
+    if (js.loading) {
+      return;
+    }
+    if (applyImmediately || !hasResult) {
+      evaluateJavaScript(js.value, "sandbox_js", onAsyncResult);
+    }
+  }, [applyImmediately, hasResult, js.loading, js.value, onAsyncResult]);
 
   const title = snippet ? `HTML Sandbox - ${snippet}` : "HTML Sandbox";
 
   return (
     <div className="sandbox-js">
       <h1>{title}</h1>
-      <p>
-        Einfache Sandbox, hier kann man JavaScript eingeben und ausprobieren.
-      </p>
       <div className="sandbox-js__options">
         <div className="inline-flex align-items-center">
           <Checkbox
@@ -90,35 +105,29 @@ function Sandbox(): ReactNode {
           <Button
             className="sandbox-js__button"
             label="Anwenden"
-            onClick={() =>
-              !js.loading &&
-              setResult(evaluateJavaScript(js.value, asyncResultHandler))
-            }
+            onClick={onApply}
           />
         )}
       </div>
       <div className="sandbox-js__code">
         <div className="sandbox-js__code-left" ref={monacoContainerRef}>
-          {js.loading ? (
-            "loading..."
-          ) : (
-            <MonacoEditor
-              value={js.value}
-              language="javascript"
-              onMount={onJsMount}
-              onChange={(value) => onJsChange(value ?? "")}
-            />
-          )}
+          <MonacoEditor
+            value={js.loading ? "" : js.value}
+            language="javascript"
+            options={jsOptions}
+            onMount={onJsMount}
+            onChange={(value) => onJsChange(value ?? "")}
+          />
         </div>
         <div className="sandbox-js__code-right">
           <ul className="sandbox-js__results">
-            {evalResult.map((r, index) => (
+            {(result ?? []).map((result, index) => (
               <li
                 // biome-ignore lint/suspicious/noArrayIndexKey: There's no ID
                 key={index}
-                className={`sandbox-js__result sandbox-js__result--${r.type}`}
+                className={`sandbox-js__result sandbox-js__result--${result.type}`}
               >
-                  {r.value}
+                {result.value}
               </li>
             ))}
           </ul>

@@ -179,8 +179,10 @@ Promise.reject("Error");
 
 Dies hatten wir auch im oberen Beispiel zur Simulation der Suchfunktionen verwenden.
 
-Mittels `new Promise()` können wir ein komplett eigenes Promise erstellen. Ein
-typsiches Demo-Beispiel ist ein Timeout-Promise, welches einige Sekunden warten:
+Mittels `new Promise()` können wir ein komplett eigenes Promise erstellen. Im
+Konstruktor erhalten wir 2 Funktion `resolve` und `reject`, mit denen wir das Promise
+asynchron beenden können, sobad wir ein Resultat haben. Ein typisches Demo-Beispiel
+ist ein Timeout-Promise, welches einige Sekunden wartet:
 
 <JsSnippet path="promise-timeout.js" toggleable />
 
@@ -205,7 +207,10 @@ Da die Funktion nun immer asynchron ist, können wir innerhalb der Funktion mitt
 `await` warten, bis ein Promise zu Ende ist. Die Ausführung der Funktion wird
 in der Zwischenzeit pausiert, sodass anderer Code ausgeführt werden kann.
 
-<JsSnippet path="promise-chain.js" toggleable nonDeterministic />
+Hier ist nochmal das vorige Beispiel, wo jede Suche mit einer Wahrscheinlichkeit
+von 10% fehlschlägt, aber diesmal mit `async` und `await`:
+
+<JsSnippet path="promise-chain-async-await.js" toggleable nonDeterministic />
 
 :::info
 In vielen Umgebungen ist es inzwischen auch möglich, `await` im sogenannten
@@ -408,7 +413,7 @@ auf Iterable schwer zu lesen ist. Falls das TC39-Proposal
 JavaScript aufgenommen wird, könnte man das etwa wie folgt schreiben:
 
 ```js
-integers
+integers()
   |> map(%, x => x * x)
   |> filter(%, x => x % 3 === 0)
   |> limit(%, 20)

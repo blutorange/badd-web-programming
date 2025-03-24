@@ -58,7 +58,7 @@ function TsSnippetContent(props: TsSnippetProps): ReactNode {
     e.preventDefault();
     if (!code.loading) {
       initSwc();
-      setResult(evaluateTypeScript(code.value, asyncResultHandler));
+      setResult(evaluateTypeScript(code.value, props.path, asyncResultHandler));
     }
   };
 

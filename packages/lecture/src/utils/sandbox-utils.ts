@@ -1,6 +1,10 @@
 import type { ColorMode } from "@docusaurus/theme-common";
+import { transformSync } from "@swc/wasm-web";
+
 import { useEffect, useState, type Dispatch } from "react";
 import useLocalStorage from "react-use-localstorage";
+
+import { getConstructorNames, isPromise } from "./lang-utils";
 
 const parser = new DOMParser();
 
@@ -19,7 +23,7 @@ a {
 `;
 
 export type Pending<T> =
-  | { readonly loading: true }
+  | { readonly loading: true, readonly value?: undefined }
   | { readonly loading: false; readonly value: T };
 
 export type AsyncResultHandler = (results: JsResult[]) => void;
@@ -148,24 +152,27 @@ export function useCode(
   ];
 }
 
-import { transformSync } from "@swc/wasm-web";
-
 export function evaluateTypeScript(
   code: string,
+  key: string,
   asyncResultHandler?: AsyncResultHandler,
 ): JsResult[] {
   let javaScript: string;
   try {
-    javaScript = transformSync(code, {sourceMaps: "inline", filename: "file.ts"}).code;
+    javaScript = transformSync(code, {
+      sourceMaps: "inline",
+      filename: "file.ts",
+    }).code;
   } catch (e) {
     console.error("Unable to transpile JavaScript", e);
     return [];
   }
-  return evaluateJavaScript(javaScript, asyncResultHandler);
+  return evaluateJavaScript(javaScript, key, asyncResultHandler);
 }
 
 export function evaluateJavaScript(
   code: string,
+  key: string,
   asyncResultHandler?: AsyncResultHandler,
 ): JsResult[] {
   const originalDebug = console.debug;
@@ -173,60 +180,81 @@ export function evaluateJavaScript(
   const originalInfo = console.info;
   const originalError = console.error;
   const originalWarn = console.warn;
-  const results: JsResult[] = [];
+  let results: JsResult[] = [];
+
   try {
-    console.debug = console.info = (...args: unknown[]) => {
-      results.push(logToJsResult("console-debug", args));
+    document.querySelector(`iframe[data-eval-id=${CSS.escape(key)}]`)?.remove();
+    const iframe = document.createElement("iframe");
+    iframe.dataset.evalId = key;
+    iframe.style.display = "none";
+    document.body.append(iframe);
+
+    const win = iframe.contentWindow as (Window & typeof globalThis) | null;
+    const doc = iframe.contentDocument;
+    let sync = true;
+
+    if (win === null || doc === null) {
+      return [];
+    }
+
+    const resultHandler = (result: JsResult) => {
+      if (sync) {
+        results.push(result);
+      } else {
+        results = [...results, result];
+        asyncResultHandler?.(results);
+      }
+    };
+
+    win.console.debug = console.info = (...args: unknown[]) => {
+      resultHandler(logToJsResult("console-debug", args));
       originalDebug.apply(console, args);
     };
-    console.log = console.info = (...args: unknown[]) => {
-      results.push(logToJsResult("console-log", args));
+    win.console.log = console.info = (...args: unknown[]) => {
+      resultHandler(logToJsResult("console-log", args));
       originalLog.apply(console, args);
     };
-    console.warn = (...args: unknown[]) => {
-      results.push(logToJsResult("console-debug", args));
+    win.console.info = console.info = (...args: unknown[]) => {
+      resultHandler(logToJsResult("console-log", args));
+      originalInfo.apply(console, args);
+    };
+    win.console.warn = (...args: unknown[]) => {
+      resultHandler(logToJsResult("console-warn", args));
       originalWarn.apply(console, args);
     };
-    console.error = (...args: unknown[]) => {
-      results.push(logToJsResult("console-error", args));
+    win.console.error = (...args: unknown[]) => {
+      resultHandler(logToJsResult("console-error", args));
       originalError.apply(console, args);
     };
-    try {
-      // biome-ignore lint/security/noGlobalEval: We use it for our own code snippets
-      const evalResult = eval.apply(null, [code]);
-      if (evalResult instanceof Promise) {
-        evalResult.then(
-          (value) =>
-            asyncResultHandler?.([
-              ...results,
-              { type: "result", value: stringify(value) },
-            ]),
-          (error) =>
-            asyncResultHandler?.([
-              ...results,
-              {
-                type: "error",
-                value: errorToString(error),
-              },
-            ]),
-        );
-      } else {
-        if (evalResult !== undefined) {
-          results.push({ type: "result", value: stringify(evalResult) });
-        }
+    win.addEventListener("error", (event) => {
+      resultHandler(errorToJsResult(event.error));
+      originalError.call(console, event.error);
+    });
+    win.addEventListener("unhandledrejection", (event) => {
+      resultHandler(errorToJsResult(event.reason));
+      originalError.call(console, event.reason);
+    });
+
+    const evalResult = win.eval.apply(null, [code]);
+
+    if (isPromise(evalResult)) {
+      evalResult.then(
+        (v) =>
+          v !== undefined ? resultHandler(resultToJsResult(v)) : undefined,
+        (e) => resultHandler(errorToJsResult(e)),
+      );
+    } else {
+      if (evalResult !== undefined) {
+        resultHandler(resultToJsResult(evalResult));
       }
-    } catch (e) {
-      originalError.apply(console, [e]);
-      results.push({ type: "error", value: errorToString(e) });
     }
-    return results;
-  } finally {
-    console.debug = originalDebug;
-    console.info = originalInfo;
-    console.log = originalLog;
-    console.error = originalError;
-    console.warn = originalWarn;
+
+    sync = false;
+  } catch (e) {
+    originalError.apply(console, [e]);
+    results.push(errorToJsResult(e));
   }
+  return results;
 }
 
 export async function loadCode(type: CodeType, path: string): Promise<string> {
@@ -279,6 +307,19 @@ function errorToString(e: unknown): string {
   return String(e);
 }
 
+function nodeToString(node: Node): string {
+  const attributeList: string[] = [];
+  if (node instanceof Element && node.attributes.length > 0) {
+    attributeList.push("");
+    const attributes = node.attributes;
+    for (let i = 0; i < attributes.length; i += 1) {
+      const attribute = attributes.item(i);
+      attributeList.push(`${attribute?.nodeName}=${attribute?.nodeValue}`);
+    }
+  }
+  return `<${node.nodeName}${attributeList.join(" ")} />`;
+}
+
 function stringify(value: unknown): string {
   switch (typeof value) {
     case "undefined":
@@ -304,18 +345,26 @@ function stringify(value: unknown): string {
         if (typeof value === "function") {
           return value.toString();
         }
+        if (value instanceof Error) {
+          return errorToString(value);
+        }
         if (typeof value === "object" && value !== null) {
           if (instances.has(value)) {
             return "circular";
           }
-          if (value === window || value === document) {
+          // Don't use instanceof, won't work for objects from another scope (e.g. iframe)
+          const names = getConstructorNames(value);
+          if (names.has("Window") || names.has("Document")) {
             return String(value);
           }
-          if (Object.keys(value).length > 50) {
+          if (names.has("Promise")) {
             return String(value);
           }
-          if (value instanceof Node) {
-            return stringifyNode(value);
+          if (names.has("Node")) {
+            return nodeToString(value as Node);
+          }
+          if (Object.keys(value).length > 30) {
+            return String(value);
           }
           instances.add(value);
           return value;
@@ -325,19 +374,6 @@ function stringify(value: unknown): string {
       return JSON.stringify(value, replacer, 2);
     }
   }
-}
-
-function stringifyNode(node: Node): string {
-  const attributeList: string[] = [];
-  if (node instanceof Element && node.attributes.length > 0) {
-    attributeList.push("");
-    const attributes = node.attributes;
-    for (let i = 0; i < attributes.length; i += 1) {
-      const attribute = attributes.item(i);
-      attributeList.push(`${attribute?.nodeName}=${attribute?.nodeValue}`);
-    }
-  }
-  return `<${node.nodeName}${attributeList.join(" ")} />`;
 }
 
 function getSnippetPath(url: URL, type: string): string | undefined {
@@ -353,4 +389,12 @@ function logToJsResult(type: JsResultType, args: unknown[]): JsResult {
     type,
     value: args.map((arg) => stringify(arg)).join("\t"),
   };
+}
+
+function resultToJsResult(value: unknown): JsResult {
+  return { type: "result", value: stringify(value) };
+}
+
+function errorToJsResult(error: unknown): JsResult {
+  return { type: "error", value: errorToString(error) };
 }

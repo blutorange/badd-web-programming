@@ -1,9 +1,16 @@
-findCityForZipCode("01309")
-  .then((city) => findMostFamousRestaurantForCity(city))
-  .then((restaurant) => findOpenHoursForRestaurant(restaurant))
-  .then((hours) => findUserFreeTimeForHours(hours))
-  .then((freeTime) => `Restaurant visit: ${freeTime}`)
-  .catch((error) => `Could not find free time: ${error}`);
+main();
+
+async function main() {
+  try {
+    const city = await findCityForZipCode("01277");
+    const restaurant = await findMostFamousRestaurantForCity(city);
+    const hours = await findOpenHoursForRestaurant(restaurant);
+    const freeTime = await findUserFreeTimeForHours(hours);
+    console.log(`Restaurant visit: ${freeTime}`);
+  } catch (error) {
+    console.error(`Could not find free time: ${error}`);
+  }
+}
 
 function findCityForZipCode(zipCode) {
   if (Math.random() > 0.9) return Promise.reject("ZIP code search failed");
@@ -22,5 +29,6 @@ function findOpenHoursForRestaurant(restaurant) {
 
 function findUserFreeTimeForHours(hours) {
   if (Math.random() > 0.9) return Promise.reject("Schedule search failed");
-  return Promise.resolve("20:00-21:00");
+  const mins = String(Math.floor(Math.random() * 60)).padStart(2, "0");
+  return Promise.resolve(`20:${mins}-21:${mins}`);
 }

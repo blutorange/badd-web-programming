@@ -1,3 +1,5 @@
+console.log("Please wait 5s....");
+
 // Promise zum Test, welches lange dauert
 const promise = waitMs(120_000).then(() => "Waited 120s");
 

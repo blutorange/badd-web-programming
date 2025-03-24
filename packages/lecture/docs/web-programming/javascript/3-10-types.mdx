@@ -7,7 +7,7 @@ sidebar_position: 10
 import JsSnippet from "@site/src/components/JsSnippet";
 import TsSnippet from "@site/src/components/TsSnippet";
 
-# Abschnitt 10 - TypeScript
+# Abschnitt 10 - Typisierung
 
 Bisher konnten wir in JavaScript-Dateien alles schreiben, was wir wollten, und
 vom Browser ausführen lassen. Manchmal sind bei diesem Versuch Scherben geflogen
@@ -32,16 +32,13 @@ in folgenden Code vermieden:
 
 <JsSnippet path="undefined-not-function" />
 
-## Typensysteme für JavaScript
+## Typen-Systeme für JavaScript
 
 Mit zunehmender Komplexität von JavaScript-Code und Webanwendungen wurden
 verschiedene Typensysteme für JavaScript entwickelt:
 
 - [TypeScript](https://www.typescriptlang.org/) unter der Federführung von Microsoft
 - [Flow](https://flow.org/), unter der Federführung von Facebook
-- [Elm](https://elm-lang.org/), wobei es sich aber um eine funktionale Sprache
-  handelt, die zwar in JavaScript übersetzt wird, aber nur noch wenig mit JavaScript
-  zu tun hat.
 
 Im grundlegenden Gebrauch sind beide Typensystem sehr ähnlich. Der folgende
 Code ist sowohl gültiges TypeScript als auch gültiges Flow:
@@ -53,9 +50,131 @@ in diesem Abschnitt TypeScript etwas genauer anschauen.
 
 ## Design-Goals
 
-Keine Runtime, nur Typen Annotationen
+TypeScript hat sich [verschiedene Ziele gesteckt](https://github.com/microsoft/TypeScript/wiki/TypeScript-Design-Goals),
+die es erfüllen möchte. Wir wollen uns zwei wichtige davon anschauen.
+
+### Nur Type-Checker
+
+TypeScript versteht sich nur als Type-Checker für JavaScript. Ziel ist nicht,
+neuen Syntax oder Features hinzuzufügen, die nicht mit normalen JavaScript
+möglich sind. 
+
+An allen Variablen, Funktionsparametern, Rückgabewerten und Klassenfeldern
+können wird in TypeScript nach einem Doppelpunkt `:` hinterlegen, von welchem
+Typ der Wert sein soll:
+
+```ts
+const age: number = 12;
+function sum(x: number, y: number): number { ... }
+class User {
+  name: string;
+  age: number
+}
+```
+
+Diese Typen nach dem Doppelpunkt nennt man Typen-Annotationen.
+
+Anders formuliert ist Ziel von TypeScript, dass wir diese Typen-Annotationen 
+entfernen können und dann bereits gültiges JavaScript erhalten, welches
+zum Beispiel im Browser ausgeführt werden kann.
+
+:::note
+Historisch besitzt TypeScript einige Features, welche diesem Design-Goal
+widersprechen. Im Wesentlichen sind dies [Enum](https://www.typescriptlang.org/docs/handbook/enums.html),
+[Namespace](https://www.typescriptlang.org/docs/handbook/namespaces.html) und
+[Parameter Properties](https://www.typescriptlang.org/docs/handbook/2/classes.html#parameter-properties).
+Zur Wahrung der Abwärtskompatibilität werden diese Features noc hunterstützt.
+Falls möglich, würde ich aber empfehlen, diese nicht mehr zu verwenden. Inzwischen
+gibt es in den [Compiler-Options](https://www.typescriptlang.org/tsconfig) auch
+das Flag [erasableSyntaxOnly](https://www.typescriptlang.org/tsconfig/#erasableSyntaxOnly),
+um solche Konstrukte zu verbieten.
+:::
+
+### Balance zwischen Korrektheit und Benutzbarkeit
+
+Ein Typen-System nennt man `sound`, wenn der Type-Checker beweisbar garantieren
+kann, dass zur Laufzeit alle Variablen vom deklarierten Typ sind (und somit
+keine Fehler aufgrund falscher Typen auftreten können).
+
+Nun ist JavaScript eine [sehr dynamische Sprache](https://github.com/microsoft/TypeScript/issues/9825#issuecomment-306272034).
+Ein Typen-System, was diese Garantie liefern kann, würde auch schwerwiegende
+Einschränkungen mit sich zienen, welchen Code wir schreiben können. Damit die
+Typenprüfung erfolgreich ist müssten wir unseren Code länger und weniger elegant
+schreiben, was die Benutzbarkeit der Sprache für uns Programmierer reduziert.
+
+Aus diesem Grund hat sich TypeScript als Ziel gesetzt, eine Balance zu finden
+zwischen Korrektheit der Typen und Bedienbarkeit der Sprache für Programmierer.
+
+Ein Beispiel, wo der Type-Checker keinen Fehler erkannt, zur Lauftzeit aber
+ein Typenfehler auftritt:
+
+<TsSnippet path="unsound-opt-prop" toggleable />
+
+In den letzten Jahren hat sich TypeScript in Richtung mehr Korrektheit entwickelt.
+Es gibt verschiedene Optionen, die man setzen kann, um die Korrektheit zu
+erhöhen, beispielsweise:
+
+- [strictFunctionTypes](https://www.typescriptlang.org/tsconfig/#strictFunctionTypes)
+  - Besser Prüfung von Funktionsparametern und Rückgabewerten, wenn Funktionen
+    etwa als Argumente an andere Funktionen übergeben werden. 
+- [noUncheckedIndexedAccess](https://www.typescriptlang.org/tsconfig/#noUncheckedIndexedAccess)
+  - Davon ausgehen, dass beim Zugriff auf den Index eines Arrays (`array[4]`) 
+    immer `undefined` erhalten werden könnte, wenn das Array nicht so lang ist.
+- [useUnknownInCatchVariables](https://www.typescriptlang.org/tsconfig/#useUnknownInCatchVariables)
+  - Bei `try { ... } catch (e) {}` davn ausgehen, dass `e` jeder beliebige
+    Wert sein könnte.
+
+:::note
+Durch Vermeidung einiger Features wie optionalen Eigenschaften, optionalen
+Funktionsparametern und [Klassen](https://github.com/microsoft/TypeScript/wiki/FAQ#why-method-bivariance)
+sowie Nutzung von Features wie [readonly](https://github.com/microsoft/TypeScript/issues/55451#issuecomment-1686782616)
+kann bei Bedarf die Typen-Sicherheit weiter erhöht werden. 
+:::
+
+## Alternative typisierte Sprachen
+
+Wie erwähnt erschwert die Programmiersprache JavaScript es, typensicheren Code
+zu schreiben. Es gibt [einige alternative Programmiersprachen](https://gist.github.com/matthiasak/c3c9c40d0f98ca91def1),
+welche dieses Problem umgehen. Dies erreichen sie dadurch, dass sie kein gültiges
+JavaScript mehr sind, sondern eine eigene Programmiersprache, die aber durch einen
+Build-Prozess in JavaScript überführt werden kann.
+
+Beispiele für solche Sprachen sind:
+
+- [Dart](https://dart.dev/overview)
+  - Eine [beinahe typensichere](https://github.com/dart-lang/language/issues/524)
+    Sprache, welche sowohl in nativen Binärcode für die Ausführung auf dem Server
+    sowie in JavaScript für die Ausführung im Browser überführt werden kann.
+- [PureScript](https://www.purescript.org/)
+  - Eine von Haskell inspirierte, stark typisierte funktionale Programmiersprache,
+    die in JavaScript übersetzt wird.
+- [Elm](https://elm-lang.org/)
+  - Ebenso eine funktionale Sprache, mit einem Schwerpunkt auf dem Erstellen von
+    Webanwendungen.
+
+Bei letzteren beiden ist ein Hauptproblem aus meiner Sicht aktuell die mangelnde
+Verbreitung und damit einhergehend die fehlende Dokumentation, Community und
+3rd-Party-Bibliotheken.
 
 ## Transpilation
+
+Wenn wir TypeScript schreiben, kann dieser Code nicht direkt im Browser ausgeführt
+werden. Es müssen wenigstens die Typen-Annotationen entfernt werden. Dieser Prozess
+wird manchmal als Transpilieren bezeichnet -- abgeleitet von Kompilieren.
+
+Die Notwendigkeit zur Transpilation stellt einen Nachteil von TypeScript dar, da
+(1) so ein zusätzlicher Schritt notwendig ist, bis unser Code lauffähig ist. Zudem
+erschwert es (2) auch die Fehlersuche (Debugging), da der im Browser ausgeführte
+nicht der gleiche ist, den wir geschrieben haben.
+
+Das erstere Problem kann umgangen werden, indem Typen-Annotationen nicht direkt
+im Code, sondern in den Doc-Kommentaren eingefügt werden. TypeScript
+[unterstützt](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html)
+solche Typen-Annotationen in Kommentaren. Der Nachteil dabei ist, dass der Code
+so etwas aufgebläht wird und Typen-Annotationen nicht mehr ganz so einfach zu schreiben
+sind.
+
+<JsSnippet path="ts-with-doc-comment-types" toggleable />
 
 :::info
 Aufgrund der großen Beliebtheit von Typen in JavaScript gibt es ein TC39-Proposal,
@@ -67,19 +186,139 @@ Sytnax und die Möglichkeit, typenannotiertes JavaScript ohne Transformationschr
 direkt auszuführen.
 :::
 
+:::info
+Einige Programme, die JavaScript ausführen können, unterstützen inzwischen auch
+direkt TypeScript. Beispielsweise unterstützt [node.JS](https://nodejs.org/en)
+die Ausführung von TypeScript
+[über Flags](https://nodejs.org/en/blog/release/v22.6.0#experimental-typescript-support-via-strip-types).
+:::
+
+Das letztere Problem wird durch sogenannte [Source-Maps](https://developer.mozilla.org/en-US/docs/Glossary/Source_map)
+abgemildert. Einfach gesprochen handelt es sich bei einer Source-Map um eine
+Datei, in der steht, in welchem Verhältnis der transpilierte JavaScript-Code
+zum ursprünglichen TypeScript-Code steht. Browser nutzen diese Source-Map, um
+beim Debugging den ursprünglichen Code anzeigen zu können. Dennoch sorgt die Notwendigkeit
+für Source-Maps für erhöhte Komplexität beim Einrichten der Programmierumgebung.
+
+Zur Illustration sieht eine Source-Map etwa wie folgt aus. Ein
+[tieferes Verstänis](https://tc39.es/ecma426/2024/) dafür ist aber in der Regel
+nicht notwendig, erforderlich ist nur, dafür zu sorgen, dass solche Source-Maps
+entsprechend erzeugt werden.
+
+```json
+{
+  "version": 3,
+  "sources": ["file.ts"],
+  "sourcesContent": [
+    "function appendToList<T>(list: T[], newItem: T): T[] {\n  return [...list, newItem];\n}\n\ndebugger;\n\nappendToList([1, 2, 3], 4);\n"
+  ],
+  "names": [
+    "appendToList",
+    "list",
+    "newItem"
+  ],
+  "mappings": [
+    ["file.ts", 26, 0 , 1, 0 , null],
+    ["file.ts", 26, 9 , 1, 9 , "appendToList"],
+    ["file.ts", 26, 22, 1, 25, "list"],
+    ["file.ts", 26, 26, 1, 34, null],
+    ["file.ts", 26, 28, 1, 36, "newItem"],
+    ["file.ts", 26, 35, 1, 46, null],
+    ["file.ts", 27, 4 , 2, 2 , null],
+    ["file.ts", 27, 11, 2, 9 , null],
+    ["file.ts", 27, 11, 2, 10, null],
+    ["file.ts", 27, 32, 2, 13, "list"],
+    ["file.ts", 27, 45, 2, 9 , null],
+    ["file.ts", 28, 8 , 2, 19, "newItem"],
+    ["file.ts", 29, 5 , 2, 27, null],
+    ["file.ts", 30, 0 , 3, 0 , null],
+    ["file.ts", 31, 0 , 5, 0 , null],
+    ["file.ts", 31, 8 , 5, 9 , null],
+    ["file.ts", 32, 0 , 7, 0 , "appendToList"],
+    ["file.ts", 32, 13, 7, 13, null],
+    ["file.ts", 33, 4 , 7, 14, null],
+    ["file.ts", 34, 4 , 7, 17, null],
+    ["file.ts", 35, 4 , 7, 20, null],
+    ["file.ts", 36, 1 , 7, 22, null],
+    ["file.ts", 36, 3 , 7, 24, null]
+  ]
+}
+```
+
 ## Basis-Typen
 
-undefined, string, number, boolean, array, object
+TypeScript unterstützt die Basic-Typen von JavaScript:
 
-union type
+```ts
+const a: undefined = undefined;
+const b: boolean = false;
+const c: number = 0;
+const d: string = "Hallo TypeScript";
+const e: string[] = ["Typen", "wie", "dich", "finde", "ich", "toll"];
+```
+
+Für Objekte wird in der Regel erst einmal definiert, welche Eigenschaften das
+Objekt überhaupt besitzen kann:
+
+```ts
+interface User {
+  name: string;
+  age: number;
+  active: boolean;
+}
+
+const user: User = { name: "Estelle", age: 21, active: true };
+```
+
+In JavaScript ist es nicht unüblich, verschiedene Typen gleichzeitig zu erlauben.
+Hierzu können wir ein sogenannten [Union-Type](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#union-types)
+verwenden:
+
+<TsSnippet path="union-type" toggleable />
+
+Diese Union-Type können wir auch verwenden, um eine Aufzählung möglicher Werte
+abzubilden. Dies ist oft besser als eine Enum. Wenn wir beispielsweise eine
+Funktion schreiben wollen, die eine Nachricht auf der Konsole ausgibt, und das
+entweder als Information, Warnung, oder Fehler:
+
+<TsSnippet path="string-constant-union" toggleable />
+
+Darüber hinaus stellt TypeScript noch viele weitere
+[fortgeschrittene Typen](https://www.typescriptlang.org/docs/handbook/2/conditional-types.html)
+zur Verfügung. Teilweise wurden diese entwickelt, um bestehende JavaScript-Bibliotheken
+abzubilden, die nicht in TypeScript geschrieben wurden und Gebrauch von den
+dynamischen Eigenschaften der Sprache JavaScript machen.
+
+Beim Schreiben von neuen TypeScript-Code sollten wir mit, und nicht gegen, den
+Type-Checker arbeiten. Das bedeutet auch, unseren Code so zu strukturieren, dass
+der Computer diesen einfach prüfen und möglichst viele Probleme frühzeitig
+erkennen kann. Viele der fortgeschrittenen Typen von TypeScript sollten daher
+mit Bedacht verwendet und wenn möglich vermieden werden.
 
 ## DefinitelyTyped
 
-https://github.com/DefinitelyTyped/DefinitelyTyped
+Nicht alle 3rd-Party-Bibliotheken sind in TypeScript geschrieben. Beispielsweise
+ist [jQuery](https://jquery.com/) eine bekannte, viel verwendete Bibliothek, welche
+rein in JavaScript geschrieben ist.
 
-## Soundness
+Theoretisch können wir solche Bibliotheken in TypeScript verwenden. Es fehlt dann
+aber jegliche Typen-Sicherheit, Typen-Prüfung und Autocomplete. Um auch in
+JavaScript geschriebene Bibliotheken komfortabel verwenden zu können, gibt es
+sogenannten [Typen-Deklarationsdateien](https://www.typescriptlang.org/docs/handbook/declaration-files/introduction.html).
+Ähnlich zu C-Header-Dateien enthalten diese keinen Code, sondern nur die Typen
+für die Funktionen, Variablen und Klassen, welche durch die JavaScript-Bibliothek
+bereitgestellt werden. Damit können wir die Bibliothek so nutzen, als ob diese
+in TypeScript geschrieben wäre.
 
-Pitfalls, not sound
+Natürlich benötigen wir dafür erst einmal eine solche Deklarationsdatei. Wir
+könnten diese selber schreiben, dass ist aber zeitaufwendig. Aufgrund der
+Beliebtheit und weiten Verbreitung von TypeScript existiert eine zentrale
+Sammelstelle für solche Deklarationsdateien, die für viele JavaScript-Bibliotheken
+entsprechend Deklarationen enthält:
 
-optional
+> DefinitelyTyped @ https://github.com/DefinitelyTyped/DefinitelyTyped
 
+Für die eben erwähnte Bibliothek `jQuery` finden sich die Deklarationsdateien
+etwa unter folgender URL:
+
+> https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/jquery

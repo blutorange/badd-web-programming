@@ -59,7 +59,7 @@ function JsSnippetContent(props: JsSnippetProps): ReactNode {
   const execute = (e: MouseEvent) => {
     e.preventDefault();
     if (!code.loading) {
-      setResult(evaluateJavaScript(code.value, asyncResultHandler));
+      setResult(evaluateJavaScript(code.value, props.path, asyncResultHandler));
     }
   };
 
