@@ -243,3 +243,34 @@ Im folgenden Beispiel wird dies an einer Tabelle mit 3 Spalten illustriert.
 Bei Reduktion der Tabellenbreite werden unwichtige Spalten ausgeblendet:
 
 <HtmlSnippet path="css-container-query" type="css" toggleable />
+
+## @scope / @layer
+
+:::warning
+Vorher bitte unbedingt die Browser-Kompatibilität prüfen!
+:::
+
+Zwei recht neue Funktionalitäten im CSS sind Layer und Scope. Diese ermöglichen
+uns, genauer zu bestimmen, wo unser CSS angewandt werden soll.
+
+__Scope__
+
+[@scope](https://developer.mozilla.org/en-US/docs/Web/CSS/@scope) ermöglicht uns,
+alle Regeln nur auf einen Teil des HTML anzuwenden. Das vermeidet, dass unser
+CSS unabsichtich anderes CSS augrund der Kaskadierung überschreibt. Im folgenden
+Beispiel werden die Regeln nur auf eine Card-Komponente angewandt. Im Container
+mit der Klasse `card-content` könnte Inhalt stehen, den der Nutzer unserer
+Komponente bereitgestellt hat. Durch die Limitierung über den Scope können wir
+uns sicher sein, dass unser CSS keine unbeabsichtigten Nebenwirkungen hat.
+
+<HtmlSnippet path="css-scope" type="css" toggleable/>
+
+__Layer__
+
+[@layer](https://developer.mozilla.org/en-US/docs/Web/CSS/@layer) ermöglicht uns,
+eine ganze neue Prioritätsstufe in die CSS-Kaskade einzufügen. Jeder Layer stellt
+eine separate Stufe dar, der letzte deklarierte Layer hat die höchste Priorität.
+Da bei der CSS-Kaskade zuerst nach Layern geschaut wird, spielt die Spezifizität
+der CSS-Selektoren keine Rolle mehr, wie das folgende Beispiel illustriert:
+
+<HtmlSnippet path="css-layer" type="css" toggleable/>

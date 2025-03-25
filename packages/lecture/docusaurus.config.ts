@@ -99,7 +99,7 @@ const config: Config = {
           position: "left",
           label: "Tutorial",
         },
-        { to: "/blog", label: "Blog", position: "left" },
+        // { to: "/blog", label: "Blog", position: "left" },
         { to: "/sandbox", label: "Sandbox (HTML)", position: "left" },
         { to: "/sandbox-js", label: "Sandbox (JS)", position: "left" },
         {

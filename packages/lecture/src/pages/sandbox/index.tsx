@@ -13,9 +13,11 @@ import {
   type Dispatch,
   useState,
   type SetStateAction,
+  useMemo,
 } from "react";
 
 import { Editor as MonacoEditor } from "@monaco-editor/react";
+import type { editor } from "monaco-editor";
 
 import { PrimeReactProvider } from "primereact/api";
 import { Button } from "primereact/button";
@@ -77,6 +79,11 @@ function Sandbox(): ReactNode {
     "sandbox_index",
     0,
     IntegerSerializer,
+  );
+
+  const monacoOptions = useMemo<editor.IStandaloneEditorConstructionOptions>(
+    () => ({ theme: colorMode === "dark" ? "vs-dark" : "vs" }),
+    [colorMode],
   );
 
   const onReset = () => {
@@ -162,6 +169,7 @@ function Sandbox(): ReactNode {
                 <MonacoEditor
                   value={html.value}
                   language="html"
+                  options={monacoOptions}
                   onMount={onHtmlMount}
                   onChange={(value) => setHtml(value ?? "")}
                 />
@@ -174,6 +182,7 @@ function Sandbox(): ReactNode {
                 <MonacoEditor
                   value={css.value}
                   language="css"
+                  options={monacoOptions}
                   onMount={onCssMount}
                   onChange={(value) => setCss(value ?? "")}
                 />
@@ -186,6 +195,7 @@ function Sandbox(): ReactNode {
                 <MonacoEditor
                   value={js.value}
                   language="javascript"
+                  options={monacoOptions}
                   onMount={onJsMount}
                   onChange={(value) => setJs(value ?? "")}
                 />

@@ -32,10 +32,13 @@ import {
 // @ts-expect-error
 import InitialJs from "!!raw-loader!./initial.js";
 import { useMonacoResize } from "@site/src/utils/monaco";
+import { useColorMode } from "@docusaurus/theme-common";
 
 function Sandbox(): ReactNode {
   const url = new URL(window.location.href);
   const snippet = url.searchParams.get("snippet");
+
+  const { colorMode } = useColorMode();
 
   const monacoContainerRef = useRef<HTMLDivElement | null>(null);
   const [onJsMount] = useMonacoResize(monacoContainerRef);
@@ -60,8 +63,11 @@ function Sandbox(): ReactNode {
   };
 
   const jsOptions = useMemo<editor.IStandaloneEditorConstructionOptions>(
-    () => ({ readOnly: js.loading }),
-    [js.loading],
+    () => ({
+      readOnly: js.loading,
+      theme: colorMode === "dark" ? "vs-dark" : "vs",
+    }),
+    [js.loading, colorMode],
   );
 
   const onAsyncResult: AsyncResultHandler = useCallback(
