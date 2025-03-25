@@ -23,7 +23,7 @@ a {
 `;
 
 export type Pending<T> =
-  | { readonly loading: true, readonly value?: undefined }
+  | { readonly loading: true; readonly value?: undefined }
   | { readonly loading: false; readonly value: T };
 
 export type AsyncResultHandler = (results: JsResult[]) => void;
@@ -142,7 +142,12 @@ export function useCode(
 
   return [
     local,
-    (x) => (snippet ? setLocal(nonPending(x)) : setCode(x)),
+    (x) => {
+      if (!snippet) {
+        setCode(x);
+      }
+      setLocal(nonPending(x));
+    },
     () => {
       if (!snippet) {
         setCode(initial);
