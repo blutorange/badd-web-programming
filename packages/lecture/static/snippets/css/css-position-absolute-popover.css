@@ -1,0 +1,29 @@
+*:has(> .popover) {
+  position: relative;
+  border-bottom: 2px dotted #333;
+  cursor: help;
+  color: rgb(171, 94, 0);
+  .popover {
+    display: inline-block;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  &:hover .popover {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+
+.popover {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 0.5em 2em;
+  white-space: nowrap;
+  transform: translateX(90%) translateY(90%);
+  background-color: #ccc;
+  border: 1px solid #666;
+  border-radius: 8px;
+}

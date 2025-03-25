@@ -5,13 +5,322 @@ sidebar_position: 3
 description: Verschiedene häufig verwendete Display-Optionen wie Flex und Grid
 ---
 
-# Abschnitt 3 - Display
+import HtmlSnippet from "@site/src/components/HtmlSnippet";
 
-## Inline und Block
+# Abschnitt 3 - Display und Position
 
+In diesem Abschnitt schauen wir uns kurz die `display` und `position`-Eigenschaften
+an. Diese Eigenschaften steuern, wie ein Element durch den Browser dargestellt
+wird.
 
-## Flex
+Genauer steueren sie, in welcher Weise der Browser das Layout der
+Elemente berechnet, also wie groß ein Element ist und wie es relativ zu anderen
+Elementen positioniert wird.
 
+## Display
 
-## Grid
+### None
 
+Mit `display: none` können wir erreichen, dass ein Element gar nicht mehr angezeigt
+wird.
+
+```css
+.hidden {
+  display: none;
+}
+```
+
+Das Element ist noch im DOM enthalten und kann etwa per JavaScript angesteuert werden,
+ist aber für den Betrachter der Webseite nicht mehr sichtbar.
+
+Ein typischer Anwendungsfall für solchen versteckten Elemente: Ein schön gemachte
+Auswahlliste in einem Formular. Mit `<select>` können wir eine Auswahlliste
+erzeugen, diese sieht aber nicht besonders schön aus und ist schwer per CSS
+zu stylen. Wir können per HTML, CSS und JavaScript selber eine Auswahlliste
+erstellen, die schöner aussieht und besser bedienbar ist.
+
+Beim Absenden des Formulars möchten wir aber, dass die ausgewählten Werte an
+den Server übertragen werden. Zu diesem Zweck können wir ein verstecktes
+`<select>`-Element verwenden, das auf `display: none` steht und in welches
+per JavaScript der ausgewählte Wert geschrieben wird.
+
+<HtmlSnippet path="css-display-none-select" type="css" />
+
+### Inline und Block
+
+Inline- und Block-Layout sind für das Verständnis von Webseiten-Layouts unabdingbar.
+
+Grundlegend können wir uns eine Webseite als Abfolge von Blöcken vorstellen,
+die vertikal angeordnet sind, ein Block nach dem anderen.
+
+<HtmlSnippet path="css-blocks" type="html" toggleable />
+
+![HTML mit roten Linien um Blocks](/img/web/css-blocks.png)
+
+Jeder Block kann Inline-Content enthalten, der von links nach rechts angeordnet
+wird. Ist das Ende einer Zeile erreicht, wird auf die nächste Zeile umgebrochen.
+Fließtext können wir uns vorstellen als individuelle Buchstaben, jeder Buchstabe
+ist ein Inline-Element. Die Buchstaben werden von links nach rechts angeordnet.
+
+<HtmlSnippet path="css-inline" type="html" toggleable />
+
+![HTML mit roten Linien um Inline-Elemente](/img/web/css-inline.png)
+
+Standardmäßig haben die meisten HTML-Element entweder die Block- oder Inline-Darstellung.
+Etwa wird `<section>` order `<p>` als Block dargestellt, `<span>` oder `<a>`
+als Inline. Per CSS können wir bei Bedarf die Darstellung ändern: 
+
+```css
+.block {
+  display: block;
+}
+.inline {
+  display: inline;
+}
+```
+
+:::warning
+HTML macht semantische Vorgaben, welche Elemente wie geschachtelt werden können.
+In der Regel dürfen Inline-Elemente wie `<span>` keine Block-Elemente wie `<div>`
+enthalten. An diesen Vorgaben ändert sich nichts, wenn wir per CSS die
+`display`-Eigenschaft setzen.
+:::
+
+### Flex
+
+Historisch war es oft schwierig im CSS, Elemente vertikal oder horizontal mittig
+zu zentrieren. Das Flex-Layout schafft hier Abhilfe und bietet darüber hinaus
+noch mehr Gestaltungsmöglichkeiten.
+
+Prinzipiell geht es beim Flex-Layout immer um ein Container-Element mit Kindern.
+Wir aktivieren das Flex-Layout, indem wie `display: flex` am Container setzen.
+Daraufhin werden die Kinder entweder vertikal oder horizontal angeordnet, abhängig
+von der Einstellung `flex-direction: row` oder `flex-direction: reverse`.
+
+```css
+.flex {
+  display: flex; /* Flex-Layout verwenden */
+  flex-direction: row; /* Kinder horizontal anordnen */
+}
+``` 
+
+Die Breite bzw. Höhe können wir dynamisch konfigurieren. Beispielsweise können
+wir sagen, dass alle Kinder bis auf eines nur so groß wie nötig sein sollen
+und das letzte Kind die verbleibende Höhe oder Breite einnehmen soll.
+
+```css
+.flex {
+  display: flex;
+  flex-direction: row;
+}
+.flex > * {
+  flex-basis: auto; /* Normale Breite verwenden */
+}
+.flex > :last-child {
+  flex-grow: 1; /* Übrig gebliebenen Platz einnehmen */
+  flex-shrink: 1; /* Schrumpfen, wenn nicht genug Platz da ist */
+  flex-basis: 0;
+}
+``` 
+
+Falls bei dem Layout noch Platz übrig geblieben ist, können wir auch
+noch festlegen, wie dieser übrig gebliebene Platz verteilt wird. Etwa können wir
+den Platz gleichmäßig links und rechts verteilen, was einer Zentrierung entspricht.
+
+```css
+.flex {
+  display: flex;
+  flex-direction: row;
+  justify-content: center; /* Kinder horizontal zentrieren */
+  align-items: center; /* Kinder vertikal zentrieren*/
+}
+```
+
+Falls der Platz nicht ausreicht, können wir dem Flex-Layout auch sagen, die
+Elemente umzubrechen. Zwischen Zeilen und Spalten können wir schließlich auch
+noch einen Abstand defineren.
+
+```css
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 1em;
+  column-gap: 1em;  
+}
+```
+
+Im folgenden Beispiel sind einige dieser Eigenschaften illustriert:
+
+<HtmlSnippet path="css-display-flex" type="html" toggleable />
+
+Ein guter visueller Guid für Flexbox findet sich bei css-tricks:
+
+> https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+
+### Grid
+
+Grid ist analog zu Flexbox ein alternatives Layout für Kinderelemente, welches
+wir per `display: grid` aktivieren können.
+
+Die Idee dabei ist ähnlich zu Flexbox, aber die Kinder werden in 2 Richtungen,
+horizontal und vertikal, also in einem Grid angeordnet.
+
+Die grundlegende Idee ist dabei, dass wir die Anzahl der Zeilen und Spalten
+defineren sowie deren Größe, dadurch entsteht ein Grid. Jedem Kind ordnen wir
+dann eine Position in diesem Grid durch Angabe der Spalte und Zeile zu.
+
+Falls wir einem Element keine explizite Position mitgeben, ermittelt das
+Grid-Layout automatisch eine Position. Dies ist einer der häufigsten Anwendungsfälle,
+nämlich Elemente dynamisch in einem Grid anzuordnen.
+
+<HtmlSnippet path="css-display-grid" type="css" />
+
+Wir können auch ein Seitenlayout mit Grid umsetzen:
+
+<HtmlSnippet path="css-display-grid-page" type="css" toggleable />
+
+Ein guter visueller Guid für Flexbox findet sich ebenfalls bei css-tricks:
+
+> https://css-tricks.com/snippets/css/complete-guide-grid/#prop-grid-column-row
+
+### Innere und äußere Darstellung
+
+Es gibt noch einen anderen Unterschied zwischen `display: block` und
+`display: inline`. Bei Block werden die Kinderelemente innerhalb des Blocks
+enstprechend angeordnet. Der Block ist immer so groß, wie die Kinderelemente
+es erfordern. Anders bei Inline: Die Höhe hängt von der Zeilenhöhe (`line-height`)
+ab, sodass Inhalt auch über die Grenzen herausgehen kann.
+
+Bei `display: flex` wird das Element immer wie ein Block dargestellt, nimmt
+also die volle Breite ein. Was, wenn wir die Kinderelemente zwar gemäß dem
+Flex-Layout darstellen wollen, der Block selber sich aber wie Inline verhalten
+soll?
+
+Hier unterscheidet das der Layout-Algorithmus noch einmal zwischen äußerer
+und innerer Darstellung. Diese können wir separat setzen:
+
+```css
+* {
+  display: block flow;        /* = block */
+  display: block flow-root;
+  display: block flex;        /* = flex */
+  display: block grid;        /* = grid */
+
+  display: inline flow;       /* = inline */
+  display: inline flow-root;  /* = inline-block */
+  display: inline flex;       /* = inline-flex */
+  display: inline grid;       /* = inline-grid */
+}
+```
+
+Der erste Wert `block` oder `inline` gibt an, wie sich das Element nach außen
+verhalten soll. `inline` wird in einer Zeile eingebettet, `block` nimmt die
+volle Breite ein.
+
+Der zweite Wert gibt an, wie sich das Element nach innen verhält und die Kinderelemente
+anordnet. `flex` und `grid` erzeugen entsprechend ein Flex- oder Grid-Layout.
+`flow` ordnet die Kinder fließend an, `flow-root` erzeugt einen neuen Block,
+der so groß ist, wie die Kinder inklusive Padding und Margin es erfodern.
+
+Zur Illustration hier noch ein Beispiel mit verschiedenen Display-Arten:
+
+<HtmlSnippet path="css-display-various" type="css" toggleable />
+
+Für tiefergreifende Informationen siehe auch 
+[MDN web docs - display](https://developer.mozilla.org/en-US/docs/Web/CSS/display),
+die dort verlinkten Ressourcen sowie das
+[CSS Display Module Level 3](https://drafts.csswg.org/css-display/).
+
+## Overflow
+
+Was passiert, wenn der Inhalt eines Elements nicht in das Element passt? Je nach
+Darstellungsart wird entweder das Element selber größer oder der Inhalt "fließt"
+über die Grenzen des Elements hinaus.
+
+Dies ist meistens nicht gewollt. Wir können den Browser eine Scrollbar erzeugen
+lassen, indem wir die Eigenschaft `overflow` verwenden:
+
+- `overflow: scroll`: Zeigt immer eine Scrollbar an, auch wenn diese nicht notwendig wäre (der Inhalt also passt).
+- `overflow: auto`: Zeigt eine Scrollbar an, wenn dies notwendig ist (der Inhalt also nicht passt).
+- `overflow: hidden`: Schneidet den Inhalt ab, der über die Grenzen des Element herausgeht.
+- `overflow: visible`: Zeigt den Inhalt an, der über die Grenzen des Element herausgeht.
+
+Mit `overflow-x` und `overflow-y` können wir das Verhalten auch separat
+in der horizontalen und vertikalen Richtung steuern.
+
+Hier ist ein Beispiel, an dem verschiedene Werte für Overflow getestet werden
+können. Gleichzeitig illustriert dieses Beispiel auch
+[CSS-Counter](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_counter_styles/Using_CSS_counters):
+
+<HtmlSnippet path="css-overflow" type="css" toggleable />
+
+## Position
+
+Position ist eine ähnliche Eigenschaft, mit der wir steuern können, wo ein Element
+positioniert ist. Der Standardwert ist `position: static`. Das Element wird
+dann wie oben besprochen gemäß der CSS-Regel angeordnet.
+
+Diese normale Anordnung, erinnern wir uns, besteht darin, Blöcke der Reihen
+nach untereinander anzuordnen und Inline-Inhalte in Zeilen.
+
+Ein typischer Bestandteil von UIs und Webseiten sind Dialoge und Tooltip, also
+Elemente, die überhalb von anderen Elementen erscheinen. Mit dem bisher
+besprochenen Layout ist das nicht möglich.
+
+Die Eigenschaft `position` erlaubt es, Elemente aus dem normalen Layout zu trennen
+und andersweitig zu positionieren. Im Folgenden schauen wir uns eine gängige
+Wert für `position`.
+
+### fixed
+
+`position: fixed` bedeutet, das Element wird relativ zum Browser fest angeordnet,
+unabhängig der Anordnung seiner Eltern- oder Kinderelemente.
+
+Mittels der Eigenschaften `top`, `right`, `bottom` und `left` können wir defineren,
+wo das Element relativ zum Browser-Fenster positioniert sein soll.
+
+Um etwa einen Dialog anzuzeigen, der über allen anderen Elementen liegt:
+
+<HtmlSnippet path="css-position-fixed-dialog" type="css" toggleable />
+
+### absolute und relative
+
+`position: absolute` ist `position: fixed` ähnlich. Der Unterschied besteht darin,
+relative zu welchem Referenzelement unser Element positioniert wird. Bei
+`position: fixed` war es das Wurzelelement bzw. das Browser-Fenster. Im Fall
+von `position: absolute` können wir selber bestimmen, gegen welches Referenzelement
+positioniert wird.
+
+Dazu müssen wir am gewünschten Referenzelement `position: relative` setzen.
+
+Ein typisches Beispiel ist ein Popover, welches etwa an einem Text oder Button
+angezeigt wird, wenn man mit der Maus darüber fährt.
+
+<HtmlSnippet path="css-position-absolute-popover" type="css" toggleable />
+
+### sticky
+
+`position: sticky` hat einen typischen Anwendungsfall: Ein Element in einer
+scrollbaren Liste am oberen Rand zu halten, sodass es immer zu sehen ist. Der
+Browser positioniert das Element normal, solange es außerhalb der mittels
+`top` gesetzten Grenze ist. Durchschreitet das Element durch Scrolling diese
+Grenze, verharrt es an seiner aktuellen Position. Das sehen wir an diesem
+Beispiel:
+
+<HtmlSnippet path="css-position-sticky" type="css" toggleable />
+
+### z-index
+
+Wenn wir Elemente etwa mittels `position: fixed` positionieren, nehmen wir
+diese außer ihrer normalen Position heraus und platzieren diese beliebig auf
+der Seite. Dabei kann es passieren, dass die Elemente sich überlappen.
+
+Um festzulegen, in welcher Reihenfolge solche Elemente gezeichnet werden,
+können wir die Eigenschaft `z-index` verwenden. Elemente mit kleineren
+`z-index` werden zuerst gezeichnet, Elemente mit höheren `z-index` danach
+(und liegen damit überhalb den zuerst gezeichneten Elementen).
+
+In folgenden Beispiel werden mehrere rechteckige Elemente zufällig erzeugt
+und zufällig `z-index` vergeben:
+
+<HtmlSnippet path="css-z-index" type="css" toggleable />

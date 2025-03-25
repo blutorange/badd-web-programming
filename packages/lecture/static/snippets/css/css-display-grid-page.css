@@ -1,0 +1,39 @@
+body {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  grid-template-areas:
+    "head head"
+    "nav  main"
+    "foot foot";
+  grid-template-rows: 60px 1fr 60px;
+  grid-template-columns: 150px 1fr;
+}
+
+header {
+  grid-area: head;
+  background-color: #8ca0ff;
+}
+
+nav {
+  grid-area: nav;
+  background-color: #ffa08c;
+}
+
+main {
+  grid-area: main;
+  background-color: #ffff64;
+}
+
+footer {
+  grid-area: foot;
+  background-color: #8cffa0;
+}
+
+body > * {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

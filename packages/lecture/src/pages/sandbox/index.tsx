@@ -34,6 +34,7 @@ import {
 
 import { useMonacoResize } from "@site/src/utils/monaco";
 
+import SubmitCss from "!!raw-loader!./submit.css";
 import InitialHtml from "!!raw-loader!./initial.html";
 import InitialCss from "!!raw-loader!./initial.css";
 // @ts-expect-error
@@ -229,25 +230,94 @@ function applyHtml(
   destroyOldIFrame(container);
   container.innerHTML = "";
   container.appendChild(iframe);
-  const iframeWin = iframe.contentWindow;
+  const iframeWin = iframe.contentWindow as Window & typeof globalThis;
   const iframeDoc = iframe.contentDocument;
   if (iframeWin && iframeDoc) {
     setLogEntries([]);
     try {
-      captureLogEntries(iframeWin as unknown as typeof globalThis, (entry) =>
-        setLogEntries((entries) => [entry,...entries]),
+      captureLogEntries(iframeWin, (entry) =>
+        setLogEntries((entries) => [entry, ...entries]),
       );
       iframeDoc.open();
       iframeDoc.write(preparedHtmlContent);
       iframeDoc.close();
+      iframeDoc.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const submitHtml = buildSubmitHtml(event, iframeWin);
+        iframeDoc.open();
+        iframeDoc.write(submitHtml);
+        iframeDoc.close();
+      });
     } catch (e) {
       console.log("Could not write content to iframe", e);
     }
   }
 }
 
-function destroyOldIFrame(container: HTMLDivElement) {
-  const oldIframe  = container.querySelector("iframe");
-  oldIframe?.contentWindow?.dispatchEvent(new Event("beforeunload"));
+function buildSubmitHtml(event: SubmitEvent, win: typeof globalThis): string {
+  if (!(event.target instanceof win.HTMLFormElement)) {
+    return "";
+  }
+
+  const $ = <K extends keyof HTMLElementTagNameMap>(x: K) =>
+    document.createElement(x);
+
+  const container = $("div");
+
+  const h1 = $("h1");
+  h1.textContent = "Formular wurde abgesendet";
+
+  const dl = $("dl");
+  const dtForm = $("dt");
+  const ddForm = $("dd");
+  const dtSubmitter = $("dt");
+  const ddSubmitter = $("dd");
+  dtForm.textContent = "Formular-Element";
+  const formClone = event.target.cloneNode() as HTMLFormElement;
+  formClone.innerHTML = "";
+  ddForm.textContent = formClone.outerHTML;
+  dtSubmitter.textContent = "Absender";
+  ddSubmitter.textContent = event.submitter?.outerHTML ?? "-";
+  dl.append(dtForm, ddForm, dtSubmitter, ddSubmitter);
+
+  const table = $("table");
+  const thead = $("thead");
+  const trHead = $("tr");
+  const thName = $("th");
+  const thValue = $("th");
+  const tbody = $("tbody");
+
+  thName.textContent = "Name";
+  thValue.textContent = "Wert";
+
+  table.append(thead, tbody);
+  thead.append(trHead);
+  trHead.append(thName, thValue);
+
+  const formData = new win.FormData(event.target, event.submitter);
+  formData.forEach((value, key) => {
+    const tr = $("tr");
+    const tdName = $("td");
+    const tdValue = $("td");
+    tdName.textContent = key;
+    if (typeof value === "string") {
+      tdValue.textContent = value;
+    } else {
+      tdValue.textContent = `File[${value.name}, ${value.size} bytes, ${value.type}]`;
+    }
+    tr.append(tdName, tdValue);
+    tbody.append(tr);
+  });
+
+  const style = $("style");
+  style.textContent = SubmitCss;
+
+  container.append(h1, dl, table, style);
+
+  return container.outerHTML;
 }
 
+function destroyOldIFrame(container: HTMLDivElement) {
+  const oldIframe = container.querySelector("iframe");
+  oldIframe?.contentWindow?.dispatchEvent(new Event("beforeunload"));
+}

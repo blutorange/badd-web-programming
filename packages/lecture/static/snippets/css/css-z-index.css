@@ -1,0 +1,5 @@
+.block {
+  position: fixed;
+  transform: translateY(2em);
+  opacity: 0.9;
+}

@@ -1,0 +1,88 @@
+.block-flow {
+  display: block flow;
+}
+
+.block-flow-root {
+  display: block flow-root;
+}
+
+.block-flex {
+  display: block flex;
+  flex-direction: column;
+}
+
+.block-grid {
+  display: block grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.inline-flow {
+  display: inline flow;
+}
+
+.inline-flow-root {
+  display: inline flow-root;
+}
+
+.inline-flex {
+  display: inline flex;
+  flex-direction: column;
+}
+
+.inline-grid {
+  display: inline grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.showContainer {
+  border: 1px solid black;
+  margin: 1rem;
+}
+
+.showBlock {
+  background-color: #ccc;
+  padding: 1rem;
+}
+
+.showContent {
+  background-color: #ccc;
+}
+
+.MarTop2 {
+  margin-top: 2rem;
+}
+
+.MarBot2 {
+  margin-bottom: 2rem;
+}
+
+.Wid40 {
+  width: 40%;
+}
+
+.Fs3 {
+  font-size: 3rem;
+}
+
+:not(html, body, fieldset, legend) {
+  &:hover {
+    background-color: rgba(133, 86, 0, 0.1);
+  }
+}
+
+body > fieldset {
+  margin: 4rem 0;
+  border-color: #009fe3;
+  > legend {
+    color: #009fe3;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+}
+
+body > fieldset > fieldset {
+  margin: 2rem 0;
+  > legend {
+    font-weight: bold;
+  }
+}

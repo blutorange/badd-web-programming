@@ -1,0 +1,46 @@
+body {
+  overflow: auto;
+}
+
+.Wid100 {
+  width: 100%;
+}
+
+.Hei100 {
+  height: 100%;
+}
+
+.Wid300{
+  width: 300px;
+}
+
+.Hei300 {
+  height: 300px;
+}
+
+body {
+  counter-reset: row column;
+  font-family: sans-serif;
+}
+
+div {
+  margin: 2rem;
+  white-space: nowrap;
+  counter-reset: column;
+  counter-increment: row;
+}
+
+span {
+  margin: 2rem;
+  background-color: #ccc;
+  display: inline flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  font-weight: bold;
+
+  counter-increment: column;
+  &::after {
+    content: counter(row) "-" counter(column)
+  }
+}

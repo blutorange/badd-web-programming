@@ -5,11 +5,29 @@ sidebar_position: 4
 description: Verschiedene häufig verwendete @rules
 ---
 
+import HtmlSnippet from "@site/src/components/HtmlSnippet";
+
 # Abschnitt 4 - At-Rules
 
 ## @import
 
-`@import`
+Mittels [@import](https://developer.mozilla.org/en-US/docs/Web/CSS/@import)
+können wir andere CSS-Dateien inkludieren. Das ist hilfreich, um Code in
+mehrere Dateien aufzusplitten. 
+
+Relative URLs werden dabei immer relativ zur URL der CSS-Datei aufgelöst, in
+der sich der `@import` befindet. Im folgenden Beispiel wird das CSS der
+Bibliothek  [Bootstrap](https://getbootstrap.com/) importiert, welche 
+grundlegendes CSs enthält, um Webseiten schön aussehen zu lassen.
+
+<HtmlSnippet path="css-import" type="css" />
+
+:::warning
+`@import` verhält sich so, als ob das importierte CSS direkt an dieser Stelle
+stehen würde. Wenn wir 2 CSS-Dateien `a.css` und `b.css` haben, die beide jeweils
+`bootstrap.css` importieren und dann in einer anderen Datei `a.css` und `b.css`
+importieren, haben wir `bootstrap.css` doppelt importiert.
+:::
 
 ## @font-face
 

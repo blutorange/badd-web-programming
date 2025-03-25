@@ -1,0 +1,21 @@
+.block {
+  border: 1px solid red;
+  margin: 16px;
+  padding: 16px;
+  line-height: 50px;
+}
+
+.block > * {
+  outline: 1px solid green;
+  padding: 8px 4px;
+  margin: 0 4px;
+}
+
+html {
+  font-family: sans-serif;
+  font-size: 16px;
+}
+
+body {
+  margin: 1em;
+}

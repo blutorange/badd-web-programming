@@ -1,0 +1,6 @@
+@import url("https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/styles/choices.min.css");
+
+.choices__inner {
+  min-height: auto;
+  box-sizing: border-box;
+}
