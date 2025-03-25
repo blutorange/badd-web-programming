@@ -1,0 +1,54 @@
+@font-face {
+  font-family: "primeicons";
+  font-display: block;
+  font-weight: normal;
+  font-style: normal;
+  src:
+    url("https://cdn.jsdelivr.net/npm/primeicons@7.0.0/fonts/primeicons.woff") format("woff"),
+    url("https://cdn.jsdelivr.net/npm/primeicons@7.0.0/fonts/primeicons.woff2") format("woff2"),
+    url("https://cdn.jsdelivr.net/npm/primeicons@7.0.0/fonts/primeicons.svg") format("svg"),
+    url("https://cdn.jsdelivr.net/npm/primeicons@7.0.0/fonts/primeicons.eot") format("embedded-opentype"),
+    url("https://cdn.jsdelivr.net/npm/primeicons@7.0.0/fonts/primeicons.ttf") format("truetype");
+}
+
+html {
+  font-size: 32px;
+}
+
+.pi {
+  font-family: "primeicons";
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  display: inline-block;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.pi:before {
+  --webkit-backface-visibility:hidden;
+  backface-visibility: hidden;
+}
+
+.pi-folder-plus:before {
+  content: "\ea05";
+}
+
+.pi-receipt:before {
+  content: "\ea06";
+}
+
+.pi-asterisk:before {
+  content: "\ea07";
+}
+
+.pi-face-smile:before {
+  content: "\ea08";
+}
+
+.pi-pinterest:before {
+  content: "\ea09";
+}

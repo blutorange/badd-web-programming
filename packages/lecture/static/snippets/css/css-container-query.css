@@ -1,0 +1,51 @@
+.container {
+  container-type: inline-size;
+}
+
+@container (min-width: 501px) {
+  table {
+    color: darkgreen;
+  }
+}
+
+@container (max-width: 500px) {
+  table {
+    color: rgb(194, 120, 18);
+  }
+  :is(th,td):last-child {
+    display: none;
+  }
+}
+
+@container (max-width: 250px) {
+  table {
+    color: darkred;
+  }
+  :is(th,td):nth-child(2) {
+    display: none;
+  }
+}
+
+.container {
+  margin: auto;
+  width: 100%;
+  height: 200px;
+  padding: 1rem;
+  box-sizing: border-box;
+  background-color: #ccc;
+}
+
+input {
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  border: 1px solid white;
+}
+
+td {
+  background-color: white;
+}
