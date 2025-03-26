@@ -103,6 +103,86 @@ Zugriff auf den aktuellen Wert.
 
 <HtmlSnippet path="element-properties" toggleable />
 
+## Eigenschaften von Elementen
+
+Weitere nützliche Eigenschaften von Elementen sind etwa:
+
+__classList__
+
+Um im JavaScript auf Klassenname (`<div class="large grid">`) zugreifen
+zu können, benutzen wir die Eigenschaft `classList`. Die ist ein Objekt mit
+Methoden, die uns erlauben, die Klassen auszulesen oder zu verändern:
+
+```js
+const element = document.querySelector(".my-element")
+
+// Prüfen, ob das Element die Klasse "stylish" hat
+element.classList.contains("stylish");
+
+// Hinzufügen neuer Klassen
+element.classList.add("new-class", "another-class");
+
+// Entfernen bestehenden Klassen
+element.classList.remove("class1", "class2");
+
+// Entfernt Klasse "hidden", falls präsent; andernfalls fügt diese hinzu
+element.classList.toggle("hidden");
+```
+
+__dataset__
+
+Jedes HTML-Element kann data-Attribute mit Werten haben, beispielsweise
+`<input data-hidden-if="tf2 == 0" />`. Die Namen der data-Attribute sind durch
+uns Programmier frei vergebbar. Im JavaScript können wir auf diese Attribute
+mittels der Eigenschaft `dataset` zugreifen.
+
+Hier ist noch zu beachten, dass wir die Attributsnamen beim Zugriff über JavaScript
+[Kebab case](https://developer.mozilla.org/en-US/docs/Glossary/Kebab_case) in den
+[Camel case](https://developer.mozilla.org/en-US/docs/Glossary/Camel_case)
+konvertieren müssen. Aus `hidden-if` wird also `hiddenIf`:
+
+```js
+// Zugriff auf <input data-hidden-if="tf2 == 0" />
+const hiddenIf = document.querySelector("input").dataset.hiddenIf;
+```
+
+__getAttribute / setAttribute__
+
+Allgemein können wir die Methoden `getAttribute` und `setAttribute` verwenden,
+um Attribute auszulesen oder zu ändern:
+
+```js
+const element = document.querySelector(".my-element")
+
+// Prüfen, ob das Element das Attribut "type" hat
+element.hasAttribute("type");
+
+// Auslesen des Werts des Attributs type
+element.getAttribute("type");
+
+// Attribut "type" auf "password" setzen
+element.setAttribute("type", "password");
+
+// Attribut "type" entfernen
+element.removeAttribute("type");
+```
+
+__outerHTML / innerHTML__
+
+Mittels `outerHTML` können wir das HTML des Elements inklusive seiner Kindelemente
+erhalten, mittels `innerHTML` das HTML von nur den Kindelementen:
+
+```js
+// <div><input /></div>
+const element = document.querySelector(".my-element")
+
+// Ergebnis: <div><input /></div>
+element.outerHTML;
+
+// Ergebnis: <input />
+element.innerHTML;
+```
+
 ## Finden von Elementen
 
 Der Einstiegspunkt ist immer das Document, welches die Webseite darstellt und
@@ -121,7 +201,7 @@ document.getElementById("first_name");
 Wollen wir eine Elemente anhand eines Klassennamen finden:
 
 ```js
-docment.getElementsByClassName("required")
+document.getElementsByClassName("required")
 ```
 
 Wir müssen beachten, dass hier eine Liste von Elementen zurückkommt, da mehrere
