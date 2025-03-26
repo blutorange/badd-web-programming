@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="atom.xsl"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://blutorange.github.io/badd-web-programming/blog/</id>
-    <title>Webpgroammierung Blog</title>
+    <title>Webprogrammierung Blog</title>
     <updated>2021-08-26T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://blutorange.github.io/badd-web-programming/blog/"/>
-    <subtitle>Webpgroammierung Blog</subtitle>
+    <subtitle>Webprogrammierung Blog</subtitle>
     <icon>https://blutorange.github.io/badd-web-programming/img/favicon.ico</icon>
     <entry>
         <title type="html"><![CDATA[Welcome]]></title>
