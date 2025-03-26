@@ -12,35 +12,38 @@ interface FeatureItem {
 
 const FeatureList: FeatureItem[] = [
 	{
-		id: "easy-to-use",
-		title: "Easy to Use",
-		Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
+		id: "zip-domain",
+		title: "Did you know?",
+		Svg: require("@site/static/img/brain.svg").default,
 		description: (
 			<>
-				Docusaurus was designed from the ground up to be easily installed and
-				used to get your website up and running quickly.
+				url.zip ist keine Datei, sondern die Adresse einer Webseite, welche
+				URLs verkürzt? Google hatte vor einiger Zeit die *.zip-Top-Level-Domain<span> </span>
+				<a target="_blank" rel="noreferrer" href="https://www.registry.google/tlds/zip/">eingeführt</a>.
+				Was nicht <a href="https://en.wikipedia.org/wiki/.zip_(top-level_domain)#Security_concerns" target="_blank" rel="noreferrer">ohne Kontroversen blieb</a>.
 			</>
 		),
 	},
 	{
-		id: "focus-on-what-matters",
-		title: "Focus on What Matters",
-		Svg: require("@site/static/img/undraw_docusaurus_tree.svg").default,
+		id: "flash-emulator",
+		title: "ruffle...",
+		Svg: require("@site/static/img/ruffle.svg").default,
 		description: (
 			<>
-				Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-				ahead and move your docs into the <code>docs</code> directory.
+				...ist ein Flash-Emulator, falls sich jemand nach den guten alten Zeiten
+				des Webs zurücksehnt, wo Design noch mehr war als Graustufen.<span> </span>
+				<a href="https://ruffle.rs/" target="_blank" rel="noreferrer">Verfügbar für alle gängigen Betriebssysteme.</a>
 			</>
 		),
 	},
 	{
 		id: "powered-by-react",
 		title: "Powered by React",
-		Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
+		Svg: require("@site/static/img/react.svg").default,
 		description: (
 			<>
-				Extend or customize your website layout by reusing React. Docusaurus can
-				be extended while reusing the same header and footer.
+				Auch diese Seite zur Webentwicklung nutzt moderne Web-Tools wie<span> </span>
+				<a href="https://react.dev/" target="_blank" rel="noreferrer">React</a>.
 			</>
 		),
 	},
