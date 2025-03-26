@@ -30,9 +30,10 @@ import {
 } from "@site/src/utils/sandbox-utils";
 
 // @ts-expect-error
-import InitialJs from "!!raw-loader!./initial.js";
+import InitialJs from "!!raw-loader!./initial.js.raw";
 import { useMonacoResize } from "@site/src/utils/monaco";
 import { useColorMode } from "@docusaurus/theme-common";
+import BrowserOnly from "@docusaurus/BrowserOnly";
 
 function Sandbox(): ReactNode {
   const url = new URL(window.location.href);
@@ -147,7 +148,7 @@ export default function SandboxPage(): ReactNode {
   return (
     <Layout>
       <PrimeReactProvider value={{ locale: "en" }}>
-        <Sandbox />
+        <BrowserOnly>{() => <Sandbox />}</BrowserOnly>
       </PrimeReactProvider>
     </Layout>
   );

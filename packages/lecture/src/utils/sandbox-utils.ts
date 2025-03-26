@@ -6,8 +6,6 @@ import useLocalStorage from "react-use-localstorage";
 
 import { getConstructorNames, isPromise } from "./lang-utils";
 
-const parser = new DOMParser();
-
 const basicStyleLight = `
 html {
   color: black;
@@ -58,6 +56,7 @@ export function prepareHtmlContent(
   js: string,
   colorMode: ColorMode,
 ): string {
+  const parser = new DOMParser();
   const doc = parser.parseFromString(html, "text/html");
 
   {

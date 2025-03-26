@@ -40,13 +40,14 @@ import SubmitCss from "!!raw-loader!./submit.css";
 import InitialHtml from "!!raw-loader!./initial.html";
 import InitialCss from "!!raw-loader!./initial.css";
 // @ts-expect-error
-import InitialJs from "!!raw-loader!./initial.js";
+import InitialJs from "!!raw-loader!./initial.js.raw";
+import BrowserOnly from "@docusaurus/BrowserOnly";
 
 export default function SandboxPage(): ReactNode {
   return (
     <Layout>
       <PrimeReactProvider value={{ locale: "en" }}>
-        <Sandbox />
+      <BrowserOnly>{() => <Sandbox />}</BrowserOnly>
       </PrimeReactProvider>
     </Layout>
   );
