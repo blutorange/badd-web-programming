@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[7916],{7916:(e,n,u)=>{u.r(n),u.d(n,{default:()=>s});const s="function sum(x = 0, y = 0) {\n  return x + y;\n}\n\nconsole.log(sum(2, 3));\nconsole.log(sum(undefined, 3));\nconsole.log(sum(2, undefined));\nconsole.log(sum(undefined, undefined));"}}]);

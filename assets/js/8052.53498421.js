@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[8052],{8052:(e,n,s)=>{s.r(n),s.d(n,{default:()=>t});const t="<fieldset>\n  <legend>Erbschaft</legend>\n  <div>\n    <p>Erbschaften sind rechtlich eine komplizierte Angelegenheit.</p>\n  </div>\n</fieldset>"}}]);

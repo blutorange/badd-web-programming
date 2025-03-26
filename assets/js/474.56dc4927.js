@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[474],{474:(e,t,s)=>{s.r(t),s.d(t,{default:()=>n});const n="function startsWith(value, prefix) {\n  return value.substring(0, prefix.length) === prefix;\n}\n\nstartsWith();"}}]);

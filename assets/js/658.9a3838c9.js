@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[658],{658:(e,n,a)=>{a.r(n),a.d(n,{default:()=>s});const s='const user = {\n  "name": "Picard",\n  "age": 80,\n  "active": false,\n  "hobbies": [\n    "Archaeology",\n    "Earl Grey"\n  ]\n};\n\nJSON.stringify(user);\n'}}]);

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[2943],{2943:(n,e,s)=>{s.r(e),s.d(e,{default:()=>a});const a='const users = [\n  { name: "Max" },\n  { name: "Maria" },\n  { name: "Odo" },\n  { name: "John" },\n];\n\nfor (const user of users) {\n  console.log(`Handling user ${user.name}`);\n}\n'}}]);

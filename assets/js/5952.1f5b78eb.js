@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[5952],{5952:(e,t,u)=>{u.r(t),u.d(t,{default:()=>n});const n='<h1>Liste unserer Produkte</h1>\n\n<ul id="products"></ul>\n\n<button id="load-more" type="button">Mehr laden</button>'}}]);

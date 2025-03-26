@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[6393],{6393:(s,e,t)=>{t.r(e),t.d(e,{default:()=>c});const c="@import url(https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.css);\n\nbody {\n    margin: 2em;\n}"}}]);

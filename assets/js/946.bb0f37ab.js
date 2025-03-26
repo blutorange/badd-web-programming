@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[946],{946:(e,t,c)=>{c.r(t),c.d(t,{default:()=>o});const o='document.getElementById("toggle").addEventListener("click", () => {\n    document.querySelector(".content-box").classList.toggle("border");\n    document.querySelector(".border-box").classList.toggle("border");\n});'}}]);
