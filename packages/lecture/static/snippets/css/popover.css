@@ -1,0 +1,37 @@
+::backdrop {
+  backdrop-filter: blur(3px);
+}
+
+[popover]:popover-open {
+  top: anchor(bottom);
+  left: calc(anchor(left) + 20px);
+  background: #333;
+  color: white;
+  font-weight: 400;
+  padding: 1rem;
+  max-width: 200px;
+  line-height: 1.4;
+  display: inline-block;
+  margin: 0;
+
+  a {
+    color: lightblue;
+  }
+}
+
+button {
+  background: #ddd;
+  font-weight: bold;
+  padding: .5rem 2rem;
+  border: 1px solid black;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: sans-serif;
+  margin: 0 2rem;
+  height: 100%;
+}

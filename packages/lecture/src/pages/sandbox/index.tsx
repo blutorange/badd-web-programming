@@ -252,6 +252,9 @@ function applyHtml(
       iframeDoc.write(preparedHtmlContent);
       iframeDoc.close();
       iframeDoc.addEventListener("submit", (event) => {
+        if (!(event.target instanceof iframeWin.HTMLFormElement) || event.target.method === "dialog") {
+          return;
+        }
         event.preventDefault();
         const submitHtml = buildSubmitHtml(event, iframeWin);
         iframeDoc.open();
