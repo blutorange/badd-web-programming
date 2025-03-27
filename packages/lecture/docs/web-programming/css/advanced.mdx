@@ -47,6 +47,51 @@ Zudem gibt es noch Pseudoklassen, welche die HTML-Struktur betreffen.
     der Geschwisternelemente. `input:first-of-type` such also nach dem ersten
     Element vom Typ `input`.
 
+Beispiele für `:*-child` und `:*-of-type`. Nehmen wir an, wir haben folgendes
+HTML:
+
+```html
+<div>
+  <h1>Überschrift</h1>
+  <p>Erster Absatz</p>
+  <p>Zweiter Absatz</p>
+  <p>Dritter Absatz</p>
+  <h2>Unterüberschrift</h2>
+</div>
+```
+
+Dann können wir folgendes selektieren:
+
+```css
+div > :first-child {
+  /* <h1>Überschrift</h1> */
+}
+
+div > nth-child(3) {
+  /* <p>Zweiter Absatz</p> */
+}
+
+div > :last-child {
+  /* <h2>Unterüberschrift</h2> */
+}
+
+p::first-of-type {
+  /* <p>Erster Absatz</p> */
+}
+
+p::last-of-type {
+  /* <p>Dritter Absatz</p> */
+}
+
+/* Selektiert die 3 Elemente h1, p, h2 */
+/* Diese sind jeweils die ersten ihres Typs */
+div > ::first-of-type {
+  /* <h1>Überschrift</h1> */
+  /* <p>Erster Absatz</p> */
+  /* <h2>Unterüberschrift</h2> */
+}
+```
+
 `:nth-child` kann auch in der Form `:nth-child(2n)` verwendet werden, um jedes
 2. Element zu selektieren. Das können wir etwa benutzen, um jede 2. Zeile einer
 Tabelle andersfarbig darzustellen:
