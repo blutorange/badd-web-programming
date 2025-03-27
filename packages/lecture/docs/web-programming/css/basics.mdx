@@ -47,11 +47,12 @@ selektieren. Dies erreichen wir, indem wir Selektoren kombinieren:
 
 | Selektor          | Bedeutung |
 | ----------------- | --------- |
+| fieldset.fancy    | UND-Kombination. Ein Element vom Typ `fieldset`, was zudem die Klasse `fancy` hat.|
 | fieldset input    | Ein `input`, der sich irgendwo in einem `fieldset` befindet |
 | fieldset > input  | Ein `input`, der ein direktes Kindelement von `fieldset ist` |
 | label + input     | Ein `input`, der direkt auf ein `label` folgt |
 | label ~ input     | Ein `input`, der sich nach einem Label `label` befindet |
-| fieldset, input   | Alle `fieldset` und alle `input` Elemente (unabhängig von deren Beziehung) |
+| fieldset, input   | ODER-Kombination. Alle `fieldset` und alle `input` Elemente (unabhängig von deren Beziehung) |
 
 Damit wir uns das besser vorstellen können, hier noch beispielshaft HTML-Schnippsel
 für die jeweiligen Selektoren:
