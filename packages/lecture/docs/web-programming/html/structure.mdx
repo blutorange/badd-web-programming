@@ -1,0 +1,269 @@
+---
+id: html-structure
+slug: /html/structure
+sidebar_position: 1
+description: Die grundlegende Struktur von HTML
+---
+
+import HtmlSnippet from "@site/src/components/HtmlSnippet";
+
+# Abschnitt 1 - Struktur von HTML
+
+Wir werden uns die grundlegende Struktur von HTML anschauen und worauf wir dabei
+achten müssen. HTML stellt die Grundstruktur jeder Webseite dar und enthält
+deren Inhalt in Textform.
+
+## XML-Format
+
+HTML ist hervorgegangen aus XML -- der eXtensible Markup Language. XML können
+wir auch auffassen als Datenstruktur zur Darstellung geschachtelter Daten. Es
+besteht aus drei wesentlichen Ideen:
+
+- Elemente ("Tag")
+- Attribute
+- Verschachtelung
+
+Ein Element oder Tag beschreibt meist ein Objekt und wird mit spitzen Klammern
+geschrieben:
+
+```xml
+<university></university>
+```
+
+Wie Objekte Eigenschaften haben können, kann jedes Element Attribute haben,
+bestehend aus einem Namen und einem Wert, getrennt mit Leerzeichen:
+
+```xml
+<university id="dhdd" name="Duale Hochschule Dresden"></university>
+```
+
+Und schließlich können Objekte andere Objekte enthalten oder referenzieren.
+Um dies abzubilden, schachteln wir Elemente in XML:
+
+```xml
+<university id="dhdd" name="Duale Hochschule Dresden">
+  <courses>
+    <course id="mi" name="Medientinformatik">
+      <lecture id="impp" name="Imperative Programmierung">Einführung in die Programmierung.</lecture>
+      <lecture id="webp" name="Webprogrammierung">Vermittelt Grundlagen der Webprogrammierung.</lecture>
+    </course>
+    <course id="it" name="Informationstechnik">
+      <lecture id="db1" name="Datenbanken 1">Grundlagen von Datenbanken.</lecture>
+      <lecture id="db2" name="Datenbanken 2">Fortgeschrittene Datenbankkonzepte.</lecture>
+    </course>
+  </courses>
+</university>
+```
+
+:::info
+Der Vollständigkeit halber sei noch erwähnt, dass in vielen Bereichen, wo XML
+verwendet wird, noch sogenannte [Namespaces](https://www.w3.org/TR/xml-names/)
+eine Rolle spielen. Damit können wir Elemente klassifzieren, wie im unteren
+Beispiel illustriert. Das Namespaces aber für HTML im wesentlichen irrelevant
+sind, werden wir auf diese hier nicht weiter eingehen. 
+
+```xml
+<x:html xmlns:x="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui">
+  <h:panelGroup layout="block">
+    <p:inputText val="#{universityBean.name}"/>
+  </h:panelGroup>
+</x:html>
+```
+:::
+
+## Aufbau eines HTML-Dokuments
+
+Schauen wir uns nun HTML an. Frühere Versionen von HTML basierten noch strikt
+auf den [Regeln von XML](https://www.w3.org/TR/xml/) und war bekannt unter dem
+Namen `XHTML`. HTML in der heutigen Form ist ein
+[eigenständiger Standard](https://html.spec.whatwg.org/multipage/introduction.html#html-vs-xhtml),
+der immer noch auf dem Konzept von XML beruht (Elemente, Attribute, Verschachtelung),
+darüber hinaus aber eigene Regeln hat, welche im XML nicht gültig wären.
+
+Grundlegend ist jedes HTML-Dokument wie folgt aufgebaut:
+
+<HtmlSnippet path="basic" />
+
+- `DOCTYPE` Sagt dem Browser, welches Format das HTML-Dokument hat (Document Type).
+  Andere Typen wie XHTML sind möglich, heutzutage wird aber fast nur noch html verwendet. 
+- `<html>` Das Wurzelelement von HTML, welches alle anderen Elemente enthält.
+- `<head>` Der Header, in dem zusätzliche Metainformationen zur Webseite stehen.
+  Elemente im Head sind in der Regel für den Nutzer nicht direkt sichtbar.
+- `<body>` Der Body mit dem eigentlichen Inhalt der Webseite. In der Regel entspricht
+  jedes Element direkt einem Teil der Webseite, den der Nutzer auf dem Bildschirm sieht.
+
+Auf einem Webserver ist ein HTML-Dokument nur reiner Text. Wenn der Browser 
+ein solches HTML-Textdokument einliest, baut der Browser aus den Elementen
+und ihren Kinderelementen ein geschachtelte Struktur auf. Diese nennt man auch
+DOM und kann von uns in den Browser-Dev-Tools eingesehen werden: 
+
+![HTML DevTools](/img/web/html-dev-tools.png)
+
+(In den meisten Browser lassen sich die Dev-Tools über F12 oder über Rechtsklick -> Untersuchen öffnen).
+
+Die konkreten Inhalte und Elemente, welche möglich sind, schauen wir uns in den
+folgenden Abschnitten an. Bevor wir das tun, schauen wir uns noch einige Besonderheiten
+von HTML an.
+
+## Behandlung von Leerzeichen
+
+In einem Textdokument sind alle Leerzeichen (white space) relevant. Es ist ein
+Unterschied, ob zwischen 2 Wörtern ein Leerzeichen, zwei Leerzeichen oder mehr
+stehen.
+
+```text
+Leerzeichen sind  wichtig   in    einem Text - Dokument
+```
+
+Im HTML werden alle Leerzeichen im Textinhalt von Elementen zusammengefasst. Es spielt
+also keine Rolle, wieviele Leerzeichen wir verwenden, der Nutzer sieht immer
+nur ein Leerzeichen. Folgende vier Absätze sehen gleich aus:
+
+<HtmlSnippet path="whitespace" />
+
+:::info
+Über CSS-Eigenschaften wie [white-space: pre-wrap;](https://developer.mozilla.org/en-US/docs/Web/CSS/white-space#pre-wrap)
+kann dieses Verhalten beeinflusst und alle Leerzeichen dargestellt werden.
+:::
+
+Diese Vorgehen ist wichtig, damit wir HTML-Dokumente schreiben können, wo die
+Elemente übersichtlich formatiert sind.  In der Regel schreiben wir HTML so,
+dass Kinderelemente eingerückt auf einer neuen Zeile sind. Würden Leerzeichen nicht
+zusammengeführt werden, sähe der Nutzer dadurch zusätzliche Leerzeichen und Zeilenumbrüche.
+
+## Void-Elemente
+
+Im XML müssen alle Elemente geschlossen werden, z.B. `<user></user>`.
+
+Ein wesentlicher Unterschied zu XML sind im HTML sogenannte
+[Void-Elemente](https://developer.mozilla.org/en-US/docs/Glossary/Void_element).
+
+Dabei handelt es sich um spezielle Arten von Elementen, welche keinen Inhalt
+haben und keinen schließenden Tag haben dürfen.
+
+```html
+<input name"email">
+<img src="image.png">
+```
+
+Siehe die [Liste bei MDN web docs](https://developer.mozilla.org/en-US/docs/Glossary/Void_element)
+für alle Void-Elemente.
+
+:::note
+Analog zu XML ist es erlaubt, einen Slash am Ende zu haben `<input />`, aber
+im Unterschied zu XML ist dieser nicht erforderlich.
+:::
+
+## Tag-Omisssion
+
+Ein weiterer Unterschied zu XML besteht darin, dass HTML es uns für einige Elemente
+erlaubt, den schließenden Tag auszulassen, obwohl diese Elemente Inhalt (Kinder)
+haben können.
+
+Der technische Name hierfür ist [Tag Omisssion](https://html.spec.whatwg.org/multipage/syntax.html#syntax-tag-omission).
+Beispielsweise können wir ungeordnete Listen mit Anführungspunkten über das Element
+`<ul></ul>` darstellen. Jeder Anführungspunkt ist ein `<li></li>`-Kindelement.
+HTML erlaubt es, bei `li` den schließenden Tag auszulassen. Damit können wir
+folgendes schreiben:
+
+<HtmlSnippet path="tag-omission" />
+
+Das ist das gleiche, als ob wir die Tags mitgeschrieben hätten:
+
+```html
+<h2>Einkaufsliste</h2>
+<ul>
+  <li>Bananen</li>
+  <li>Käse</li>
+  <li>Walnüsse</li>
+</ul>
+```
+
+Sowohl im [HTML-Standard](https://html.spec.whatwg.org/multipage/grouping-content.html#the-li-element) als auch
+bei [MDN web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/li#technical_summary)
+können wir für jedes Elemente sehen, ob der Start- oder End-Tag ausgelassen werden kann.
+
+Tatsächlich ist es sogar erlaubt, `<html>`, `<head>` und `<body>` auszulassen:
+
+```html
+<!DOCTYPE HTML>
+<title>Hello</title>
+<p>Welcome to this example.</p>
+```
+
+Das ist gültiges HTML und entspricht folgendem:
+
+```html
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Hello</title>
+  </head>
+  <body>
+    <p>Welcome to this example.</p>
+  </body>
+</html>
+```
+
+:::note
+Das Auslassen von schließenden Tags etwa bei List Items `<li>` oder
+Paragraphs (`<p>`) kann sinnvoll sein, wenn wir HTML per Hand schreiben
+und übersichtlich halten müssen. Das Auslassen von `<html>`, `<head>` und `<body>`
+reduziert in der Praxis aber eher die Übersichtlichkeit.
+:::
+
+## Sonderzeichen
+
+Zeichen wie `<` oder `>` haben im HTML eine spezielle Bedeutung. Wenn wir solche
+Zeichen als Text verwenden wollen, müssen wir diese umschreiben (escapen). Für die
+meisten üblichen Sonderzeichen stellt HTML Abkürzungen bereit, z.B.:
+
+<HtmlSnippet path="html-escape" />
+
+Falls notwendig und im HTML keine Abkürzung bereitsteht, können wir ein Zeichen
+auch escapen, indem wir dessen [Unicode-Codepoint](https://developer.mozilla.org/en-US/docs/Glossary/Unicode)
+verwenden, z.B.
+
+```html
+&#x1F605;
+```
+
+[&#x1F605;](https://unicode.org/charts/nameslist/n_1F600.html)
+
+## Shadow-DOM
+
+Wie erwähnt ist der DOM die geschachtelte Darstellung eines HTML-Dokuments,
+was der Browser geladen hat. Jedes Element im `<body>` entspricht einem
+Element, das der Nutzer auf dem Bildschirm sieht.
+
+Beispielsweise können wir `<select>` verwenden, um ein Dropdown-Auswahlmenü
+darzustellen:
+
+![Einfaches Input-Element mit Typ color](/img/web/input-color-view.png)
+
+Im HTML sieht das einfach wie folgt aus:
+
+```html
+<input type="color">
+```
+
+Obwohl wir nur ein Element verwendet haben, stellen Browser ein komplexes
+Element mit einer Farbvorschau und einer Auswahl der Farbe dar. Wie
+implementieren Browser dies? HTML ist ein mächtiges Werkzeug, um UI-Elemente zu
+erstellen. Es hat sich für Browser nun als praktisch erwiesen, selber HTML für
+die Implementierung zu verwenden. Der Browser hat "verstecktes" HTML innerhalb von
+`<input>`, um die Anzeige der Farbvorschau zu ermöglichen.
+
+Dieses versteckte HTML nennt sich
+[Shadow DOM](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM).
+Einige Browser erlauben es über eine Einstellung in den Dev-Tools, den Shadow-DOM
+anzuzeigen:
+
+![Shadow-DOM von Input mit Typ color](/img/web/input-color-shadow.png)
+
+Inzwischen ist es auch für uns als Autoren von Webseiten möglich, den Shadow-DOM
+zu verwenden. Ein typischer Anwendungsfall dafür sind Web Components -- eigene
+HTML-Elemente (Widgets), die wir uns in einem späteren Kapitel kurz anschauen
+werden. Ein anderer Anwendungsfall ist die Isolierung von CSS -- alle CSS/Stylesheets
+innerhalb des Shadow-DOM beeinflussen nicht die darumliegende Webseite.

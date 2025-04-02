@@ -1,0 +1,56 @@
+---
+id: html-head
+slug: /html/head
+sidebar_position: 2
+description: Metadaten der Webseite im Head
+---
+
+import HtmlSnippet from "@site/src/components/HtmlSnippet";
+
+# Abschnitt 2 - Metadaten (Head)
+
+Erinnern wir uns nochmal an die Grundstruktur einer Webseite:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <title>Demoseite</title>
+ </head>
+ <body>
+  <h1>Demoseite</h1>
+ </body>
+</html>
+```
+
+Im `<head>` stehen Metadaten, die nicht direkt einem sichtbaren Element auf der
+Webseite entsprechen. Wir wollen uns einen Überblick darüber verschaffen,
+welche Elemente es gibt.
+
+## lang
+
+Ein wichtiges Attribut, welche nicht im `<head>` steht, sondern direkt am
+`<html>`, ist das `lang`-Attribut. Dieses gibt die Sprache an. Es ist wichtig,
+dieses Attribut immer zu setzen. Hilfsmittel (assistive technology) wie Screen Reader
+verwenden dieses zum Teil auch, um den Inhalt zu erkennen und zu vermitteln.
+
+Falls Seiten mehrsprachige Inhalte enthalten, kann das `lang`-Attribut auch
+an einzelnen Elementen verwendet werden:
+
+<HtmlSnippet path="html-multi-lang"/>
+
+## Head und Metadaten
+
+head, 
+meta (charset),  eher selten, auch über http header
+
+title, favicon, base
+
+## CSS
+
+## JavaScript
+
+body, script, style, link
+
+Position
+`<script async defer></script>`
