@@ -213,6 +213,35 @@ und übersichtlich halten müssen. Das Auslassen von `<html>`, `<head>` und `<bo
 reduziert in der Praxis aber eher die Übersichtlichkeit.
 :::
 
+## Boolean-Attribute
+
+Im HTML gibt es sogenannte [Boolean-Attribute](https://developer.mozilla.org/en-US/docs/Glossary/Boolean/HTML)
+(Boolean = Wahrheitswert). Diese haben keinen Wert, entscheidend dabei ist nur,
+ob das Attribut vorhanden ist oder nicht. Im XML muss jedes Attribut dem Schema
+`attr="value"` folgen, im HTML lassen schreiben wir nur den Namen des Attributs:
+
+```html
+<input name="birth_date" type="date" required>
+
+<script src="./script" defer></script>
+
+<dialog open></dialog>
+```
+
+Manchmal gibt es Tools und Software zum Erstellen von HTML, welche es nicht
+unterstützen, solche Attribute ohne Wert zu setzen. In dem Fall
+[erlaubt der Standard](https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#boolean-attributes)
+es, als Wert den Namen des Attributs zu verwenden:
+
+```html
+<!-- Korrekt -->
+<input required="required">
+
+<!-- Nicht korrekt -->
+<input required="true">
+<input required="false">
+```
+
 ## Sonderzeichen
 
 Zeichen wie `<` oder `>` haben im HTML eine spezielle Bedeutung. Wenn wir solche

@@ -6,18 +6,72 @@ description: Inhalt der Webseite im Body
 ---
 
 import HtmlSnippet from "@site/src/components/HtmlSnippet";
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Abschnitt 3 - Inhalt (Body)
 
-## content model
+Im `<body>` steht der eigentliche Inhalt der Webseite. Die meisten Elemente
+im `<body>` entsprechen einem Element, welches der Nutzer auf der Webseite sieht.
+Wir können mehrere Elemente im Body haben, diese werden vom Browser der Reihe
+nach dargestellt, von oben nach unten.
+
+HTML definiert viele Elemente, die wir verwenden können. Da HTML eine Living Standard
+ist, kommen auch nicht selten neue Elemente dazu. In diesem Abschnitt verschaffen
+wir uns einen Überblick über die wichtigsten Elemente.
+
+## Content Model
+
+Bevor wir uns konkrete Elemente anschauen, noch eine Anmerkung zum sogenannten
+Content Model in HTML. In XML und HTML können wir innerhalb jedes Elements
+Kinderelemente einfügen. HTML macht nun bestimmte Einschränkungen, welche Elemente
+innerhalb von welchen Elternelementen verwendet werden dürfen. Dies nennt
+der Standard das sogenannte [Content Model](https://html.spec.whatwg.org/multipage/dom.html#content-models).
+
+Jedes Element ist in eine oder mehrere Kategorien gruppiert. Einige Kategorien
+überschneiden sich. Dies ist in folgender Abbildung dargestellt (mit der Maus
+darüber fahren, um die Elemente der Kategorie zu sehen):
+
+<figure>
+  <object data={useBaseUrl("/img/web/content-venn.svg")} height="288" width="1000"><img alt="Kategorien des HTML-Content-Model" src={useBaseUrl("/img/web/content-venn.svg")} /></object>
+  <figcaption>Quelle: HTML Living Standard, W3C, https://html.spec.whatwg.org/multipage/dom.html#content-models</figcaption>
+</figure>
+
+Für jede Art von Element definiert der HTML-Standard dann, welche Inhalte möglich
+sind. Beispielsweise sagt der Standard
+zum [&lt;label&gt;-Element](https://html.spec.whatwg.org/multipage/forms.html#the-label-element):
+
+> __Content model:__
+>
+> Phrasing content, but with no descendant labelable elements unless it is the element's labeled control, and no descendant label elements.
+
+Es ist also erstmal nur "Phrasing Content" erlaubt. Das bedeutet beispielsweise, wir dürfen
+keine `<div>`-Elemente (Flow Content) oder `<article>`-Elemente (Sectioning Content)
+verwenden. Das folgende HTML ist also invalid:
+
+```html
+<label for="email"><div>Ihre E-Mail</div><div>(kein Spam!)</div></label>
+<input id="email" name="email" type="input">
+```
+
+Die meisten Browser werden solches invalides HTML trotzdem darstellen und in der
+Regel nicht einmal eine Warnungsmeldung uns Entwicklern anzeigen. Es kann uns
+daher schnell passieren, dass wir unbewusst HTML schreiben, welches streng
+genommen nicht dem Standard entspricht. Wir sollten immer darauf achten,
+gültiges HTML zu schreiben, damit jede Art von Software mit unserer Webseite
+korrekt umgehen kann (Browser, Screenreader, Braille-Display etc).
+
+Von W3C gibt es ein bereitgestelltes Online-Tools, mit dem wir unsere Webseite
+prüfen können:
+
+> https://validator.w3.org/
+
+## Generische Elemente
+
+div, span, i, strong, s, pre, br
 
 ## Semantisches HTML
 
 uebersicht ueber verschiedene tags
-
-### Generische Elemente
-
-div, span, i, strong, s, pre, br
 
 ### Seitenstruktur
 
@@ -26,6 +80,8 @@ header, main, footer, section, nav, aside, p, h1, h2...
 ### Textinhalte
 
 blockquote, samp, mark, abbr, q, code, citem details/summary, progress, meter, small
+
+figure, figcaption
 
 ### Bilder
 
@@ -56,6 +112,5 @@ table tbody, thead th tr td
 role, aria
 
 ## Data-Attribute
-
 
 ## Iframe

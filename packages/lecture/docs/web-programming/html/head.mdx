@@ -41,16 +41,231 @@ an einzelnen Elementen verwendet werden:
 
 ## Head und Metadaten
 
-head, 
-meta (charset),  eher selten, auch über http header
+Im Head stehen wichtige Metadaten für die Webseite.
 
-title, favicon, base
+### title
+
+`<title>` ist, wie der Name sagt, der Titel der Webseite. Im Browser wird
+dieser meist oben im Browser-Tab angezeigt.
+
+```html
+<head>
+  <title>Meine erste Webseite</title>
+</head>
+```
+
+### meta
+
+`<meta>` ist ein Tag, mit dem wir verschiedene Arten von Metadaten setzen können.
+
+__charset__
+
+Eine wichtige Verwendung ist das Setzen des Zeichensatzes des Dokument. Ein
+Zeichensatz ist eine Zuordnung, wie Zahlen (Bytes) Buchstaben und anderen
+Schriftzeichen entsprechen. Heutzutage weit verbreitet ist [Unicode](https://home.unicode.org/),
+speziell in der Kodierung [UTF-8](https://developer.mozilla.org/en-US/docs/Glossary/UTF-8),
+was durch sein variables Byte-Encoding platzsparsam ist und trotzdem
+[fast](https://web.archive.org/web/20131216023226/http://www.ibm.com/developerworks/library/u-secret.html)
+[alle](https://web.archive.org/web/20160610051311/https://mojikiban.ipa.go.jp/1292.html)
+Schriftzeichen aus verschiedenen Ländern und Kulturen darstellen kann.
+
+```html
+<head>
+  <meta charset="utf-8">
+</head>
+```
+
+__http-equiv__
+
+Das Meta-Element können wir auch benutzen, um Werte einiger HTTP-Header zu setzen.
+In der Regel sollte hierfür aber der Webserver direkt den entsprechenden Header
+senden, sodass wir dies eher seltener verwendet werden. Verwenden wir diese Funktionalität,
+sind vom [Standard nur einige wenige Header zugelassen](https://html.spec.whatwg.org/multipage/semantics.html#pragma-directives).
+
+```html
+<head>
+  <!-- Weiterleitung nach 5 Sekunden an example.com -->
+  <!-- Manchmal für index-Dokumente verwendet, um auf den eigentlichen Inhalt weiterzuleiten-->
+  <meta http-equiv="refresh" value="5; url=https://www.example.com/" >
+</head>
+```
+
+__name / value__
+
+Mittels `<meta name="name" content="value">` können wir verschiedene weitere
+Metadaten definieren. Eine Liste aller möglichen Namen findet sich
+[im HTML-Standard](https://html.spec.whatwg.org/multipage/semantics.html#standard-metadata-names).
+Einige wichtige, die wir verwenden können, sind:
+
+```html
+<head>
+  <!-- Autor der Webseite -->
+  <meta name="author" content="Andre Wachsmuth">
+
+  <!-- Die Beschreibung kann etwa von Suche-Engines ausgelesen werden. -->
+  <meta name="description" content="Eine kurze Einleitung in die Grundlagen der Webprogrammierung">
+
+  <!-- Schlüsselwörter, die ebenfalls etwa von Such-Engines verwendet werden -->
+  <meta name="keywords" content="web,programming,javascript,html,css,lesson">
+
+  <!-- Farbe, die etwa auf mobilen Geräten in der Adressleiste angezeigt wird. -->
+  <meta name="theme-color" content="#00ff00">
+
+  <!-- Farbschema, welches die Webseite vorschlägt -->
+  <meta name="color-scheme" content="dark">
+</head>
+```
+
+<figure>
+![theme-color auf Mobilgeräten](/img/web/theme-color.png)
+<figcaption>Auswirkung von `theme-color`. Quelle: von [Icons & Browser Colors](https://web.dev/articles/icons-and-browser-colors),
+created and shared by Google and used according to terms described in the Creative Commons 4.0 Attribution License.</figcaption>
+</figure>
+
+### link
+
+Mittels `<link>` können wir verschiedene relevante Ressourcen verlinken. Ein
+Link-Tag folgt immer dem Schema `<link rel="TYPE" href="LINK">`. `TYPE` ist
+die Art der verlinkten Ressource, `LINK` eine URL auf die Ressource.
+
+Im folgenden schauen wir uns 2 wichtige Arten von Links an. Eine Liste mit vielen
+weiteren möglichen Linkarten findet sich etwa bei [MDN web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel).
+
+__Stylesheet__
+
+Die wahrscheinlich häufigste Ressource, die in Webseiten verlinkt wird, ist ein
+CSS-Stylesheet. CSS schauen wir uns im nächsten Kapitel an, es sorgt dafür, dass
+die Webseite schön aussieht.
+
+```html
+<head>
+  <link rel="stylesheet" href="./styling.css">
+</head>
+```
+
+Über ein optionales `media`-Attribute können wir auch CSS für verschiedene
+Geräte oder Bildschirmgrößen laden:
+
+```html
+<head>
+  <!-- CSS für Nutzer, die dark oder light Theme bevorzugen -->
+  <link rel="stylesheet" href="light.css" media="(prefers-color-scheme: light)">
+  <link rel="stylesheet" href="dark.css" media="(prefers-color-scheme: dark)">
+
+  <!-- CSS für Geräte mit kleinen / großen Bildschirm -->
+  <link rel="stylesheet" href="small.css" media="(max-width: 719px)">
+  <link rel="stylesheet" href="large.css" media="(min-width: 720px)">
+</head>
+```
+
+__favicon__
+
+Ein [favicon](https://www.w3schools.com/html/html_favicon.asp) (favorite icon)
+ist ein kleines Icon, was Browser etwa im Browser-Tab anzeigen und der Webseite
+mehr Personalisierung verleihen.
+
+```html
+<head>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" sizes="16x16">
+</head>
+```
+
+Wir können mehrere Link-Tags verwenden, um das Icon in mehreren Formaten und
+Auflösungen anzugeben. Browser suchen dann ein Icon heraus, welches am besten
+zum Gerät und seiner Auflösung passt.
+
+Auch diese Webseite hat ein Favicon:
+
+![favicon dieser Webseite](/img/web/favicon-tab.png)
+
+
+:::note
+Noch weitere Meta-Informationen zu einer Webseite können wir auch in einer
+[Manifest-Datei](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest)
+hinterlegen. Mittels einem Link-Tag sagen wir dem Browser, wo er diese findet.
+
+```html
+<link rel="manifest" href="manifest.json" />
+```
+:::
 
 ## CSS
 
+Im Header können wir auch direkt CSS-Inhalte einbinden, indem wir den `<style>`-Tag
+verwenden:
+
+```html
+<head>
+  <style> html { font-size: 16px; } </style>
+</head>
+```
+
+Empfehlenswert ist, dies nur im Notfall oder bei kleineren CSS-Inhalten zu tun.
+Soweit möglich, sollten wir CSS-Dateien immer mit dem `<link>`-Tag verlinken.
+Hintergrund ist, dass Browser externe Link [cachen](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching)
+können. Das bedeutet, die CSS-Datei wird beim ersten Besuch der Webseite einmal
+heruntergeladen und auf dem Rechner gespeichert. Beim nächsten Besuch der Webseite
+muss die Datei dann nicht noch einmal geladen werden. Dies kann die die Ladezeit
+unserer Webseite verbessern. 
+
 ## JavaScript
 
-body, script, style, link
+Ebenso im Header können wir JavaScript einbinden. Die Programmiersprache JavaScript
+ermöglicht interaktive Webseiten.
 
-Position
-`<script async defer></script>`
+Hierzu verwenden wir das `<script>`-Tag. Wir können sowohl eine JavaScript-Datei
+verlinken:
+
+```html
+<head>
+  <script src="./my-script.js"></script>
+</head>
+```
+
+Alternativ können wir den JavaScript-Code auch direkt im HTML inkludieren:
+
+```html
+<head>
+  <script>console.log("Hallo Welt!");</script>
+</head>
+```
+
+Analog zu CSS ist besser, JavaScript-Dateien zu verlinken, um die Größe der
+Webseite klein zu halten und die Ladezeit zu verbessern.
+
+:::info
+Binden wir ein `<script>` in einer Webseite ein, lädt der Browser das JavaScript
+sofort herunter und führt es aus, bevor die Webseite weiter geladen wird. Das
+ist nützlich, weil wir somit eine definierte Reihenfolge haben, wann unser
+JavaScript ausgeführt wird, kann aber dafür sorgen, dass die Webseite langsamer
+lädt. Mittels den Attributen [defer](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#defer)
+oder [defer](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#async) können wir dafür sorgen,
+dass der Browser das JavaScript [erst später ausführt](https://html.spec.whatwg.org/multipage/scripting.html#attr-script-async).  
+:::
+
+:::info
+Für JavaScript, welches im sogenannten ESM-Format (Modulformat) geschrieben wurde,
+muss zusätzlich das Attribute `type="module"` gesetzt werden.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/lodash-es@4.17.21/debounce.js" type="module"></script>
+```
+:::
+
+Falls wir JavaScript geschrieben haben, welches auf HTML-Elemente zugreifen
+muss (etwa, um ein Bild bei Klick in voller Größe anzuzeigen), müssen wir aufpassen.
+Binden wir das JavaScript im Header ein und versuchen dann direkt, auf die HTML-Elemente
+zuzugreifen, erhalten wir einen Fehler: Der Browser hat an dieser Stelle das HTML
+im `<body>` noch gar nicht erzeugt.
+
+Es gibt mehrere Varianten, wie wir dieses Problem lösen können:
+
+- Mittels dem Attribute `defer` am `<script>`. Dieses sorgt dafür, dass das
+  JavaScript erst ausgeführt wird, wenn der Browser das HTML fertig geladen hat.
+- Indem wir das `<script>` erst am Ende des `<body>` setzen, statt direkt
+  im `<script>`. Der Browser hat das HTML dann schon geladen, wenn der Browser
+  unser Script ausführt.
+- Durch Registrieren eines Event-Listener auf das `readystatechange`-Event des
+  `document` und Abfrage des `Document.readyState`. Siehe
+  [MDN web docs - Document.readyState](https://developer.mozilla.org/en-US/docs/Web/API/Document/readyState)
+  oder später im JavaScript-Kapitel für ein Beispiel.
