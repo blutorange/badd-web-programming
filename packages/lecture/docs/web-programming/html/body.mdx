@@ -67,19 +67,73 @@ prüfen können:
 
 ## Generische Elemente
 
-div, span, i, strong, s, pre, br
+Generische Elemente, die wir immer verwenden können, wenn es keine anderen
+passenden Elementen gibt:
+
+<HtmlSnippet path="div-span" />
+
+`<div>` und `<span>` werden oft verwendet für eigene interaktive Inhalte und Widgets,
+wie etwa Suchleisten oder Select-Dropdowns.
+
+`<div>` wird standardmäßig als Block-Element dargestellt, welches die gesamte
+Bildschirmbreite einnimmt und beliebigen Flow-Inhalt aufnehmen kann, also fast
+alle HTML-Elemente. `<span>` ist ein Inline-Element, welches nur so breit ist
+wie sein Inhalt. `<span>` darf nur Phrasing-Inhalt enthalten, also etwa keine
+`<div>` oder `<article>.`
 
 ## Semantisches HTML
 
-uebersicht ueber verschiedene tags
+[Semantic HTML](https://developer.mozilla.org/en-US/docs/Glossary/Semantics#semantics_in_html)
+ist ein allgemeiner Begriff für HTML-Elemente mit einer bestimmten Semantik (Bedeutung).
+Beispielsweise steht `<h1>` für eine Hauptüberschrift. Unabhängig davon, wie
+die Überschrift per CSS dargestellt wird, kann Software wie Screenreader erkennen,
+dass es sich um eine Überschrift handelt.
+
+Folgende beide HTML-Schnippsel erzeugen ein ähnliches Aussehen. Variante 1
+mit `<h1>` sollten wir aber bevorzugen, da es für Software besser verständlich ist.
+
+<HtmlSnippet path="h1-span" />
+
+Im folgenden schauen wir uns weitere semantische HTML-Elemente an.
 
 ### Seitenstruktur
 
-header, main, footer, section, nav, aside, p, h1, h2...
+`<header>`, `<main>` und `<footer>` unterteilen die Seite in den Hauptinhalt
+sowie Header und Footer. Nicht verwechseln mit `<head>`!
+
+<HtmlSnippet path="header-main-footer" />
+
+Mit `<section>` zeichnen wir einen Abschnitt der Seite aus, der in der Regel
+eine Überschrift haben sollte. Überschriften zeichnen wir mittels `<h1>`, `<h2>`,
+..., `<h6>` aus. `<h1>` ist die Hauptüberschrift, `<h2>` die Unterüberschrift etc.
+Innerhalb einer `<section>` können wir Absätze (English: paragraph) mit `<p>`
+darstellen:
+
+<HtmlSnippet path="section-hx" />
+
+Um eine Navigationsleiste als solche deutlich zu machen, steht uns
+`<nav>` zur Verfügung.
+
+<HtmlSnippet path="nav" />
+
+`<aside>` zeichnet einen Teil aus, der einen Zusatz zum Hauptinhalt darstellt
+und oft links oder rechts daneben angenordnet ist.
+
+<HtmlSnippet path="aside" />
 
 ### Textinhalte
 
-blockquote, samp, mark, abbr, q, code, citem details/summary, progress, meter, small
+Einzelne Wort oder Abschnitte in Textpassagen können wir über verschiedene
+Elemente auszeichnen:
+
+<HtmlSnippet path="text-markers" />
+
+br
+details/summary, 
+progress, meter, small
+blockquote, 
+
+### Abbildungen
 
 figure, figcaption
 

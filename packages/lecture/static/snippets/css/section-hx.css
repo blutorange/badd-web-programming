@@ -1,0 +1,22 @@
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  row-gap: 1em;
+  margin: 0;
+  padding: 2em;
+  box-sizing: border-box;
+}
+
+header, footer {
+  text-align: center;
+}
+
+main {
+  flex-grow: 1;
+  padding: 2em;
+}
+
+body > * {
+  border: 1px solid black;
+}
