@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[817],{817:(l,e,p)=>{p.r(e),p.d(e,{default:()=>a});const a="<p>Hallo Welt!</p>\n<p>Hallo  Welt!</p>\n<p>Hallo    Welt!</p>\n<p>\n  Hallo\n  \n  Welt!\n</p>\n"}}]);

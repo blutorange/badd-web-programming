@@ -1,0 +1,29 @@
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  row-gap: 1em;
+  margin: 0;
+  padding: 2em;
+  box-sizing: border-box;
+}
+
+aside {
+  float: right;
+  max-width: calc(min(300px, 40vw));
+  border: 1px solid #999;
+  padding: 1em;
+}
+
+header, footer {
+  text-align: center;
+}
+
+main {
+  flex-grow: 1;
+  padding: 2em;
+}
+
+body > * {
+  border: 1px solid black;
+}

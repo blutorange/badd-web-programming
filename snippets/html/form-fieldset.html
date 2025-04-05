@@ -1,0 +1,27 @@
+<form>
+  <fieldset>
+    <legend>Kontaktdaten</legend>
+    <p>
+      <label for="name">Vor- und Nachname</label>
+      <input id="name" name="name" type="text" required>
+    </p>
+    <p>
+      <label for="email">E-Mail</label>
+      <input id="email" name="email" type="email" required>
+    </p>
+  </fieldset>
+
+  <fieldset>
+    <legend>Angaben zum PKW</legend>
+    <p>
+      <label for="producer">Hersteller</label>
+      <input id="producer" name="producer" type="text" required>
+    </p>
+    <p>
+      <label for="carLen">Länge (m)</label>
+      <input id="carLen" name="car-length" type="number" min="0.5" step="0.1" required>
+    </p>
+  </fieldset>
+
+  <button type="submit">Absenden</button>
+</form>

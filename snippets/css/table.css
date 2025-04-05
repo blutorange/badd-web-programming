@@ -1,0 +1,25 @@
+table {
+  border: 2px solid #666;
+  border-collapse: collapse;
+}
+
+caption {
+  font-style: italic;
+}
+
+thead {
+  background-color: #f1f1ff;
+}
+
+tfoot {
+  background-color: #f1f1ff;
+}
+
+th, td {
+  border: 1px solid rgb(160 160 160);
+  padding: 8px 10px;
+}
+
+body {
+  font-family: sans-serif;
+}

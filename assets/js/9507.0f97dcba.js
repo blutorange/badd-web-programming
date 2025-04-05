@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[9507],{9507:(e,a,t)=>{t.r(a),t.d(a,{default:()=>n});const n="<header>Navigation</header>\n\n<main>Hauptinhalt</main>\n\n<footer>Impressum | Datenschutz</footer>"}}]);

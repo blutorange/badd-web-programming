@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[5619],{5619:(e,a,c)=>{c.r(a),c.d(a,{default:()=>l});const l="p > label {\n  display: block;\n}\n"}}]);

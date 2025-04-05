@@ -1,0 +1,33 @@
+body {
+  font-size: 20px;
+  font-family: sans-serif;
+}
+
+code {
+  background-color: #e3e3e3;
+}
+
+dt {
+  font-weight: bold;
+}
+
+dd {
+  margin-left: 0.5em;
+  margin-bottom: 1em;
+}
+
+abbr {
+  color: rgb(203, 138, 15);
+  text-decoration: underline dotted;
+  cursor: help;
+}
+
+q {
+  color: #666;
+}
+
+blockquote {
+  border-left: 2px solid #999;
+  margin: 0;
+  padding: 0.5em 0 0.5em 1em;
+}

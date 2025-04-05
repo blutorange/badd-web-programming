@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[9311],{9311:(e,n,l)=>{l.r(n),l.d(n,{default:()=>o});const o='function *createSomePeople() {\n  yield "James";\n  yield "Jessy";\n  yield "Meowth";\n}\n\n// Spread-Operator funktioniert allgemein f\xfcr Iterable\nconst people = [...createSomePeople()];\n\nconsole.log(people);\n'}}]);

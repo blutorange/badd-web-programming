@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[3653],{3653:(e,n,a)=>{a.r(n),a.d(n,{default:()=>t});const t='<form action="http://example.com">\n  <label for="name">Vor- und Nachname</label>\n  <input id="name" name="name" required>\n  <button type="submit">Absenden</button>\n</form>'}}]);
