@@ -33,3 +33,7 @@ body {
 dt {
   font-weight: bold;
 }
+
+.form-row__value {
+  white-space: pre-wrap;
+}

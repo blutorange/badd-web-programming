@@ -393,7 +393,7 @@ p {
 }
 ```
 
-Es gewinnt daher der erste ID-Selektor und das Element erhählt die Farbe Blau.
+Es gewinnt daher der erste ID-Selektor und das Element erhält die Farbe Blau.
 
 Das Anwenden dieser Regeln nennt man Kaskadierung. [Kaskade](https://de.wiktionary.org/wiki/Kaskade)
 stammt ab vom lateinischen `casicare` "Fallen" und bezeichnet einen stufenförmigen
@@ -404,6 +404,31 @@ Wasserfall.
 Bildlich können wir uns es vielleicht so vorstellen, dass die Regeln, von höchster
 zu niedrigster Priorität von oben nach unten herunterfallen.  Regeln niedrigerer
 Priorität werden somit von denen höherer Priorität verdrängt / fortgestoßen.
+
+## Konfliktlösung
+
+Wie wir im obigen Abschnitt sahen, sind die Regeln für die Kaskadierung teilweise
+recht komplex. Besser ist es in der Praxis, Konflikte soweit möglich zu vermeiden.
+
+Ein Ansatz, der sich bewährt hat, besteht darin, soweit möglich nur Klassen in
+den Selektoren zu verwenden. Halten wir uns dann noch an ein Namensschema für diese
+Klassen, erleichtert und dies die Entwicklungsarbeit sehr.
+
+Ein solches Namensschema ist [BEM](https://getbem.com/). BEM steht für
+Block-Element-Modifier. Ein Block ist etwa ein Dropdown-Widget. Dieses erhält
+die CSS-Klasse `stylish-dropdown`. Die Bestandteile des Dropdowns werden mit 2
+Unterstrichen abgetrennt, z.B. `stylish-dropdown__option-container` oder
+`stylish-dropdown__selected-text`. Um ein Element oder Block anders darzustellen,
+wird der Modifier mit 2 Bindestrichen angehangen, z.B. `stylish-dropdown--large`
+oder `stylish-dropdown__option-container--hover`.
+
+Auf dieser Art und Weise entstehen eindeutige Klassennamen, die in keine Konflikte
+mit anderen Selektoren geraten. Da es sich nur um eine einzelne Klasse handelt, wird
+auch die Spezifizität gering gehalten.
+
+Weitere Ansätze zur Konfliktlösung sind etwa verschiedene
+[CSS-in-JS-Lösungen](https://css-tricks.com/a-thorough-analysis-of-css-in-js/),
+auf die wir hier aber nicht näher eingehen.
 
 ## Farben und Einheiten
 

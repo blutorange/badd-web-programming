@@ -20,6 +20,10 @@
   column-gap: 1em;
 }
 
+.sandbox__width-slider {
+  width: 200px;
+}
+
 .sandbox__code {
   flex-grow: 1;
   flex-shrink: 1;
@@ -30,9 +34,7 @@
 
 .sandbox__code-left,
 .sandbox__code-right {
-  flex-basis: 50%;
-  flex-grow: 1;
-  flex-shrink: 1;
+  min-width: 0;
   border: 1px solid #ccc;
 }
 
@@ -99,4 +101,11 @@
 
 .sandbox__result-result {
   color: rgb(24, 107, 8);
+}
+
+.primereact--resizing {
+  .p-tabview::before,
+  .sandbox__iframe-container {
+    pointer-events: none;
+  }
 }

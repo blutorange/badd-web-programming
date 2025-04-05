@@ -1,0 +1,84 @@
+---
+id: html-misc
+slug: /html/content-misc
+sidebar_position: 4
+description: Weitere Aspekte von HTML
+---
+
+# Abschnitt 4 - Weitere Aspekte
+
+In diesem Abschnitt wollen wir uns abschließend noch kurz einige Aspekte von
+HTML anschauen, die nicht vergessen werden sollten oder die wir für die nächsten
+Kapitel benötigen.
+
+## Data-Attribute
+
+Wir haben in den vorigen Abschnitten verschiedene HTML-Elemente kennengelernt.
+Jedes Element kann verschiedene Attribute besitzen, z.B. `<input required>`.
+Der [HTML Living Standard](https://html.spec.whatwg.org/multipage/) schreibt
+vor, welche Elemente es gibt und welche Attribute diese haben können.
+
+Manchmal würden wir gerne zusätzliche Daten als Attribut zu einem Element
+hinzufügen. Nehmen wir beispielsweise an, die `<option>` eines `<select>`
+stammen von einen Datenbank-Abfrage. Die Datenbankabfrage lieferte auch noch
+weitere Spalten zurück. Wir würden gerne interaktiv per JavaScript auf diese
+zusätzlichen Werte zugreifen, um dem Nutzer diese bei Auswahl einer Option
+anzuzeigen.
+
+Wir könnten nun einfach ausgedachte Attribute an die `<option>` schreiben.
+Das sorgt aber dafür, dass Validatoren wie der [W3C Markup Validation Service](https://validator.w3.org/)
+unser HTML nicht mehr als valide betrachten. Zudem besteht die Gefahr, dass
+in Zukunft der HTML-Standard ein neues Attribut mit gleichem Namen einführt,
+was zu Konflikten mit unserem Attribut führt.
+
+Für solche Fälle definiert HTML die sogenannten data-Attribute. Ein Data-Attribut
+hat immer den Präfix `data-`. Danach können wie einen beliebigen Namen wählen
+und jedem HTML-Element dieses Attribut geben:
+
+```html
+<select name="programming-language">
+  <option value="c" data-type="imperative" data-year-of-inception="1972">C</option>
+  <option value="java" data-type="oop" data-year-of-inception="1995">Java</option>
+  <option value="haskell" data-type="fun" data-year-of-inception="1990">Haskell</option>
+</select>
+```
+
+:::info
+Data-Attribute verwenden [Kebab case](https://developer.mozilla.org/en-US/docs/Glossary/Kebab_case)
+mit Bindestrichen. Später beim Zugriff per JavaScript müssen wir dies in
+[Camel case](https://developer.mozilla.org/en-US/docs/Glossary/Camel_case) umwandeln.
+Zum Beispiel wird aus `year-of-inception` dann `yearOfInception`. 
+:::
+
+## Events
+
+Teil des HTML-Standard ist, dass jedes Element sogenannte [Ereignisse](https://html.spec.whatwg.org/multipage/webappapis.html#events)
+auslösen kann. Ein Ereignis ist beispielsweise, wenn der Nutzer auf einen Button klickt,
+den Wert eines Eingabefelds ändert oder mit der Maus über eine Element fährt.
+
+Später im Abschnitt zu JavaScript werden wir sehen, wie wir per JavaScript
+auf solche Ereignisse reagieren können.
+
+## Accessiblity
+
+Accessiblity bedeutet, dass wir unsere Webseite barrierefrei gestalten, sodass
+diese von allen Menschen verstanden und verwendet werden kann.
+
+Barrierefreiheit ist ein Thema, was wir in dieser einführenden Vorlesung nicht
+tiefer behandeln können, da es voraussetzt, die Technologien verstanden zu haben,
+um dann mit deren Hilfe barrierefreie Webseiten zu gestalten.
+
+Das Befolgen der Regeln von HTML sowie die korrekte Nutzung semantischer Elemente
+stellen einen ersten Schritt dar, um Webseiten barrierefrei zu gestalten. Falls
+semantische Elemente nicht verwendet werden können bzw. nicht ausreichend sind,
+gibt es sogenannte [ARIA-Attribute](https://www.w3.org/TR/wai-aria-1.2/), welche
+wir [verwenden können](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA), um
+die Bestandteile in unserer Webseite mit mehr Metainformationen zur deren Funktion anzureichern.
+
+Ein anderer wichtiger Punkt ist etwa, bei der Gestaltung mittels CSS darauf zu achten,
+dass das Layout auch von Menschen mit Sehschwächen wahrnehmbar ist. Dazu gehört
+etwa, den Kontrast von Farben ausreichend hoch zu halten; oder mehrere Merkmale
+zur Auszeichnung zu verwenden (nicht nur rot und grün für korrekte und falsche Eingaben).
+
+[WCAG 2](https://www.w3.org/WAI/standards-guidelines/wcag/) (Web Content Accessibility Guidelines)
+sind weitere Regeln, die unsere Webseite befolgen sollte, um Barrieren abzubauen.

@@ -23,6 +23,7 @@ import { PrimeReactProvider } from "primereact/api";
 import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
 import { TabView, TabPanel } from "primereact/tabview";
+import { Slider } from "primereact/slider";
 
 import {
   BooleanSerializer,
@@ -47,7 +48,7 @@ export default function SandboxPage(): ReactNode {
   return (
     <Layout>
       <PrimeReactProvider value={{ locale: "en" }}>
-      <BrowserOnly>{() => <Sandbox />}</BrowserOnly>
+        <BrowserOnly>{() => <Sandbox />}</BrowserOnly>
       </PrimeReactProvider>
     </Layout>
   );
@@ -58,6 +59,7 @@ function Sandbox(): ReactNode {
 
   const { colorMode } = useColorMode();
 
+  const [codeWidth, setCodeWidth] = useState(50);
   const monacoContainerRef = useRef<HTMLDivElement | null>(null);
   const [onJsMount] = useMonacoResize(monacoContainerRef);
   const [onCssMount] = useMonacoResize(monacoContainerRef);
@@ -92,6 +94,7 @@ function Sandbox(): ReactNode {
       destroyOldIFrame(contentRef.current);
       contentRef.current.innerHTML = "";
     }
+    setCodeWidth(50);
     resetHtml();
     resetCss();
     resetJs();
@@ -134,6 +137,16 @@ function Sandbox(): ReactNode {
             Änderungen sofort anwenden?
           </label>
         </div>
+        <div className="sandbox__width-slider">
+          <span>Breite Editor-Vorschau</span>
+          <Slider id="widthSlider"
+            value={codeWidth}
+            min={0}
+            max={100}
+            step={1}
+            onChange={(e) => setCodeWidth(typeof e.value === "number" ? e.value : e.value[0])}
+          />
+        </div>
 
         <Button
           className="sandbox__button"
@@ -158,7 +171,7 @@ function Sandbox(): ReactNode {
         )}
       </div>
       <div className="sandbox__code">
-        <div className="sandbox__code-left">
+        <div className="sandbox__code-left" style={{flexBasis: `${codeWidth}%`}}>
           <TabView
             activeIndex={activeIndex}
             onTabChange={(e) => setActiveIndex(e.index)}
@@ -204,7 +217,7 @@ function Sandbox(): ReactNode {
             </TabPanel>
           </TabView>
         </div>
-        <div className="sandbox__code-right">
+        <div className="sandbox__code-right" style={{flexBasis: `${100-codeWidth}%`}}>
           <div className="sandbox__iframe-container" ref={contentRef} />
         </div>
       </div>
@@ -253,7 +266,10 @@ function applyHtml(
       iframeDoc.write(preparedHtmlContent);
       iframeDoc.close();
       iframeDoc.addEventListener("submit", (event) => {
-        if (!(event.target instanceof iframeWin.HTMLFormElement) || event.target.method === "dialog") {
+        if (
+          !(event.target instanceof iframeWin.HTMLFormElement) ||
+          event.target.method === "dialog"
+        ) {
           return;
         }
         event.preventDefault();
@@ -313,6 +329,8 @@ function buildSubmitHtml(event: SubmitEvent, win: typeof globalThis): string {
     const tr = $("tr");
     const tdName = $("td");
     const tdValue = $("td");
+    tdName.classList.add("form-row__name");
+    tdValue.classList.add("form-row__value");
     tdName.textContent = key;
     if (typeof value === "string") {
       tdValue.textContent = value;

@@ -1,11 +1,12 @@
 ---
-id: html-content-model
-slug: /html/content-model
+id: html-body
+slug: /html/body
 sidebar_position: 3
 description: Inhalt der Webseite im Body
 ---
 
 import HtmlSnippet from "@site/src/components/HtmlSnippet";
+import Link from "@docusaurus/Link";
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Abschnitt 3 - Inhalt (Body)
@@ -81,6 +82,36 @@ alle HTML-Elemente. `<span>` ist ein Inline-Element, welches nur so breit ist
 wie sein Inhalt. `<span>` darf nur Phrasing-Inhalt enthalten, also etwa keine
 `<div>` oder `<article>.`
 
+## Links
+
+Links sind das Herzstück des weltweiten Webs. Wir können mit Links auf andere
+Seite verweisen, entweder innerhalb unserer Webseite oder auf andere Webseiten.
+Für Links nutzen wir das `<a>`-Element (a = anchor). 
+
+<HtmlSnippet path="a" />
+
+Mit dem `target`-Attribut steuern wir, wo der Link geöffnet werden soll. standardmäßig
+wird der Link im aktuellen Fenster oder Tab geöffnet. Der spezielle Wert `_blank`
+sorgt dafür, dass der Link sich in einem neuen Tab oder Fenster öffnet. Wir können
+auch die ID eines Frames als `target` angeben, dies wird aber in der Praxis selten
+verwendet.
+
+Weiterhin können wir noch das Attribut `rel` (relationship) setzen, also die
+Beziehung zur verlinkten Seite, etwa `privacy-policy` (Datenschutz) oder `search`
+(Seite für Suche im Inhalt der Webseite). Oft wird aus Sicherheits und Performance-Gründen
+`noreferrer noopener` gesezt. Weitere erlaubte Werte sind bei
+[MDN web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel) 
+
+:::info
+Eine URL, auf die verlinkt wird, kann entweder absolut oder relativ sein. Eine
+absolute URL ist etwa `http://example.com/web/content/index.html` oder
+`http://example.com/web/images/logo.png`. Eine relative URL ist nur sinnvoll relativ
+zu einer Basis-URL. Wenn wir uns zum Beispiel auf der Webseite `http://example.com/web/content/index.html`
+befinden, könnte diese Webseite den relativen Link `../images/logo.png` enthalten.
+Die 2 Punkte bedeuten: gehe 1 Verzeichnis nach oben. Danach wird in das Verzeichnis
+`images` gegangen und auf die Datei `logo.png` zugegriffen.
+:::
+
 ## Semantisches HTML
 
 [Semantic HTML](https://developer.mozilla.org/en-US/docs/Glossary/Semantics#semantics_in_html)
@@ -124,47 +155,393 @@ und oft links oder rechts daneben angenordnet ist.
 ### Textinhalte
 
 Einzelne Wort oder Abschnitte in Textpassagen können wir über verschiedene
-Elemente auszeichnen:
+Elemente auszeichnen.
 
-<HtmlSnippet path="text-markers" />
+Siehe den Playground mit einem Beispiel für jedes Element 
 
-br
-details/summary, 
-progress, meter, small
-blockquote, 
+<p>
+  <Link to="/sandbox?snippet=text-markers" target="_blank" rel="noopener noreferrer">Playground &mdash; Elemente zum Auszeichnen von Textinhalten</Link>
+</p>
 
-### Abbildungen
+Hier eine kurze Übersicht:
 
-figure, figcaption
+* small - Kleingedrucktes
+* abbr - Abkürzungen
+* em - Betonung
+* i - Abhebung
+* dfn - Definition
+* code - Inline-Code-Snippet
+* pre - Separates Code-Snippet, vorformatierter Text
+* samp - Ausgabe eines Programms
+* strong - Besondere Wichtigkeit
+* s - Irrelevanz, Durchstreichung
+* q - Kurzzitat innerhalb eines Texts.
+* blockquote - Separates Zitat
+* mark - Markierung, Suchresultate
+
+### Details
+
+`<details>` ist ein hilfreiches Element, mit dem wir eine aufklappbare Sektion
+in der Webseite erzeugen können.
+
+<details><summary>Hier klicken, um mehr zu erfahren</summary>
+  Zuerst schreiben wir ein `<detail></detail>`-Element. Innerhalb von diesem
+  Element platzieren wir ein `<summary>...</summary>` mit der Kurzbeschreibung.
+  Im restlichen Teil des `<details>` fügen wir den Text ein, der nach dem
+  Aufklappen angezeigt wird.</details>
+
+<p>
+  <Link to="/sandbox?snippet=details-summary" target="_blank" rel="noopener noreferrer">Beispiel in der Sandbox</Link>
+</p>
 
 ### Bilder
 
-img, picture, source, srcset, alt
+Das grundlegende Element im HTML, um ein Bild anzuzeigen, ist das `<img>`-Element:
 
-svg
+<HtmlSnippet path="img" />
+
+Wir sollten uns an allgemeine Richtlinien für Bilder halten. Die Auflösung sollte
+so hoch wie nötig, so gering wie möglich sein. Für reale Bilder ist das Bildformat
+JPG empfehlenswert, für Zeichnungen PNG. [WEBP](https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Image_types#webp_image)
+ist ein Format, welches oft in kleineren Dateigrößen resultiert und langsam weitere
+Verbreitung findet.
+
+Um den Bildinhalt auch für Screenreader verständlich zu machen, sollten wir immer
+eine aussagekräftige Beschreibung im `alt`-Attribut hinterlegen. Dieses wird auch
+angezeigt, wenn das Bild nicht geladen werden konnte.
+
+Das [srcset](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#using_the_srcset_attribute)
+erlaubt uns, höher aufgelöste Bilder anzuzeigen, wenn ein hochauflösendes Gerät
+verwendet wird:
+
+<HtmlSnippet path="img-srcset" />
+
+Um genauer zu kontrollieren, welches Bild bei welcher Bildschirmgröße geladen
+wird, steht uns das `<picture>`-Element zur Verfügung. `<picture>` enthält mehrere
+`<source>`-Elemente mit Bedingungen und ein `<img>`. Findet ein Browser einer dieser Bedingungen
+als passend, wir das Bild von dem jeweiligen `<source>` angezeigt. Ansonsten
+wird das `<img>` angezeigt.
+
+<HtmlSnippet path="picture" />
+
+__SVG__
+
+Neben Formaten wie PNG und JPEG gibt es noch ein weiteres wichtiges Format: SVG.
+SVG steht für [Scalable Vector Graphics](https://www.w3.org/TR/SVG11/).
+
+Bei pixelbasierten Formaten wie PNG oder JPG wird ein roter Kreis als Menge von
+Pixeln repräsentiert, wobei Pixel innerhalb des Kreises rot sind und außerhalb
+des Kreises weiß:
+
+![Roter Kreis, man erkennt aufgrund Vergrößerung Pixel am Rand](/img/web/scaled-circle.png)
+
+Das Problem dabei ist, dass bei ausreichender Vergrößerung
+der Rand des Kreises nicht mehr glatt erscheint. Zudem wird für jedes Pixel
+Speicherplatz gebraucht &mdash; obwohl es doch eigentlich nur wenige wichtige
+Informationen gibt: Ein Kreis an einer Position, mit der Farbe rot.
+
+Bei SVG können wir diese relevante Information direkt ausdrücken:
+
+```svg
+<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="150" cy="100" fill="red" r="80" />
+</svg>
+```
+
+![Roter Kreis mit SVG, alle Ränder sind glatt](/img/web/circle.svg)
+
+Egal, wie sehr wir an das SVG heranzoomen, die Ränder bleiben immer glatt. SVG
+werden unter anderem gerne für Logos und Icons verwendet.
+
+### Abbildungen
+
+Wollen wir eine Abbildung mit einem Untertext versehen, steht uns
+das `<figure>`-Element zur Verfügung. Es zeichnet einen Teil aus als Illustration.
+Wir können es etwa für verwenden für Bilder, Diagramme oder illustrative Code-Blöcke.
+
+<HtmlSnippet path="figure" />
 
 ## Video / Audio
 
-## Link
+Zum Abspielen von Videos und Audio-Dateien stellt HTML uns jeweils ein entsprechendes
+Element bereit: `<video>` und `<audio>`:
 
-rel, href, target
+<HtmlSnippet path="video-audio" />
 
-### Formulare
+Diese Elemente erfordern, dass uns eine Video- beziehungsweise Audio-Datei mit dem
+gesamten Inhalt bereitstellt. Nicht unterstützt wird Streaming, was von vielen
+Videoplattformen genutzt wird. Dabei wird das Video in kleinen Teilen ausgeliefert,
+was Bandbreite spart und ein Springen zu beliebigen Positionen vereinfacht. 
 
-form (action), input (type) datalist, textarea, select/option/optgroup, file/checkbox/radio, button, fieldset/legend, label
+Es gibt verschiedene JavaScript-Bibliotheken, welche das Video-Element mit mehr
+UI anreichern und teilweise auch Streaming unterstützen, beispielsweise
+[VideoJS](https://videojs.com/).
 
 ### Listen
 
-ul, ol, dl
+In Texten kommen öfters auch Listen oder Aufzählungen vor. HTML stellt uns drei
+verschiedene Arten von Listen bereit:
+
+* `ul` (unordered list) &mdash; Liste, wo die Reihenfolge der Elemente unwichtig ist.
+* `ol` (ordered list) &mdash; Liste, wo die Reihenfolge der Elemente wichtig ist.
+* `dl` (definition list) &mdash; Liste von Key-Value-Paaren, wo die Value eine Erklärung zum Key ist.
+
+Sowohl bei `<ul>` als auch bei `<ol>` geben wir die Listen-Element mit `<li>`
+(list item) an. Bei `<dl>` verwenden wir `<dt>` (definition term) für den zu erklärenden
+Key und `<dd>` (definition description) für die Erklärung.
+
+<HtmlSnippet path="lists" />
 
 ### Tabellen
 
-table tbody, thead th tr td
+Tabellen dienen, wie der Name sagt, für tabellarische Daten. Wir sollten Tabellen
+auch nur dafür verwenden, nicht als Hilfsmitteln zum Layout. Früher wurde dies oft
+getan, da es kaum bessere Möglichkeiten gab. Inzwischen gibt CSS uns wesentlich
+bessere Möglichkeiten, das Layout unserer Seite gemäßt unseren Wünschen zu gestalten.
 
-## Accessiblity
+:::note
+Tatsächlich ist es aus Entwicklersicht eher schwieriger, Tabellen schön und gut
+darzustellen und zu gestalten. Auch aus Sicht der Responiveness (Darstellung auf
+Geräten mit kleiner Bildschirmbreite) müsen wir bei Tabellen entsprechend Testen
+und Vorkehrungen treffen.
+:::
 
-role, aria
+Das Hauptelement der Tabelle ist `<table>`. Der Tabellenkopf (Kopfspalte) wird
+mit `<thead>` angegeben, der eigentliche Inhalt mit `<tbody>`. Für jede Zeile
+schreiben wir ein `<tr>` (table row), für jede Zelle in der Zeile ein `<td>`
+(table data). Der Tabellenkopf hat meist nur eine Zeile, die Spalten werden `<th>`
+statt `<td>` angegeben.
 
-## Data-Attribute
+<p>
+  <Link to="/sandbox?snippet=table" target="_blank" rel="noopener noreferrer">Playground &mdash; Tabelle</Link>
+</p>
+
+Im oberen Beispiel sehen wir auch noch das `<caption>`-Element für die Überschrift
+der Tabelle und das `<tfoot>`-Element für die Fußzeile der Tabelle.
+
+Zudem wird an der 1. Spalte der Fußzeile `<td colspan="2">` verwendet. Damit
+können wir erreichen, dass eine Zelle sich über mehrere Spalten erstreckt. Analog
+dazu gibt es auch das Attribut `rowspan`, wenn eine Zelle mehrere Zeilen einnehmen soll.
+
+|  Element  |Bedeutung   |Erklärung                             |
+|-----------|------------|--------------------------------------|
+|table      |Table       |Wurzelelement der Tabelle             |
+|caption    |Caption     |Überschrift der Tabelle               |
+|thead      |Table head  |Kopfzeile(n) der Tabelle              |
+|tbody      |Table body  |Tabellarische Daten                   |
+|tfoot      |Table foot  |Fußzeile(n) der Tabelle               |
+|tr         |Table row   |Zeile der Tabelle                     |
+|th         |Table head  |Zelle in der Kopfzeile (oder Fußzeile)|
+|td         |Table data  |Zelle im Body der Tabelle             |
+
+## Formulare
+
+Formulare werden verwendet, um Daten zu erfassen. Das
+[Onlinezugangsgesetz (OZG)](https://www.bmi.bund.de/DE/themen/moderne-verwaltung/verwaltungsmodernisierung/onlinezugangsgesetz/onlinezugangsgesetz-node.html)
+verpflichtet Behörden dazu, Verwaltungsleistungen auch digital über Verwaltungsportale anzubieten.
+
+Webformular sind hierzu ein geeignetes Mittel, um etwa Anträge online zu ermöglichen.
+
+Das Hauptelement, dass wir benötigen, um Webformular umzusetzen, ist das `<form>`-Element.
+Innerhalb eines `<form>` können wir verschiedene Eingabefelder oder Buttons zum Absenden platzieren.
+Zur Illustration hier ein einfaches Formular, wo der Vor- und Nachname eingegeben werden muss:
+
+<HtmlSnippet path="form-simple" />
+
+Das `<form>`-Element hat noch [einige andere Attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form),
+das wichtigste ist aber `action`. Hier geben wir die URL an, an welche die eingegebenen
+Daten beim Absenden gesendet werden.
+
+:::info
+Die Sandbox hat eine spezielle Vorkehrung für Formulare. Beim Absenden wird das
+eigentliche _Submit_ blockiert, stattdessen werden die Daten angezeigt, die gesendet
+werden würden. Somit können Formulare auf einfache Weise ohne ein `action`-Attribut
+getestet werden. 
+:::
+
+Im Folgenden schauen wir uns einige typische Inhalte von Formularen an.
+
+### Eingabe-Elemente
+
+Mit Eingabe-Elementen erfassen wir Daten vom Nutzer. Jedes Eingabefeld sollte
+einen technischen Namen besitzen, den wir mit dem Attribut `name` angeben. Der `name`
+bestimmt, unter welchem Schlüssel der Wert des Elements beim Absenden an den
+Server übertragen wird.
+
+Auch sollte jedes Eingabefeld ein `<label>` mit einem Beschriftungstext für das Feld haben. Das Label ist wichtig,
+damit etwa Screenreader wissen, was der Zweck des Elements ist. Das `<label>`
+muss ein `for`-Attribut haben, dessen Wert der ID des Eingabe-Elements entspricht:
+
+<HtmlSnippet path="form-label" />
+
+Verwenden wir ein `<label>` mit einem korrekten `for`-Attribut, kann der Nutzer
+auch auf das Label klicken, um das Eingabe-Element zu fokussieren.
+
+__input__
+
+`<input>` ist ein einzeiliges Eingabfeld und das wohl am meisten verwendete Formularelement.
+
+Mit dem Attribut `type` können wir auch verschiedene Arten von Eingaben ermöglichen,
+beispielsweise `type="color"` für einen Farbwähler oder `type="date"` für
+einen Datumswähler. Weitere Typen bei [MDN web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#input_types).
+
+<HtmlSnippet path="form-input" />
+
+Das Attribut `required` können wir setzen, um ein Element als Pflichtfeld zu markieren.
+Der Browser verbietet dann das Absenden, wenn kein Wert eingetragen wurde.
+
+:::warning
+Die Validierung durch den Browser ist __KEINE GARANTIE__ dafür, dass die abgesendeten
+Daten auch den festgelegten Regeln entsprechen! Der Nutzer könnte etwa einfach über
+die Dev-Tools die Validationsregeln entfernen. Falls erforderlich, muss der Server,
+der die Daten entgegennimmt, entsprechende Validierungen durchführen!
+:::
+
+__file__
+
+Um dem Nutzer zu ermöglichen, eine Datei hochzuladen, verwenden wir ein `<input>`
+mit `type="file"`:
+
+<HtmlSnippet path="form-input-file" />
+
+Das `accept`-Attribut erlaubt uns, einzugrenzen, welche Arten von Dateien möglich sind.
+Wir können entweder Datei-Endungen oder [MIME-Typen](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/MIME_types)
+angeben.
+
+__password__
+
+Mittels `type="password"` am `<input>` können wir ein Passwortfeld erzeugen,
+dass die Eingabe maskiert:
+
+<HtmlSnippet path="form-input-password" />
+
+Das Attribute `autocomplete="new-password"` sorgt dafür, dass der Browser weiß,
+dass es sich um ein neues Passwort handelt und keine bestehenden Passwörter
+vorschlägt.
+
+__checkbox__
+
+Eine einfache Checkbox erzeugen wir mit `type="checkbox"` am `<input>`:
+
+<HtmlSnippet path="form-input-checkbox" />
+
+__textarea__
+
+Eine `<textarea>` erlaubt im Gegensatz zu `<input>` die Eingabe von mehreren
+Zeilen Text. Es wird oft verwendet für Freitext wie Anmerkungen oder Kommentare:
+
+<HtmlSnippet path="form-textarea" />
+
+__select__
+
+Manchmal sind die möglichen Optionen beschränkt, zwischen denen der Nutzer auswählen
+kann. In dem Fall können wir ein `<select>`-Element verwenden. Für jede Auswahloption
+schachteln wir ein `<option>`-Element im `<select>`. Das Attribut `value` jeder
+`<option>` gibt den Wert an, der beim Absenden übertragen wird.
+
+<HtmlSnippet path="form-select" />
+
+Um mehrere Optionen gleichzeitig zu erlauben, können wir das Attribut `multiple`
+am `<select>` setzen.
+
+Weitehrin können wir auch einzelne `<option>` in einem `<optgroup>`-Element schachteln,
+um Optionen zu gruppieren. Der Browser zeigt diese dann gruppiert an.
+
+__checkbox / radio select__
+
+Statt eines Dropdowns mit `<select>` ist es auch üblich, Checkboxen oder Radiobuttons
+für die Optionen zu verwenden. Der Vorteil ist, dass der Nutzer sofort alle Optionen
+sieht. Hierzu können wir mehrere `<input type="checkbox" name="panTop">` verwenden,
+welche den gleichen Namen haben, aber unterschiedliche `value`.
+
+Im Fall von `<input type="radio" name="panTop">` stellt der Browser Radiobuttons 
+dar und sorgt dafür, dass immer nur ein Radiobutton ausgewählt sein kann.
+
+<HtmlSnippet path="form-select-checkbox-radio" />
+
+__hidden__
+
+Schließlich gibt es noch `<input>` vom `type="hidden"`. Solche Eingabefelder
+sind nicht für den Nutzer sichtbar und können in der Regel nicht durch diesen
+bearbeitet werden. Hidden-Inputs werden gerne in Kombination mit JavaScript genutzt,
+um berechnete oder andersweitig abgeleitete Daten beim Absenden mit zu übertragen.
+
+Ein anderer Anwendungsfall sind Widgets, also per JavaScript geschriebene
+Elemente, die mehr Funktionalität bieten als Elemente, die der Browser bereitstellt.
+Hier können wir dann ein Hidden-Input verwenden, um die Daten zu übertragen.
+
+```html
+<input type="hidden" name="tag-select-value">
+```
+
+### Fieldset
+
+Mit einem `<fieldset>` können wir mehrere Elemente gruppieren. Beispielsweise
+könnten wir ein `<fieldset>` für die allgemeinen Kontaktdaten erstellen und eines
+für die Informationen zum Auto für den Stellplatzantrag.
+
+Platzieren wir innerhalb des `<fieldset>` ein `<legend>`, geben wir damit den
+Namen des Fieldsets an.
+
+<HtmlSnippet path="form-fieldset" />
+
+### Button
+
+Wir haben bereits das `<button>`-Element gesehen. Ein Button ist eine klickbare
+Schaltfläche. Die Art des Button geben wir mit dem `type`-Attribut an. Im HTML
+gibt es 3 Arten von Buttons:
+
+* submit &mdash; Sendet das Formular ab.
+* reset &mdash; Setzt alle Eingabefelder auf den ursprünglichen Wert zurück.
+* button &mdash; Führt keine Aktion beim Klick durch.
+
+`type="button"` können wir verwenden, um eigene Aktionen beim Klick durchzuführen,
+in dem wir entsprechendes JavaScript schreiben.
+
+Den Name des Buttons geben wir mit dem Attribut `name` an. Über dieses Namen
+können wir beim Absenden herausfinden, welcher Button gedrückt wurde.
+
+<HtmlSnippet path="form-buttons" />
+
+An dieser Stelle noch ein Hinweis. Drückt der Nutzer in einem Formularfeld auf
+Entern, ist das Standarverhalten von Browsern, so vorzugehen, als ob der Submit-Button
+gedrückt wurde. Es wird also das Formular abgesendet. Bei kleineren Formularen
+wie Suchmasken kann das sinnvoll sein. Bei längeren Formularen sorgt das aber
+schnell dafür, dass Nutzer unbeabsichtigt Formulare absenden.
+
+Um das zu verhindern, können wir entweder mittels JavaScript das Absenden verhindern.
+Einfacher ist, ganz am Anfang des Formulars einen versteckten Submit-Button
+einzuführen, der das Absenden verhindert. Das funktioniert deshalb, weil der
+Browser beim Klick auf Enter den ersten Submit-Button auslöst. 
+
+<HtmlSnippet path="form-prevent-submit" />
 
 ## Iframe
+
+:::warning
+Früher gab es auch das `<frame>`-Element, welches man auch für das Layout einer Seite
+nutzen konnte. `<frame>` ist [obsolet](https://html.spec.whatwg.org/multipage/obsolete.html#non-conforming-features),
+und wird inzwischen nicht mehr verwendet. 
+:::
+
+Mit dem `<iframe>`-Element (inline frame) können wir eine andere Webseite in unsere
+Webseite einbinden. 
+
+```html
+<iframe src="http://example.com/map-widget.html"></iframe>
+```
+
+Der Vorteil von einem `<iframe>` ist, dass dessen Inhalt vollständig vom Rest
+der Webseite abgekappselt ist. Das betrifft sowohl das Design und Layout (CSS)
+als auch JavaScript-Logik. Somit ist sichergestelt, dass die beiden verschiedenen
+Seiten sich nicht gegenseitig beeinflussen.
+
+Etwa verwendet unsere Sandbox einen `<iframe>`, um das eingegebene HTML darzustellen.
+Somit ist garantiert, dass die Sandbox selber nicht durch die eingegebenen Inhalt
+kaputt gemacht wird.
+
+Allgemein werden `<iframe>` gerne für die Einbindung von Widgets von Drittanbietern
+verwendet. Hier ist ein Beispiel von `mdr.de`, wo ein `<iframe>` genutzt wird,
+um eine interaktive Grafik zu Autodiebstählen vom Anbieter `datawrapper.de` einzubinden.
+
+![Webseite mdr.de mit einem IFrame mit externen Inhalten](/img/web/mdr-iframe.png)
