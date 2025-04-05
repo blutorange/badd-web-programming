@@ -6,3 +6,96 @@ description: Bidirektionale Kommunikation mittels Web Socket
 ---
 
 # Abschnitt 5 - Web Socket
+
+Zur Motivation starten wir mit der Problemstellung.
+
+## Problemstellung
+
+Stellen wir uns vor, wir wollen eine Webapp schreiben für ein E-Mail-Inbox.
+In der Inbox werden alle E-Mails des Nutzers in einer Liste angezeigt. Sobald
+eine neue E-Mail eingeht, soll diese in der Liste erscheinen. Wie ist das technisch
+möglich?
+
+Bisher haben wir nur HTTP-Requests betrachtet, die durch JavaScript im Browser
+ausgelöst werden. Damit können die Daten der neuen E-Mail vom Server abgeholt
+werden. Doch woher soll der Browser wissen, wann eine E-Mail verfügbar ist,
+um diese abzuholen.
+
+Ein ähnliches Problem haben wir, wenn wir das Web-Frontend für eine Chat-App
+schreiben wollen. Woher weiß der Browser, wann eine neue Nachricht eingegangen
+ist?
+
+Eine Möglichkeit, um das zu lösen: Wir könnten kontinuerlich beim Server anfragen,
+ob neue Nachrichten oder E-Mails vorhanden sind. Dabei laufen wir aber in einen
+Konflikt zwischen 2 Faktoren:
+
+* Wir müssen so oft wie möglich nachfragen, um die Zeit zwischen Eingang
+  der E-Mail und Anzeige im Browser zu reduzieren.
+* Wir sollten so wenig wie möglich anfragen, um die Serverlast gering zu halten.
+
+Wäre es nicht besser, wenn der Server uns direkt in dem Moment, wo eine E-Mail
+oder Nachricht eingegangen ist, uns dies mitteilen könnte?
+
+## Bidirektionale Kommunikation
+
+Das ist , was [Web Socket](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket)
+uns ermöglichen.
+
+Mit einem Web Socket ist eine bidirektionale Kommunikation zwischen Server und
+Client möglich. Das bedeutet, wir können dem Server Nachrichten senden (wann wir wollen);
+und der Server kann uns Nachrichten senden (wann er will).
+
+Technisch funktionieren Web Socket so, dass der Browser zuerst ein HTTP-Request
+an den Server stellt, mit der Bitte, einen Web Socket zu öffnen:
+
+```
+GET wss://example.com/chat/channel HTTP/1.1
+connection: Upgrade
+upgrade: websocket
+```
+
+Falls der Server Web Socket unterstützt und willens ist, einen Web Socket aufzubauen,
+antwortet der Server mit dem Status-Code 101:
+
+```
+HTTP/1.1 101 Switching Protocols
+connection: Upgrade
+upgrade: websocket
+```
+
+Nun ist der Web Socket aufgebaut. Server und Client halten die Verbindung offen,
+um sich jederzeit Nachrichten einander senden zu können.
+
+## JavaScript-API
+
+Um von den Möglichkeiten eines Web Socket Gebrauch zu machen, müssen wir
+[entsprechendes JavaScript](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket)
+schreiben, welches die WebSocket-Verbindung aufbaut und anschließend Nachrichten
+sendet und empfängt.
+
+Vereinfacht dargestellt ist der grobe Ablauf wie folgt:
+
+
+```js
+// Neune Socket öffnen
+const socket = new WebSocket("wss://example.com/chat/channel");
+
+// Auf Nachrichten vom Server reagieren
+socket.addEventListener("message", event => {
+  // Zugriff auf die Daten, die der Server gesendet hat.
+  console.log(event.data);
+});
+
+// Drückt der Nutzer auf den Button zum Senden einer Chat-Nachricht
+// senden wir die Nachricht an den Server.
+document.getElementById("submitChatMessage", () => {
+  const chatMessage = document.getElementById("chatMessage");
+  socket.send(chatMessage.value);
+  chatMessage.value = "";
+});
+
+// Socket schließen, wenn nicht mehr benötigt
+document.getElementById("quitChat", () => {
+  socket.close();
+});
+```
