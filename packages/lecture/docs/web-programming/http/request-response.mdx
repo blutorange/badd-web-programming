@@ -1,20 +1,283 @@
 ---
-id: http-request-response
-slug: /http/request-response
+id: http-protocol
+slug: /http/protocol
 sidebar_position: 1
-description: Kommunikation über HTTP zwischen Client und Server
+description: Grundlagen des HTTP-Protokolls
 ---
 
-# Abschnitt 1 - Request und Response
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
-Stateless
+# Abschnitt 1 - Das Protokoll
 
-Request-Response-Prinzip.
+Zuerst einmal müssen wir uns über 2 Begriffe klar sein: Client und Server. Das
+sind die beiden Seiten, welche per HTTP-Protokoll miteinander reden.
 
-Wie sieht der Text aus? Statuscode etc.
+Der Client ist etwa der Web Browser, in dem eine Webseite geöffnet wird.
+
+Der Server ist der Computer oder Rechner, auf dem die Webseite gehostet wird.
+
+Wenn wir das Internet nutzen, stellen wir als Client ständig Anfragen (Request) an
+verschiedene Server, die uns den gewünschten Inhalt wie Informationen, Bilder
+oder Videos zurückliefern (Response). 
+
+## Request und Response
+
+HTTP basiert auf dem zustandlosen Austausch von Nachrichten. Was bedeutet das?
+
+Stateless bedeutet zustandslos. Fragen wir eine Videodatei beim Server an,
+gibt er uns diese zurück. Fragen wir nun erneut nach der Videodatei an, weiß
+der Server nichts mehr davon, ob oder wann wir bereits einmal angefragt haben.
+Alle Informationen, die der Server braucht, um unsere Anfrage zu erfüllen, müssen
+in jeder Anfrage enthalten sein.
+
+Für einige Anwendungsfälle wie Webanwendungen mit Login ist es notwendig, dass
+der Server sich Informationen über uns merkt. In einem späteren Abschnitt
+werden wir sehen, wie das möglich ist.
+
+Wie genau findet der Austausch von Nachrichten statt? HTTP definiert eine sogenannte
+Anfrage (Request) und eine Antwort (Response). Auf jeden Request folgt genau
+1 Response.
+
+### Request
+
+Im Wesentlichen besteht ein HTTP-Request aus Text in der folgenden Form:
+
+<figure>
+  <object data={useBaseUrl("/img/web/http-message-anatomy.svg")} height="288" width="1000"><img alt="Aufbau von Request und Response" src={useBaseUrl("/img/web/http-message-anatomy.svg")} /></object>
+  <figcaption>Quelle: MDN web docs, Mozilla, https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Messages</figcaption>
+</figure>
+
+Wir erkennen daran 3 wesentliche Teile:
+
+* Statuszeile
+* Header
+* Body
+
+__Statuszeile__
+
+```
+GET https://example.com/ HTTP/1.1
+```
+
+In der Statuszeile stehen 3 Informationen. Als erstes kommt das sogenannte
+HTTP-Verb, welches angibt, um welche Art von Anfrage es sich handelt. Danach
+steht die URL mit der Addresse, an welche die Anfrage gesendet wird. Als letztes
+steht die Version des HTTP-Protokolls. Mittlerweile gibt es auch HTTP 2/3, dies
+werden wir uns später kurz anschauen.
+
+Das HTTP-Verb sollten wir uns nochmal genauer anschauen. HTTP definiert verschiedene
+Aktionen oder Arten von Anfragen mit verschiedener Bedeutung, zum Beispiel:
+
+* GET - Hole ein Dokument oder eine Datei ab. Ein GET-Request ist das, was immer
+ ausgeführt wird, wenn wir im Browser eine Webseite aufrufen.
+* POST - Sende Daten an den Server. Oft verwendet bei Formularen, um die Formulardaten
+  abzusenden.
+* PUT - Ersetze die Zieladdresse mit dem gesendeten Inhalt. Oft verwendet, um
+  etwa eine Datei hochzuladen.
+* DELETE - Lösche die Datei an der Zieladdresse.
+* HEAD - Erhalte Meta-Informationen zur Seite, mache sonst aber nicht weiter.
+
+Die Bedeutung dieser HTTP-Verben ist nur schwach definiert. Theoretisch
+kann jeder Server selber definieren, was genau bei welchem HTTP-Verb passiert.
+Es ist aber hilfreich, sich an die übliche Bedeutung zu halten. Speziell sollte
+ein GET-Request immer nur etwas zurückliefern und nie ein Änderung wie Anlegen
+oder Löschen von Daten auf dem Server bewirken. 
+
+__Header__
+
+Als nächstes folgend die sogenannten HTTP-Header. Ein HTTP-Header besteht
+aus einem Namen und einem Wert. Der Nutzer einer Webseite sieht diese Header
+nie direkt. Header dienen dazu, Metadaten zum Request oder zum Response bereitzustellen.
+Beispielsweise kann im Request der Browser dem Server mitteilen, in welcher
+bevorzugten Sprache der Server die angefragte Webseite zurückliefern soll:
+
+```
+Accept-Language: de-DE
+```
+
+Einige bekannte Header werden wir uns in Kürze anschauen. Wichtig ist noch,
+dass die Namen von Header case-insensitive sind, Groß- und Kleinschreibung
+also keine Rolle spielt. Egal, ob wir den Header `Accept-Language`, `accept-language`
+oder `AcCePt-LaNgUaGe` nennen, das Resultat ist das gleiche.
+
+___Body__
+
+Der Body enthält die eigentlichen Daten der Anfrage.
+
+Rufen wir eine Webseite nur auf, ist der Body leer. Senden wir ein Formular
+ab , stehen im Body die Werte der einzelnen Formularfelder.
+
+Der HTTP-Standard selber erlaubt im Body beliebge binäre Daten. Über den Header
+`Content-Type` wird angegeben, welches Format die Daten im Body haben.
+
+Ein typisches Format ist `application/json`, wenn also im Body ein JSON-Wert
+(meist Array oder Objekt) steht. Das wird besonders gerne von sogenannten
+[REST-API](https://de.wikipedia.org/wiki/Representational_State_Transfer) verwendet,
+wenn also 2 Programme miteinander über HTTP kommunizieren. Bei Single-Page-Apps
+besteht die Webseite beispielsweise oft nur aus JavaScript, welches dann per
+REST-API Daten vom Server anfragt und dem Nutzer darstellt.
+
+Zwei weitere typische Formate sind `application/x-www-form-urlencoded` und
+`multipart/form-data`. 
+
+Nehmen wir hierzu nochmal ein einfaches HTML-Formular als Beispiel. Wir setzen noch
+das Attribut `method="post"`, damit der Browser die Daten im Body sendet:
+
+```html
+<form action="https:/example.com/post" method="post" enctype="application/x-www-form-urlencoded">
+  <label for="email">E-Mail</label>
+  <input id="email" name="email" type="email">
+  <button name="btnSubmit" type="submit">Absenden</button>
+</form>
+```
+
+Mit dem Attribut `enctype="application/x-www-form-urlencoded"` weisen wir den
+Browser an, die Daten beim Absenden im sogenannten Format
+[x-www-form-urlencoded](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods/POST#url-encoded_form_submission)
+zu übertragen. Vereinfacht gesprochen bedeutet das, die Daten werden nach dem
+Schema `name1=value1&name2=value2&...` übertragen. Dabei ist `name` der Name
+des Formular-Elements und `value` dessen Wert.
+
+:::info
+Falls Sonderzeichen im Namen oder Wert auftauchen, werden diese
+[URL-kodiert](https://developer.mozilla.org/en-US/docs/Glossary/Percent-encoding).
+Das URL-Enkoding schauen wir uns im nächsten Abschnitt genauer an.
+:::
+
+Klicken wir nun auf den Submit-Button, sendet der Browser etwa folgendes Request
+an den Server:
+
+```
+POST https://example.com/example.com/post HTTP/1.1
+accept-language: de-DE
+user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36
+content-length: 41
+content-type: application/x-www-form-urlencoded
+
+email=test%40example.com&btnSubmit=
+```
+
+Wir erkennen, dass im Body die Daten der Formularfelder stellen. Bei Dateien
+ist dies Format etwas ungünstig. Ändern wir nun den `enctype` auf
+`enctype="multipart/form-data"` und senden erneut ab, sehen wir folgendes Request:
+
+```
+POST https://example.com/example.com/post HTTP/1.1
+accept-language: de-DE
+user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36
+content-length: 254
+content-type: multipart/form-data; boundary=----WebKitFormBoundaryCNomoyMHu4lWFbBZ
+
+------WebKitFormBoundaryCNomoyMHu4lWFbBZ
+Content-Disposition: form-data; name="email"
+test@example.com
+
+------WebKitFormBoundaryCNomoyMHu4lWFbBZ
+Content-Disposition: form-data; name="btnSubmit"
+
+------WebKitFormBoundaryCNomoyMHu4lWFbBZ--
+```
+
+## Response
+
+Die Response stellt die Antwort vom Server dar. Dessen Aufbau ist ähnlich
+zum Request:
+
+<figure>
+  <object data={useBaseUrl("/img/web/http-message-anatomy.svg")} height="288" width="1000"><img alt="Aufbau von Request und Response" src={useBaseUrl("/img/web/http-message-anatomy.svg")} /></object>
+  <figcaption>Quelle: MDN web docs, Mozilla, https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Messages</figcaption>
+</figure>
+
+Wir erkennen wieder die gleichen Bestandteile:
+
+* Statuszeile
+* Header
+* Body
+
+Header und Body sind gleich zum Request.
+
+In der Statuszeile steht beim Response kein HTTP-Verb mehr, stattdessen finden
+wir einen sogenannten Status-Code. Eine Liste aller Status-Codes findet sich
+bei [MDN web docs - Status](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status).
+
+Der Status-Code gibt einen groben Aufschluss darüber, ob das Request erfolgreich
+war und welche Art von Fehler aufgetreten ist, wenn nicht. Ein Status-Code besteht
+immer aus 3 Ziffern, wobei die 1. Ziffer die Kategorie des Status-Codes darstellt.
+
+* 2xx (200 - 299) - Status-Codes 2xx bedeuten Erfolg. Der häufigste ist 200 ("OK"),
+  der zurückgeliefert wird, wenn alles OK war. 
+* 3xx (300 - 399) - Status-Codes 3xx bedeuten Weiterleitung. Rufen wir etwa eine
+  Webseite auf und der Server antwortet mit 302 ("Found"), leitet der Browser an
+  die URL weiter, die im Header `Location` zu finden ist.
+* 4xx (400 - 499) - Status-Codes 4xx stehen für clientseitige Fehler. Ein clientseitiger
+  Fehler ist ein solcher, wo der Client verantwortlich ist, also beispielsweise
+  die falsche URL aufgerufen hat (404 - Not Found), nicht die richtigen
+  Werte mit übertragen hat (400 - Bad Request) oder sich nicht angemeldet hat
+  (401 - Unauthorized).
+* 5xx (500 - 599) - Status-Codes 5xx stehen für serverseitige Fehler, also
+  solche, wo der Server für den Fehler verantwortlich ist. Das kann etwa
+  passieren, wenn wir als Programmierer einen Bug im Server-Code eingebaut
+  haben (500 - Internal Server Error) oder wenn ein Administrator den Server
+  gerade wartet (503 - Service Unavailable).
 
 ## Übliche HTTP-Header
 
-caching, content 
+TODO
+
+content type
 
 ## HTTPS / TLS
+
+Im ursprünglichen HTTP-Standard war nicht vorgesehen, Verbindungen zu verschlüsseln.
+Senden wir etwa ein Anmeldeformular ab, wird das Passwort im Klartext und
+unverschlüsselt übertragen. Mit Wachstum des Internets hat sich dies als problematisch
+erwiesen.
+
+Fast alle Webseiten, die wir heutzutage aufrufen, beginnen mit
+`https://`, nicht mit `http://`. `s` steht hierbei für `secure` und bedeutet,
+dass die Daten über eine [verschlüsselte Verbindung](https://en.wikipedia.org/wiki/Transport_Layer_Security)
+übertragen werden. Der Client verschlüsselt die Daten und der Server entschlüsselt
+die Daten. Niemand dazwischen kann die Daten lesen.
+
+In anderen Worten, die Daten sind beim Übetragen über die (Internet-)verbindung
+verschlüsselt, daher nennt man dies auch Verbindungsverschlüsselung.
+
+Über HTTPS hinausgehend gibt es noch das Konzept der sogenannten End-To-End-Verschlüsselung.
+
+Nehmen wir als Beispiel eine Chat-Anwendung. 2 Chat-Teilnehmer, nennen wir sie 
+Anna und Boris, wollen miteinander reden. Anna sendet eine Nachricht an den Chat-Server.
+Boris ist gerade nicht online. Der Chat-Server speichert die Nachricht und wartet,
+bis Boris wieder online ist. Dann leitet er ihm Annas Nachricht weiter.
+
+Sowohl die Verbindung von Anna zum Chat-Server als auch von Bob zum Chat-Server
+ist per HTTPS gesichert. Das Problem ist nun, dass der Chat-Server alle Daten
+im Klartext lesen kann. Falls Emil in der Firma arbeitet, die den Chat-Server
+betreibt und böse Absichten hat, kann er die Nachrichten von Anna und Boris
+mitlesen.
+
+Um das zu verhindern, kann End-To-End-Verschlüsselung verwendet werden. Dabei
+[einigen sich Anna und Boris auf ein Geheimnis (Secret)](https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange).
+Nun kann Anna ihre Nachrichten selber verschlüsseln und an den Chat-Server
+senden. Der Chat-Server speichert nur die verschlüsselte Nachricht und leitet
+diese an Boris weiter, der die Nachricht entschlüsseln kann. Die Nachricht ist
+also nicht nur während eines HTTP-Request-Response verschlüsselt, sondern auf dem
+gesamten Weg zwischen beiden Enden der Verbindung (Anna und Boris). Da der
+Chat-Server kein Kenntnis vom Secret hat, kann der Chat-Server die Nachricht
+auch nicht entschlüsseln.
+
+## HTTP 2/3
+
+[HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) und [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3)
+sind Ausbaustufen von HTTP/1.1.
+
+An der grundlegenden Funktionsweise, nämlich dem Austausch von Nachrichten
+mittels Request und Response ändert sich dabei nichts. Die Verbesserungen
+und Änderungen sind eher technischer Natur ([Transportschicht](https://en.wikipedia.org/wiki/User_Datagram_Protocol))
+und betreffen unter Anderem auch [Performance-Probleme](https://en.wikipedia.org/wiki/Multiplexing)
+in HTTP/1.1.
+
+In der Regel kann ein Server auf HTTP/2 oder HTTP/3 umgeschaltet werden, ohne
+das eine Webanwendung oder Webseite angepasst werden muss. Dadurch können bereits
+Geschwindigkeitsvorteile erzielt werden. Durch gezielte Nutzung von neuen Features
+wie Multiplexing kann die Webseite oder Webanwendung potentiell noch mehr optimiert
+werden.
