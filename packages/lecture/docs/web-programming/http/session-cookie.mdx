@@ -7,3 +7,94 @@ description: Cookies und Session-Management
 
 # Abschnitt 3 - Session und Cookies
 
+Wir hatten im ersten Abschnitt gelernt, dass HTTP ein zustandsloses Protokoll
+ist.
+
+Manchmal ist es aber erforderlich, dass ein Zustand zwischen Requests bewahrt
+wird. Das typische Beispiel hierfür sind Webseiten mit Login, etwa ein
+Shop-Portal. Das Passwort wird nur einmal eingegeben, jeder folgende Aufruf
+einer Seite im Shop-Portal soll ohne erneute Eingabe des Passworts möglich sein.
+
+Die klassische Lösung hierfür sind Cookies. Eine andere Möglichkeit, die gerade
+im Zusammenhang mit auf REST-API basierenden Webapps verwendet wird, sind
+JWT-Token. Beiden Varianten ist gemeinsam, dass im Browser eine gemeine ID
+aufbewahrt wird, die bei jedem Request mitgesendet wird. In diesem Abschnitt
+wollen wir uns nur Cookies anschauen.
+
+## Cookies
+
+Ein Cookie ist eine kleine Datenmenge, die der Browser automatisch bei jedem
+Request mitsendet.  Jeder Cookie hat einen Namen, es können verschiedene Cookies
+mit verschiedenen Namen gesetzt sein.
+
+Zuerst muss der Server einen Cookie setzen. Dies kann er mit dem Response-Header
+`Set-Cookie` tun:
+
+```
+HTTP/1.1 200 OK
+Set-Cookie: Preferred-Language=de
+Set-Cookie: Preferred-View=advanced
+```
+
+Der Nutzer hatte beim Login die Sprache `Deutsch` und den Ansichtsmodus
+`Fortgeschritten` gewählt. Daher setzt der Server nun entsprechende Cookies,
+damit diese Einstellungen beim nächsten Mal vorausgewählt sind.
+
+Nachdem die Cookies nun gesetzt ist, sendet der Browser diese jedesmal mit:
+
+```
+GET https://example.com/shop/cart
+Cookie: Preferred-Language=de; Preferred-View=advanced
+```
+
+## Cookie-Parameter
+
+Der Server kann zusätzlich noch einige Parameter angeben, wenn ein Cookie
+gesetzt wird.
+
+```
+HTTP/1.1 200 OK
+Set-Cookie: Preferred-Language=de; Expires=Sat, 05 Apr 2025 03:75:64 GMT
+```
+
+Einige mögliche Parameter sind:
+
+* Expires - Gibt an, wie lange der Cookie gültig ist. Nach Ablauf löscht der
+  Browser den Cookie.
+* Path - Pfad, unter dem der Cookie gültig ist. Der Browser sendet den Cookie
+  nur unter diesen Pfaden mit. Ist ein Cookie beispielsweise auf den
+  Pfad `/shop` gesetzt, wird der Cookie nicht mitgesendet, wenn der Nutzer
+  etwa `https://example.com/blog` aufruft. 
+* HttpOnly - Verbietet es JavaScript, aus den Cookie zuzugreifen. Sinnvoll
+  etwa bei Session-Cookies aus Sicherheitsgründen.
+* Secure - Der Browser setzt den Cookie nur, wenn HTTPS (nicht HTTP) verwendet
+  wird. Auch dies dient der Sicherheit.
+
+## Session-Cookie
+
+Mit Hilfe von Cookie können wir so eine Session (=Sitzung) implementieren.
+
+Bei der 1. Anfrage generiert der Server eine zufällige ID und setzt einen Cookie:
+
+```
+HTTP/1.1 200 OK
+Set-Cookie: JSESSIONID=e229c71a-e303-4c4b-a5be-6ca42b44f336; Secure; HttpOnly
+```
+
+Der Browser sendet nun diesen Cookie bei jedem Request mit. Meldet sich der
+Nutzer jetzt an, speichern wir auf dem Server unter der ID
+`e229c71a-e303-4c4b-a5be-6ca42b44f336`, dass der Nutzer mit dieser Session-ID
+nun angemeldet ist. Somit muss der Nutzer sich beim nächsten Request nicht
+nochmal anmelden.
+
+:::warning
+Jeder, der die Session-ID hat, ist genauso wie der Nutzer eingelogged. Daher
+muss diese vertraulich behandelt werden und darf nicht weitergegeben werden.
+
+Gute Webseiten erfordern vor kritischen Aktionen wie dem Löschen von Daten, dass
+der Nutzer sicherheitshalber noch einmal sein Passwort eingibt.
+:::
+
+Um die Session ungültigt zu machen, kann der Nutzer sich ausloggen. Dabei
+markiert der Server die Session als invalid. Die Session-ID ist nun nicht mehr
+gültig.
