@@ -5,7 +5,8 @@ sidebar_position: 1
 description: Grundlagen des HTTP-Protokolls
 ---
 
-import useBaseUrl from '@docusaurus/useBaseUrl';
+import useBaseUrl from "@docusaurus/useBaseUrl";
+import HtmlSnippet from "@site/src/components/HtmlSnippet";
 
 # Abschnitt 1 - Das Protokoll
 
@@ -100,7 +101,7 @@ dass die Namen von Header case-insensitive sind, Groß- und Kleinschreibung
 also keine Rolle spielt. Egal, ob wir den Header `Accept-Language`, `accept-language`
 oder `AcCePt-LaNgUaGe` nennen, das Resultat ist das gleiche.
 
-___Body__
+__Body__
 
 Der Body enthält die eigentlichen Daten der Anfrage.
 
@@ -178,7 +179,7 @@ Content-Disposition: form-data; name="btnSubmit"
 ------WebKitFormBoundaryCNomoyMHu4lWFbBZ--
 ```
 
-## Response
+### Response
 
 Die Response stellt die Antwort vom Server dar. Dessen Aufbau ist ähnlich
 zum Request:
@@ -222,9 +223,157 @@ immer aus 3 Ziffern, wobei die 1. Ziffer die Kategorie des Status-Codes darstell
 
 ## Übliche HTTP-Header
 
-TODO
+Es gibt inzwischen viele verschiedene HTTP-Header für verschiedene Einsatzzwecke.
+Bei [MDN web docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Type)
+findet sich eine Liste vieler Header. An dieser Stelle wollen wir nur wenige
+wichtige erwähnen, die uns begegnen werden.
 
-content type
+### Accept
+
+Header: [Accept](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Accept)
+
+Gibt beim Request an, mit welche Arten von Dateien der Client umgehen kann.
+Ein typischer Wert beim Aufruf einer Webseite könnte etwa sein:
+`text/html,application/xhtml+xml,application/xml,image/avif,image/webp,image/apng`.
+Dieser Client kann also HTML, XML und Bilder verarbeiten. Bei REST-API
+wird der Accept-Header zudem verwendet, um die Art von Inhalt zu beeinflussen (
+z.B. JSON oder XML).
+
+### Accept-Language
+
+Header: [Accept-Language](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Accept-Language)
+
+Die Sprache, in der die Antwort zurückgeliefert werden soll. Das können wir testen,
+indem wir zum Beispiel per [curl](https://curl.se/) die Startseite von MDN web docs aufrufen:
+
+```sh
+$ curl 'https://developer.mozilla.org/' -H 'accept-language: en-US' -v
+Found. Redirecting to /en-US/
+
+$ curl 'https://developer.mozilla.org/' -H 'accept-language: ja-JA' -v
+Found. Redirecting to /ja/
+```
+
+Je nach Header leitet MDN entweder auf die englische oder die japanische Sprachversion weiter.
+
+### Content-Type
+
+Header: [Content-Type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Type)
+
+Gibt den Inhalt des Body an, z.B. `Content-Type: text/plain`. Der Wert ist
+eine Media-Type (auch: MIME-Type). Ein Media-Type ist eine
+[standardisiertes Format](https://datatracker.ietf.org/doc/html/rfc2045), um
+den Inhalt einer Datei anzugeben.
+
+Ein Media-Type folgt dem Format:
+
+> primaryType/subType
+
+Der Primary Type gibt die grundlegende Dateiart an, der Sub-Type den konkreten Typ.
+Folgende wesentliche Primary Type gibt es:
+
+* text - Textdokumente
+* image - Bilder
+* audio - Ton, Musik
+* video - Videos
+* application - anwendungsspezifische Dateien
+
+Einige konkrete Beispiele für Dateien, denen wir im Web häufig begegnen, sind:
+
+* text/plain - Reines Textdokument
+* text/html - HTML-Dokument
+* text/css - CSS-Datei
+* text/javascript - JavaScript-Datei
+* image/png - PNG-Bild
+* image/jpeg - JPEG-Bild
+* application/svg+xml - SVG-Bild
+* application/json - JSON-Datei
+* audio/aac - [AAC](https://en.wikipedia.org/wiki/Advanced_Audio_Coding)-Audio-Datei
+* audio/ogg - [OGG](https://xiph.org/ogg/)-Audio-Datei
+* video/webm - [Webm-Video](https://www.webmproject.org/)
+* video/H265 - [H.265-kodiertes Video](https://en.wikipedia.org/wiki/High_Efficiency_Video_Coding)
+
+Weiteres offizielle registrierte Media-Type für bestimmte Dateiformate
+finden sich auf der [Webseite von IANA](https://www.iana.org/assignments/media-types/media-types.xhtml),
+der dafür zuständigen Organisation.
+
+### Location
+
+Header: [Location](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Location)
+
+Dieser Header wird bei Weiterleitungen durch den Server verwendet, um den Client
+auf eine andere Webseite weiterzuleiten.
+
+Erwähnenswert ist noch, dass es verschiedene Arten von Weiterleitungen gibt, abhängig
+vom Status-Code:
+
+* 301 (Moved Permanently) - Die Seite ist permanent umgezogen. Der Browser
+  merkt sich dies und fragt beim nächsten Aufruf an die URL nicht mehr beim Server
+  nach, sondern leitet gleich zur neuen URL weiter. Wir sollten diesen Status-Code
+  daher nur mit Vorsicht verwenden, da es schwer rückgängig zu machen ist.
+* 302 (Found) - Temporäre Weiterleitung. Der Browser fragt bei jedem Aufruf erneut
+  beim Server nach, ob die Weiterleitung noch gültig ist. Der häufigste Status-Code
+  für Weiterleitungen.
+* 307 (Temporary Redirect) und 308 (Permanent Redirect) - Analog zu 302 und 301,
+  aber mit dem Unterschied, dass das HTTP-Verb beibehalten wird.
+
+### Origin
+
+Header: [Origin](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Origin)
+
+Der Origin-Header gibt die URL der Webseite an, von der aus der Client oder Browser
+den Request gestellt hat. Wenn wir etwa die Webseite `https://example.com/webapp`
+besuchen und dort per JavaScript eine HTTP-Request ausgeführt wird, steht im
+Origin-Header `https://example.com` (also ohne den Pfad am Ende).
+
+Dieser Header ist besonders wichtig bei sogenannten Cross-Origin-Requests (CORS).
+Ein Cross-Origin-Request ist ein HTTP-Request zu einer anderen Webseite. Wenn
+das JavaScript auf `https://example.com/webapp` ein HTTP-Request an
+`https://api.restful-api.dev/objects/7` stellt, um von dort Daten abzuholen, handelt
+es sich um ein CORS-Request.
+
+Wir müssen bei CORS-Requests, die von JavaScript gestartet werden, aufpassen. Aus
+Sicherheitsgründen blockieren Browsers solche Requests standardmäßig. Erlaubt ist
+uns solch ein Request nur, wenn der Server, bei dem wir anfragen, dies explizit
+erlaubt.
+
+Will der Server von `https://api.restful-api.dev/objects/7` dies erlauben, muss
+dieser Server in der HTTP-Response den Header `Access-Control-Allow-Origin`
+setzen. Als Wert muss hier der Origin hinterlegt sein, der zugelassen werden soll.
+
+Und hier kommt der `Origin`-Header aus dem Request ins Spiel. Üblicherweise liest
+der Server den `Origin`-Header aus und prüft, ob er diesen zulassen möchte. Wenn
+ja, nimmt der Server diesen Wert und schreibt ihn in den `Access-Control-Allow-Origin`-Header
+der Response.
+
+Zusammengefasst:
+
+* Request-Header: `Origin: https://example.com`
+* Response-Header: `Access-Control-Allow-Origin: https://example.com` 
+
+<HtmlSnippet path="cors" type="js" />
+
+### User-Agent
+
+Header: [User-Agent](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Accept)
+
+Im User-Agent sendet der Client mit, um welche Art von Anwendung oder Browser
+es sich handelt. Daran kann der Server erkennen, ob es sich um Chrome, Firefox,
+Safari, eine Crawl-Bot einer Suchmaschine etc. handelt.
+
+Auf den User-Agent können wir auch im JavaScript per `window.navigator.userAgent`
+zugreifen.
+
+Viele Webbrowser sind inzwischen dazu übergegangen, hier einen generischen String
+zu hinterlegen, der keinen Rückschluss mehr auf den Browser zulässt, z.B.
+nutzt der Chrome:
+
+> 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36'
+
+Auf dem Server sollten wir uns nur auf Web-Standards verlassen. Im JavaScript
+gibt es kaum Gründen, herauszufinden, um welchen Browser es sich handelt. Wollen
+wir feststellen, ob der Browser ein bestimmtes Feature unterstützt,
+[gibt es hierzu andere Möglichkeiten](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Testing/Feature_detection).
 
 ## HTTPS / TLS
 

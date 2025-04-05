@@ -5,9 +5,265 @@ sidebar_position: 2
 description: Aufbau und Bestandteile einer URL
 ---
 
+import Link from "@docusaurus/Link";
+import JsSnippet from "@site/src/components/JsSnippet";
+
 # Abschnitt 2 - URL
 
-Domain, port, Protokoll, localhost, relative URLs, fragment, query
-relative absolut
+URL steht für Uniform Resource Locator und ist eine
+[standardisiertes Format](https://datatracker.ietf.org/doc/html/rfc3986#section-1.1.3),
+um den Standort von Ressourcen anzugeben, z.B. von einer Webseite oder einer
+Datei.
 
-IP, DNS, IPv6
+
+## Bestandteile
+
+Beispiele für URLs sind etwa
+
+* `https://wikipedia.com`
+* `http://localhost:8080`
+* `demo@example.com`
+* `../img/logo.png`
+* `#examples`
+
+Was haben diese miteinander zu tun? Allgemein ist das Format einer URL wie folgt:
+
+<pre>
+          userinfo       host      port
+          ┌──┴───┐ ┌──────┴──────┐ ┌┴─┐
+  https://john.doe@www.example.com:1234/forum/questions/?tag=networking&order=newest#top
+  └─┬─┘   └─────────────┬─────────────┘└───────┬───────┘ └────────────┬────────────┘ └┬┘
+  scheme            authority                path                   query          fragment
+</pre>
+
+Wir schauen uns nun diese Teile kurz an.
+
+### scheme
+
+Das `Scheme` oder `Protokoll` gibt an, wie auf die Ressource zugegriffen werden
+soll. Wir kennen schon `http` und `https` für das HTTP-Protokoll (mit / ohne Verschlüsselung).
+
+Andere mögliche Protokolle sind etwa `file:` für lokale Dateien auf der Festplatte,
+`ftp:` für das [File Transfer Protocol](https://en.wikipedia.org/wiki/File_Transfer_Protocol)
+oder `mailto` für E-Mails.
+
+### userinfo
+
+In den User Info stehen Angaben zum Nutzer. Dies wird vor allem verwendet
+bei E-Mail-Addressen, wo hier der Name des Nutzers steht.
+
+Historisch war es möglich, nach dem Nutzername einen Doppelpunkt zu setzen und
+danach das Passwort anzugeben. Aus Sicherheitsgründen wird dies aber kaum noch
+unterstützt.
+
+### host
+
+Der Host ist der Name des Servers, an den bei HTTP die Anfrage gestellt wird.
+
+Technisch gesehen hat jeder Server eine eindeutige Nummer, die sogenannte
+[IP-Addresse](https://en.wikipedia.org/wiki/IPv4). Eine IP-Addresse ist eine
+Nummer, die aus 4 Byte besteht.
+
+Beispielsweise hat die Duale Hochschule Sachsen die IP 194.95.197.225. Statt
+`https://www.dhsn.de/dresden` könnten wir auch `https://194.95.197.225/dresden`
+in den Browser eingeben. Da sich das schwer merken lässt, wurde ein System
+eingeführt, um sprechende Namen auf IP-Addressen zuzuweisen, das sogenannte
+[Domain Name System (DNS)](https://developer.mozilla.org/en-US/docs/Glossary/DNS).
+
+Eine IP aus 4 Byte erlaubt maximal `2^(4*8) = 2^32`, also 4294967296 oder
+rund 4 Milliarden verschiedene Addressen. Aufgrund des Wachstums des Internets
+reicht dies nicht mehr aus. Aus diesem Grund wurden sogenannte
+[IPv6](https://en.wikipedia.org/wiki/IPv6) eingeführt.
+
+Eine IPv6 ist ebenfalls eine Nummer, besteht aber aus 16 Bytes. Damit sind
+bis zu `2^128`, also etwa 340 Sextillionen (`10^38`) verschiedene Addressen
+möglich.
+
+Üblicherweise werden IPv6 als [Hex-Zahlen](https://en.wikipedia.org/wiki/Hexadecimal)
+geschrieben, z.B. `2001:0db8:0000:0000:0000:ff00:0042:8329`. Um eine IPv6 in einer
+URL zu verwenden, müssen wir eckige Klammern verwenden:
+
+> `https://[2a02:ec80:300:ed1a::1]` (`https://www.wikiepdia.org`)
+
+Ein bekannter Host, den wir oft brauchen, ist der sogenannte `localhost`.
+`localhost` ist einfach die Addresse von unserem eigenen Rechner. Bei der Webentwicklung
+kommt es nicht selten vor, dass wir zu Testzwecken einen lokalen HTTP-Server starten
+müssen. Mittels `localhost` können wir diesen dann im Browser aufrufen, z.B.
+`http://localhost:8080/index.html` (wenn der Server auf Port 8080) läuft.
+
+Die IP von `localhost` ist immer `127.0.0.1` bzw. `::1` (IPv6). 
+
+:::note
+Der Aufruf von https-URLs mit IP-Addressen schlägt nicht fehlt, weil die
+Seite nicht gefunden wird, sondern weil das [Zertifikat](https://developer.mozilla.org/en-US/docs/Glossary/Digital_certificate)
+nur für den Domain-Name, aber nicht die IP gültig ist.
+:::
+
+### port
+
+Der Port, der aufgerufen werden soll. Wird ein Server auf einem Rechner gestartet,
+bindet sich dieser immer an einen bestimmten Port. Beim Aufruf muss neben dem
+Namen oder der IP des Rechners auch noch der Port angegeben werden. Damit ist es
+möglich, dass auf einem Rechner mehrere Server-Dienste gleichzeitig gestartet
+und verwendet werden.
+
+Mögliche Ports sind 0 - 65535, wobei Ports 1024-49151 häufig intern verwendet
+werden, da Ports 0-1023 in einigen Betriebssystemen Beschränkungen haben. 
+
+Jedes Protokoll hat einen Standardport. Wird dieser verwendet, kann der Port
+auch weggelassen werden. Der Standardport von HTTP ist 80, von HTTPS 443.
+Webseiten, die wir täglich verwenden, laufen auf dem Standardport, sodass
+Webaddressen oft keinen expliziten Port haben.
+
+Wenn wir zu Testzwecken einen lokalen HTTP-Server starten,  läuft dieser meist
+auf einem anderen Port. Für HTTP-Server ist etwa Port 8080 üblich. Wir würden
+im Browser dann also `http://localhost:8080` aufrufen.
+
+### path
+
+Der Pfad, unter dem die Ressource zu finden ist, immer mit einem Schrägstrich
+getrennt, analog zu Unix-Pfaden.
+
+Sonderzeichen müssen Prozent-kodiert werden, siehe unten.
+
+Erwähnenswert sind in diesem Zusammenhang noch relative Pfade. Beispielsweise
+ist es bei HTML-Webseiten üblich, auf ein anderes HTML-Dokument auf der gleichen
+Webseite zu verweisen. Statt die komplette URL zu wiederholen, können wir einen
+relativen Pfad verwenden.
+
+Nehmen wir an, wir hätten eine Webseite mit folgenden URLs:
+
+```
+https://example.com/web/content/page1.html
+https://example.com/web/content/page2.html
+https://example.com/web/misc/other.html
+```
+
+Sind wie auf `page1.html`, können wir einen relativen Link auf `page2.html`
+wie folgt erstellen:
+
+```html
+<a href="./page2.html">Seite 2</a>
+```
+
+Der Punkt (`.`) bezieht sich auf das aktuelle Verzeichnis, also `content`.
+
+Der relative Link auf `other.html` wäre:
+
+```html
+<a href="../misc/other.html">Seite 2</a>
+```
+
+Die 2 Punkte (`..`) beziehen sich auf das übergeordnete Verzeichnis, also `web`.
+
+Ebenso sind alle `@import url(...)` Angaben in CSS-Dateien immer relativ
+zur URL der CSS-Datei, die den Import enthält. 
+
+### query
+
+Die Query enthält zusätzliche Parameter, die notwendig sind, um die Ressource
+zu identifizieren oder um das Request zu erfüllen. Diese werden auch URL-Parameter
+genannt. 
+
+Welche Parameter konkret möglich sind, hängt immer vom Webserver ab, eine
+allgemeine Aussage ist nicht möglich.
+
+Jeder Parameter besteht aus einem Namen und einem Wert, diese Werten mit einem
+`=` voneinander getrennt. Mehrere Parameter werden mit einem `&` getrennt.
+
+Zum Beispiel könnten wir eine Seite haben, welche eine Liste von Produkten
+enthält. Über URL-Parameter erlaubt die Seite, anzugeben, welche und wieviele
+Produkte angezeigt werden sollen:
+
+```
+https://example.com/products?limit=10&first=30&q=stuhl
+```
+
+Hier werden 3 Parameter gesetzt: `q` ist die Suchanfrage (Produkte, die 
+im Namen `stuhl` haben). `first` gibt an, dass mit Treffer `30` angefangen
+werden soll. `limit` gibt es, dass 10 Treffer angezeigt werden sollen. Es werden
+also Treffer 31-40 für die Suche nach `stuhl` angezeigt.
+
+Parameter mit dem gleichen Namen können mehrfach verwendet werden, wenn der
+Server dies unterstützt. Z.B. könnte
+
+```
+https://example.com/products?q=stuhl&q=tisch&q=bett
+```
+
+eine Suche nach Stühlen, Tischen und Betten darstellen.
+
+Falls im Namen oder im Wert eines Parameters Sonderzeichen vorkommen, müssen
+diese URL-kodiert werden (siehe unten).
+
+### fragment
+
+Das Fragment gibt eine bestimmte Stelle auf der Webseite an und wird nicht
+mit an den Server übertragen, wenn ein HTTP-Request gestellt wird.
+
+Der typische Anwendungsfall ist, dass beim Aufruf einer URL automatisch an eine
+bestimmte Stelle gescrolled wird.
+
+Dazu muss im HTML die gewünschte Stelle ein `id="..."`-Attribut besitzen.
+Diese ID wird dann als Wert des Fragments an die URL gehangen. Zum Beispiel:
+
+[https://developer.mozilla.org/en-US/docs/Web/API/URL#usage_notes](https://developer.mozilla.org/en-US/docs/Web/API/URL#usage_notes)
+
+Das HTML dieser Seite von MDN web docs enthält folgendes:
+
+```html
+<h2 id="usage_notes">
+  <a href="#usage_notes">Usage notes</a>
+</h2>
+```
+
+## URL-Kodierung
+
+Wie erwähnt, müssen Sonderzeichen im Pfad und bei URL-Parametern kodiert werden.
+
+Wenn wir etwa einen URL-Parameter mit Namen `equation` und Wert `x^2+2x+1=0`
+an die URL `https://example.com/quadratic-equation-solver` hängen wollen, wäre
+folgendes falsch:
+
+> `https://example.com/quadratic-equation-solver?equation=x^2+2x+1=0`
+
+Die Zeichen `+` und `=` müssen kodiert werden. Hierzu verwenden wir das sogenannte
+URL-Encoding.
+
+Um ein Zeichen zu kodieren, kodieren wir das Zeichen zuerst als
+[UTF-8](https://developer.mozilla.org/en-US/docs/Glossary/UTF-8). Dabei erhalten
+wir ein oder mehrere Bytes. Jedes Byte stellen wir als 2-stelliges Hex-Paar dar
+und setzen ein `%`-Zeichen davor.
+
+Beispiel:
+
+* Wir wollen das Zeichen `愛` (Liebe) kodieren.
+* 愛 hat den [Unicode-Codepoint 7231](https://www.compart.com/en/unicode/U+7231).
+* Im Encoding UTF-8 sind das die 3 Bytes `E7`, `88` und `B1`
+* Mit einem Prozent davor erhalten wir `%E7%88%B1`.
+
+Die URL-Kodierung von `愛` ist also `%E7%88%B1`.
+
+Nach dem gleichen Prinzip lautet die korrekte URL für unser Beispiel:
+
+> `https://example.com/quadratic-equation-solver?equation=x%5E2%2B2x%2B1%3D0`
+
+Während wir das zwar jedesmal manuell tun könnten, ist das doch eine sehr anstrengende
+Aufgabe. JavaScript bietet 2 Hilfsfunktionen hierzu:
+
+```js
+encodeURIComponent("愛")
+decodeURIComponent("%E7%88%B1")
+```
+
+<p>
+  <Link to="/sandbox?snippet=url-encoding" target="_blank" rel="noopener noreferrer">Sandbox: URL-Kodierer / Dekodierer</Link>
+</p>
+
+
+## URL-Objekt
+
+Im JavaScript steht zudem das `URL`-Objekt bereit, mit dem wir einfacher
+mit URLs arbeiten können:
+
+<JsSnippet path="url" toggleable />
