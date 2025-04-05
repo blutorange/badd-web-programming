@@ -1,0 +1,125 @@
+---
+id: http-caching
+slug: /http/caching
+sidebar_position: 4
+description: Caching zum schnelleren Laden von Webseiten 
+---
+
+# Abschnitt 4 - Caching
+
+Bisher haben wir gesehen, wie Client und Server untereinander Nachrichten
+austauschen können. Das funktioniert, jedes Request erfordert aber Zeit und
+Ressourcen. Zeit, weil Daten über das Internet gesendet werden müssen &mdash; 
+jeder möchte, dass die Webseite so schnell wie möglich lädt. Ressourcen, weil
+der Server ein Rechner ist, auf dem zum Beantworten des Requests CPU-Last
+entsteht. Gehen zuviele Anfragen auf einem Server an, kann das in einem
+Zusammenbruch des Server resultieren.
+
+Daher ist es sinnvoll, Requests zu reduzieren, wenn möglich.
+
+Eine Möglichkeit zur Reduzieren von Requests ist das Caching. Beim Caching
+speichert der Browser den Inhalt der Response und verwendet diesen, statt noch
+einmal beim Server anzufragen.
+
+Sinnvoll ist das bei statischen Dateien. Wenn wir in eine Webseite ein Logo
+einbinden, ist dieser Logo bei jedem Aufruf der Webseite gleich. Es besteht
+also keine Notwendigkeit, jedesmal das Logo neu vom Server zu laden.
+
+Es kann nun aber passieren, dass wir die Webseite aktualisieren und das Logo
+austauschen. In dem Fall wollen wir, dass der Browser das Logo neu lädt.
+Bei jedem Caching-Mechanismus ist es daher notwendig, eine Strategie zu haben,
+wie der Cache durchbrochen werden kann (Cache Buster).
+
+HTTP bietet 2 grundlegende Möglichkeiten, Caching umzusetzen: `Cache-Control`
+und `E-Tag`. Dies wollen wir uns in diesem Abschnitt anschauen.
+
+Per JavaScript ist Caching zudem noch auf eine dritte Art und Weise möglich, 
+nämlich mit sogenannten [Service Worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API).
+Auf diese werden wir hier aber nicht weiter eingehen.
+
+## Cache-Control
+
+`Cache-Control` ist ein Header, den der Server in der Response setzen kann.
+
+Mit diesem können wir steuern, ob und wie lange der Browser eine Ressource cachen
+darf.
+
+Beispielsweise könnte ein Server bei der Anfrage an `https://example.com/logo.png`
+wie folgt antworten:
+
+```
+HTTP/1.1 200 OK
+Content-Type: image/png
+Cache-Control: max-age=604800
+```
+
+`max-age` gibt an, wie lange die Ressource im Cache des Browsers gehalten
+werden darf (in Sekunden, 604800s = 1 Woche). In dem Fall stellt der Browser
+kein Request mehr an den Server und nutzt direkt die Ressource aus dem Cache.
+
+Falls wir unter keinen Umständen wollen, dass der Browser die Ressource cached,
+können wir dies explizit anfordern mittels:
+
+```
+HTTP/1.1 200 OK
+Content-Type: image/png
+Cache-Control: no-store
+```
+
+## ETag
+
+Das Problem mit `max-age` ist, dass wir meist nicht im Voraus wissen, ob und
+wann eine Ressource aktualisiert wird. Es kann daher schwierig sein, `max-age`
+auf einen sinnvollen Wert zu setzen.
+
+Der [ETag](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/ETag)
+(entity tag) kann hier Abhilfe schaffen.
+
+Die Idee dabei ist, dass jede Ressource eine Version hat. Solange die Version
+gleich ist, muss die Ressource nicht neu geladen werden. Bei der Anfrage nach
+einer Ressource liefert der Server einen ETag mit der Version zurück:
+
+```
+HTTP/1.1 200 OK
+Content-Type: image/png
+ETag: "bb88efe1aa703b3f70a7c92e086a5070"
+```
+
+Der Browser speichert die Ressource zusammen mit dem ETag in seinem Cache.
+
+Benötigt der Browser die Ressource nun erneut, etwa weil der Nutzer auf eine
+andere Unterseite navigiert, fragt der Browser beim Server erneut nach der
+Ressource an. Diesmal sendet der Browser aber seinen gespeicherten ETag
+mit:
+
+```
+GET https://example.com/logo.png HTTP/1.1
+If-None-Match: "bb88efe1aa703b3f70a7c92e086a5070"
+```
+
+Mittels dem `If-None-Match`-Header bittet der Browser den Server, die Ressource
+nur zurückzuliefern, falls diese einen anderen ETag hat.
+
+Falls die Ressource den gleichen ETag hat, teilt der Server dies nur mit und
+sendet die Ressource nicht erneut:
+
+```
+HTTP/1.1 304 Not Modified
+```
+
+Über den 304-Status-Code weiß der Browser nun, dass die Ressource aktuell ist
+und verwendet die Daten aus seinem Cache.
+
+Auf diese Weise kann Bandbreite gespart werden. Ungünstig ist, dass trotzdem
+ein Request an den Server gestellt werden muss. Bei Verwendung von HTTP/2 bzw.
+HTTP/3 und Multiplexing kann der Overhead aber weiter reduziert werden.
+
+---
+
+Schließlich könne wir auch `Cache-Control` und `ETag` gleichzeitig verwenden.
+So ist ein zweistufiges Vorgehen möglich. Die Idee hierbei ist,
+`Cache-Control` mit einem geringen Wert (wenige Minuten oder Stunden) zu verwenden,
+um zu verhindern, dass in kurzer Zeit immer wieder neue Requests gestellt werden.
+
+Das resultiert dann darin, dass der Browser in Intervallen von einigen Minuten oder
+Stunden jeweils einmal erneut nachfragt, ob die Ressource noch aktuell ist.
