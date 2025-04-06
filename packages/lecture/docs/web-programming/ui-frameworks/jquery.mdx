@@ -2,27 +2,406 @@
 id: framework-jquery
 slug: /framework/jquery
 sidebar_position: 1
-description: JQuery, das Schweizer Taschenmesser
+description: jQuery, das Schweizer Taschenmesser
 ---
 
 import HtmlSnippet from "@site/src/components/HtmlSnippet";
+import Link from "@docusaurus/Link";
 
-# Abschnitt 1 - JQuery
+# Abschnitt 1 - jQuery
+
+Die erste Frage, die wir uns immer stellen sollten, bevor wir eine neue Bibliothek
+oder ein Framework einsetzen: Warum? Welche Problem wird dadurch gelöst? Wie
+wird es gelöst?
+
+Wir haben die DOM API kennengelernt, mit der wir prinzipiell alles tun können, was
+für Widgets und Webapp notwendig ist. Um die Probleme zu sehen, betrachten wir
+ein einfaches Beispiel für eine Webapp: die TODO-App.
+
+## TODO-App
+
+Die TODO-App ist ein beliebtes Beispiel von UI-Frameworks, um ihre Verwendung
+zu illustrieren, ein bisschen wie das `Hello World`-Programm bei der Programmierung.
+Im Wesentlichen besteht die TODO-App aus:
+
+* Einer Liste von TODOs, die der Nutzer hinzugefügt hat.
+* Eine Möglichkeit zum Markieren erledigter TODOs
+* Einer Eingabemaske, wo der Nutzer neue TODOs hinzufügen kann.
+
+Zusätzlich können wir noch Features ergänzen, wie etwa einen Filter für offene
+und erledigte TODOs, einer Möglichkeit zum Löschen von TODOs etc.
+
+An dieser Stelle wollen wir uns orientieren an [TodoMVN](https://todomvc.com/),
+einer Sammlung von TODO-Apps in verschiedenen UI-Frameworks.
+
+![Beispiel für eine TODO-App](/img/web/todo-app.png)
+
+Für die folgenden Beispiele hier das grundlegende HTML und CSS für die TODO-App
+im Playground, ohne JavaScript-Funktionalität:
+
+<p>
+  <Link to="/sandbox?snippet=todo-app-template&tab=html" target="_blank" rel="noopener noreferrer">Playground &mdash; TODO-App-Template</Link>
+</p>
 
 ## Probleme DOM API
 
-Reicht nicht die DOM API?
+Um die Probleme mit der DOM API beim Erstellen von Webapp zu sehen, implementieren
+wir die TODO-Ap beispielshaft mit der nativen DOM API (gerne auch mal selber
+versuchen!):
 
-## JQuery
+<p>
+  <Link to="/sandbox?snippet=todo-app-native&tab=js" target="_blank" rel="noopener noreferrer">Playground &mdash; TODO-App (nativ)</Link>
+</p>
 
-### Motivation
+:::note
+Scherzhaft wird die native Funktionalität, die der Browser bereitgestellt,
+manchmal auch als Framework [Vanilla JS](https://vanilla-js.com/) bezeichnet.
+Das ist eine Anspielung auf die Vielzahl von Bibliotheken und Frameworks, die
+in JavaScript erstellt wurden (und meist auf *JS enden). Oft versprechen sie
+viele Features. Vieles kann aber bereits der Browser schon ohne Bibliothek und
+Framework.
 
-kurz knapp, einfach, browser uebergreifend kompatibel
+Wie schon gesagt, sollten wir uns immer fragen, ob eine Bibliothek oder Framework
+notwendig ist und aus welchem Grund.
+:::
 
-### Relevanz
+Wer sich selber an dieser Übung versucht hat, wird bereits einige Probleme erkannt
+haben. Es gibt mehrere Probleme, von den jQuery einige löst.
 
-einige teile aufgrund neuer funktionalitaten in modernen javascript obsolet
+### Kompatiblität mit älteren Browser
 
-### Cash
+Wir haben in der TODO-App Gebrauch von verschiedenen DOM-API-Funtionen gemacht,
+wie [classList](https://developer.mozilla.org/en-US/docs/Web/API/Element/classList),
+[closest](https://developer.mozilla.org/en-US/docs/Web/API/Element/closest) oder
+[iterierbare NodeList](https://developer.mozilla.org/en-US/docs/Web/API/NodeList#browser_compatibility).
 
-alternative zu JQ mit nur relevanten teilen
+[Historisch](https://daverupert.com/2022/06/goodbye-ie/) haben nicht alle Browser
+solche Funktionalitäten überhaupt oder in der gleichen Weise unterstützt.
+
+jQuery war hier eine beliebte Bibliothek, die [versprochen hat](https://web.archive.org/web/20130307211117/https://jquery.com/browser-support/),
+dass alle angebotenen Funktionalitäten in allen Browsern auf die gleiche Weise funktionieren.
+
+Inzwischen ist die Standardisierung weiter fortgeschritten, sodass dies kaum
+noch ein Problem darstellt.
+
+:::info
+[@mdn/browser-compat-data](https://github.com/mdn/browser-compat-data) stellt
+umfangreiche Daten bereit, welche Browser welche Features unterstützen. Diese
+Daten können wir entweder auf den entsprechenden Seiten [MDN web docs](https://developer.mozilla.org/en-US/docs/Web/API/Element/classList#browser_compatibility)
+oder auf [Can I Use](https://caniuse.com/) einsehen und durchsuchen.
+:::
+
+### Verbosität
+
+Die DOM-API ist nicht gerade dafür bekannt, kurz und bündig zu sein. jQuery
+versucht, dies zu vereinfachen. Beispiele (oben: DOM API, unten: jQuery):
+
+```js
+// 1 Element selektieren
+document.querySelector(".todo-list");
+$(".todo-list");
+
+
+// Alle Elemente selektieren
+document.querySelectorAll(".toggle");
+$(".toggle");
+
+
+// Alle Elemente entfernen
+for (const item of document.querySelectorAll(".toggle")) {
+  item.parentElement.removeChild(item);
+}
+
+$(".toggle").remove();
+
+
+// Element B nach A einfügen
+const a = document.querySelector(".a")!;
+const b = document.querySelector(".b")!;
+if (b.nextElementSibling) {
+    a.insertBefore(b, b.nextSibling);
+} else {
+    a.appendChild(b);
+}
+
+$(".a").after(".b");
+```
+
+Teilweise ist das über die DOM API heutzutage etwas komfortabler möglich, nachdem
+der Standard weitere Hilfsfunktionen wie [after](https://developer.mozilla.org/en-US/docs/Web/API/Element/after)
+und [remove](https://developer.mozilla.org/en-US/docs/Web/API/Element/remove) eingeführt hatte.
+
+## jQuery
+
+Wir wollen uns nun noch einen kurzen Überblick über die wesentliche Funktionsweise
+von jQuery verschaffen. jQuery hat eine sehr gute Dokumentation, die wir
+unter [jQuery API](https://api.jquery.com/) einsehen können.
+
+jQuery lässt sich am besten als Hilfsbibliohek beschreiben, welche neben
+DOM-API-Funktionalitäten auch noch weitere Hilfen für die tägliche Programmierung
+bereitstellt. Aufgebaut ist jQuery aus mehreren Teilen, die sich kurz wie
+folgt zusammenfassen lassen.
+
+### DOM API
+
+Das Kernstück von jQuery sind Hilfsfunktionen rund um die vom Browser bereitgestellte
+DOM-API. jQuery verwendet üblicherweise die Variable `$`, weil diese sehr kurz ist.
+
+__Selektieren von Elementen__
+
+Bevor wir mit Elementen arbeiten können, müssen wir erst einmal welche selektieren.
+Das ermöglicht jQuery mittels `$("cssSelector")`. Als Ergebnis erhalten wir eine
+Liste mit allen Elementen, die auf den CSS-Selektor passen.
+
+Um die Arbeit mit Elementen zu vereinfachen, ist bei jQuery alles eine
+`Liste von Elementen`. Auch wenn wir nur ein einzelnes Element selektieren wollen,
+erhalten wir bei jQuery eine Liste mit einem Element:
+
+<HtmlSnippet path="jquery-select" type="js"/>
+
+Der Vorteil davon ist, dass wir keine Sonderbehandlung für den Fall brauchen,
+wenn einmal kein Element gefunden wird. Bei der DOM-API kommt im dem Fall
+`null` zurück, worauf wir entsprechend reagieren müssen:
+
+```js
+// OK, gibt Leerstring zurück
+$(".missing").text();
+
+// Schlecht, führt zu Laufzeitfehler
+document.querySelector(".mising").textContent;
+```
+
+Auf die gleiche Weise können wir auch neue Elemente erstellen, in dem wir `$(...)`
+einen HTML-String übergeben:
+
+<HtmlSnippet path="jquery-create" type="js"/>
+
+__Arbeiten mit Elementen__
+
+Nachdem wir Elemente selektiert haben, können wir damit arbeiten. Hierzu stellt
+jQuery [viele Funktionen](https://api.jquery.com/) bereit, z.B.:
+
+```js
+// Neues Element am Anfang vor allen anderen Kindern der 1. <section> einfügen
+$("section").first().prepend("<h1>Hallo Welt</h1>");
+
+// Alle .todo-list-item entfernen, deren .toggle angehakt ist (die also erledigt sind) 
+$(".todo-list .toggle").filter(":checked").closest(".todo-list-item").remove();
+
+// Neues <input> erstellen, einige Attribute und Klassen setzen, dann
+// zum bestehenden <fieldset> hinzufügen
+$("<input>")
+  .addClass("md-inputfield stylish")
+  .prop("required", true)
+  .attr("name", "zip code")
+  .attr("id", "zip-code")
+  .appendTo("fieldset");
+```
+
+__Lauschen auf Ereignisse__
+
+jQuery vereinfacht auch das Lauschen auf Ereignisse etwas. Erinnern wir an die
+DOM-API, hier brauchten wir `element.addEventListener("event", callback)`.
+
+<HtmlSnippet path="jquery-events" type="js"/>
+
+Im obigen Beispiel reagieren wir auf Änderungen im Eingabfeld und geben
+den aktuellen Wert darunter aus.
+
+Was wir an diesem Beispiel auch erkennen: jQuery macht starken Gebrauch vom
+kontextuellen [this-Argument](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this).
+
+Das ist heutzutage aus 2 Gründen problematisch. Zum einen hängt die Bedeutung
+von `this` immer von demjenigen ab, der unserer Funktion aufruft. Das ist nicht
+immer unter unser Kontrolle. Um zu zeigen, dass unser Code korrekt ist, müssen
+wir Annahmen machen, wie anderer Code (hier: jQuery) unsere Funktion aufruft.
+
+Zum anderen ist `this` auch einfach inkompatibel mit Arrow-Funktionen (`() => {}`),
+da hier `this` nicht mehr geändert werden kann. Zum Zeitpunkt, wo jQuery erschien,
+gab es diese noch nicht.
+
+### AJAX
+
+Inzwischen können wir [fetch](../../js/fetch) verwenden, um HTTP-Request auszuführen.
+Als jQuery erschien, gab es `fetch` noch nicht und wir mussten das sogenannte
+[XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
+verwenden. Dies war nicht so komfortabel bedienbar. Grob sah dessen Verwendung
+etwa wie folgt aus:
+
+```js
+const request = new XMLHttpRequest();
+request.addEventListener("load", () =>  console.log("response", request.status, request.responseText));
+request.addEventListener("error", () => console.error("request failed"));
+request.open("GET", "https://api.restful-api.dev/objects?id=3&id=5&id=10");
+request.send();
+```
+
+Der Code kann noch weiter wachsen, wenn wir z.B. POST-Requests stellen wollen.
+jQuery bietet hier eine einfachere Hilfsfunktion [$.ajax](https://api.jquery.com/jQuery.ajax/)
+an:
+
+<HtmlSnippet path="jquery-ajax" type="js"/>
+
+### JavaScript-Hilfsfunktionen
+
+Allgemein stellt jQuery unabhängig von der DOM-API verschiedene Hilfsfunktionen
+bereit, um (damals) fehlende Funktionen in JavaScript zu kompensieren. Um nur
+wenige Beispiele zu nennen:
+
+<HtmlSnippet path="jquery-helpers" type="js"/>
+
+Hierfür gibt es mittlerweile von JavaScript bereitgestellte Funktionen
+wie [Array.isArray](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray),
+[map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map)
+und [filter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter).
+
+### Deferred
+
+Um es kurz zu fassen, [$.Deferred](https://api.jquery.com/jQuery.Deferred/) war
+die Lösung von jQuery für [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise),
+bevor es diese gab. Inzwischen können wir [Promise](../../js/es2015/#promise) statt `$.Deferred` verwenden.
+
+### Animationen
+
+jQuery stellt auch ein Möglichkeit bereit, um HTML-Element mittels JavaScript
+zu animieren.
+
+<HtmlSnippet path="jquery-animate" type="js"/>
+
+Für fortgeschrittene Animationen kann es manchmal notwendig sein, dass wir diese
+nur per JavaScript umsetzen können. Oft können wir aber Animation auch nur mittels
+CSS ([transition](https://developer.mozilla.org/en-US/docs/Web/CSS/transition) und
+[@keyframes](https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes))
+umsetzen. Wo möglich, sollten wir auf JavaScript-basierte Animationen verzichten:
+das ist weniger fehleranfällig, performanter und sieht potentiell auch flüßiger
+aus, da der Browser die Animation besser timen kann:
+
+<HtmlSnippet path="jquery-animate-css" type="css"/>
+
+### Plugins
+
+Ein Faktor, der wesentlich zum Erfolg von jQuery beigetragen haben wird, sind Plugins.
+Als Bibliothek kann jQuery nur eine gewisse Anzahl an Features bereitstellen &mdash;
+jedes Feature muss gewartet werden und erhöht die Größe der Bibliothek.
+
+Fehlt ein Feature, stellt jQuery die Architektur für Plugins bereit, womit externe
+Entwickler neue Features hinzufügen können. Diese können wir dann verwenden, als
+ob sie Teil von jQuery wären.
+
+Als Beispiel schreiben wir ein einfaches Plugin, um eine Funktion `visible`
+zu jQuery hinzuzufügen, die abhängig vom Argument die Elemente ein- oder ausblendet:
+
+<HtmlSnippet path="jquery-plugin" type="js" toggleable />
+
+Durch unser Plugin steht nun die Funktion `$(...).visible(true)` bereit.
+
+Auf der alten [The jQuery Plugin Registry](https://plugins.jquery.com/)
+finden sich etwa 2500 Plugins. [Bei NPM](https://www.npmjs.com/search?q=keywords:jquery-plugin)
+finden sich auch viele Plugins.
+
+## Ergebnisse
+
+Betrachten wir nun nochmal unserer TODO-App und setzen diese mittels jQuery
+um.
+
+<p>
+  <Link to="/sandbox?snippet=todo-app-jquery&tab=js" target="_blank" rel="noopener noreferrer">Playground &mdash; TODO-App (jQuery)</Link>
+</p>
+
+Einige Stellen wurden durch jQuery kürzer. Gerade wenn wir Operationen mit
+mehreren  Elementen durchführen, können wir das mit jQuery kompatker schreiben:
+
+```js
+// vorher 
+for (const item of todoList.querySelectorAll(".todo-list-item")) {
+  item.classList.remove("editing");
+
+// NACHER
+todoList.find(".todo-list-item").removeClass("editing");
+```
+
+Auch durch [Method Chaining](https://en.wikipedia.org/wiki/Method_chaining)
+konnten wir einige Stellen kürzer schreiben, z.B.:
+
+```js
+todoList.find(".toggle").filter(":checked").closest(".todo-list-item").remove()`
+```
+
+Wir sehen aber auch, dass wir manchmal Elemente extra noch einmal in jQuery
+wrappen müssen (`$(e.target)`), wo wir vorher direkt auf dem Element arbeiten
+konnten.
+
+Insgesamt sind die Verbesserungen durch jQuery aber gering. Die Struktur des Codes
+hat sich nicht geändert. Wir arbeiten immer noch direkt auf den DOM-Elementen
+und registrieren entsprechende Listener. Die Länge des Codes ist durch
+Hilfsfunktionen etwas geschrumpft.
+
+## Relevanz
+
+Wie relevant ist jQuery für die heutige Webentwicklung noch? Hier können wir
+2 Aspekte betrachten: Statistiken zur Verwendung von jQuery; und technische
+Aspekte, was jQuery ermöglicht.
+
+### Nutzungsdaten
+
+Schauen wir uns an, ob und wie oft jQuery auf Webseiten eingesetzt wird, stellen
+wir fest, dass die Bibliothek noch verbreitet ist.
+
+Statistische Daten finden wir etwa bei [W3Techs - World Wide Web Technology Surveys](https://w3techs.com/),
+konkret auf der Unterseite [Usage statistics and market shares of JavaScript libraries](https://w3techs.com/technologies/overview/javascript_library):
+
+> jQuery is used by 74.4% of all the websites [that we monitor]
+
+Dies ist bei W3Techs Platz 1 aller JavaScript-Frameworks. Um diese Zahl besser
+einschätzen zu können, muss aber auch erwähnt werden, dass basierend auf den Daten
+der gleichen Seite:
+
+> WordPress is used by 43.5% of all the websites [that we monitor]
+
+[WordPress liefert jQuery](https://developer.wordpress.org/plugins/javascript/)
+[standardmäßig mit aus.](https://developer.wordpress.org/themes/basics/including-css-javascript/#default-scripts-included-and-registered-by-wordpress)
+
+Ein weiterer interessanter Datenpunkt ist das [2024 Developer Survey](https://survey.stackoverflow.co/2024/technology)
+von Stack Overflow. Stack Overflow ist ein beliebte Seite, wo Fragen von Programmierern
+gestellt und beantwortet werden. In dieser Umfrage wurden Teilnehmer von Stack Overflow
+gefragt, mit welchen Technologien sie im letzten Jahr gerarbeitet haben und im
+nächsten Jahr arbeiten werden. Hier ist [React auf Platz 2 mit knapp 40% und
+jQuery auf Platz 3 mit 21%.](https://survey.stackoverflow.co/2024/technology#1-web-frameworks-and-technologies)
+
+Bei [State of JavaScript - The annual developer survey of the JavaScript ecosystem](https://stateofjs.com/)
+findet man ähnliche Daten. Das ist eine jährliche Umfrage, an der Entwickler aus
+der ganzen Welt teilnehmen. [Bezüglich jQuery finden](https://2024.stateofjs.com/en-US/other-tools/#libraries)
+wir hier, dass nur 17% der Teilnehmer jQuery regelmäßig verwendet. Bei Front-end frameworks,
+die wir uns noch anschauen, [wurde etwa](https://2024.stateofjs.com/en-US/libraries/front-end-frameworks/#front_end_frameworks_ratios)
+React von 82% der Teilnehmer schon genutzt, Svelte von 26%. 
+
+Um diese Ergebnisse zusammenzufassen: jQuery wird häufig noch im Low-Code-Bereich
+verwendet, wo kleinere Funktionalitäten und Interaktivität umzusetzen ist. Bei komplexeren
+und größeren Webapp erhalten andere UI-Frameworks mehr Verwendung. In den nächsten
+Abschnitten werden wir uns daher einige UI-Frameworks anschauen und welche Probleme
+diese lösen. Zudem wurden sehr viele Plugins für jQuery erstellt, die Funktionalitäten
+bereitstellen, für die man sonst erst einmal Alternativen suchen müsste.
+
+### Technische Relevanz
+
+Technisch haben wir bereits oben zu den Bestandteilen von jQuery gesehen, dass
+viele dieser Teile zwar einmal ihre Berechtigung hatten, inzwischen aber obsolet
+aufgrund von Alternativen, die der Browser direkt bereitstellt. Zusammenfassend
+noch einmal:
+
+* DOM API &mdash; Die native DOM API stellt bereits viele nützliche Funktionen
+  bereit. Zudem werden wir sehen, dass die direkte Arbeit mit dem DOM bei größeren
+  Webapps problematisch ist und es andere Ansätze hier gibt.
+* AJAX &mdash; Die native fetch-API ist eine moderne, einfach zu verwendende Alternative.
+* JavaScript-Hilfsfunktionen &mdash; Inzwischen stellt JavaScript hier entsprechende Funktionen bereit.
+* Deferred &mdash; Die nativen Promise erfüllen den gleichen Zweck.
+* Animationen &mdash; Durchaus noch relevant, es sollten aber Alternativen wie CSS-Animation verwendet werden, wo möglich.
+
+## Cash
+
+Der auch heute noch relevanteste Bestandteil von jQuery sind die DOM-API-Funktionen.
+
+[Cash](https://github.com/fabiospampinato/cash) ist eine sehr kleine
+JavaScript-Bibliothek (etwa 16KB), welche nur diesen DOM-API-Teil von jQuery
+enthält. Es stellt daher eine mögliche Alternativ dar, wenn wir direkte
+Operation auf dem DOM ausführen möchten.

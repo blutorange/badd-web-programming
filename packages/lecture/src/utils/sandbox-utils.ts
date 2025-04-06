@@ -1,8 +1,7 @@
 import type { ColorMode } from "@docusaurus/theme-common";
 import { transformSync } from "@swc/wasm-web";
 
-import { useEffect, useState, type Dispatch } from "react";
-import useLocalStorage from "react-use-localstorage";
+import { useCallback, useEffect, useState, type Dispatch } from "react";
 
 import { getConstructorNames, isPromise } from "./lang-utils";
 
@@ -99,6 +98,44 @@ export const IntegerSerializer: Serializer<number> = {
   serialize: (v) => v.toString(10),
 };
 
+export default function useLocalStorage(
+  key: string,
+  initialValue: string,
+): [string, Dispatch<string>] {
+  const [value, setValue] = useState(
+    () => window.localStorage.getItem(key) ?? initialValue,
+  );
+
+  const setItem = useCallback<(newValue: string) => void>((newValue) => {
+    setValue(newValue);
+    window.localStorage.setItem(key, newValue);
+  }, [key]);
+
+  useEffect(() => {
+    const newValue = window.localStorage.getItem(key);
+    if (value !== newValue) {
+      setValue(newValue ?? initialValue);
+    }
+  });
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Initial value should be applied only once
+  const handleStorage = useCallback(
+    (event: StorageEvent) => {
+      if (event.key === key && event.newValue !== value) {
+        setValue(event.newValue || initialValue);
+      }
+    },
+    [value],
+  );
+
+  useEffect(() => {
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, [handleStorage]);
+
+  return [value, setItem];
+}
+
 /** Same as useLocalStorage, but lets you use non-string types. */
 export function useMappedLocalStorage<T>(
   key: string,
@@ -107,10 +144,11 @@ export function useMappedLocalStorage<T>(
 ): [T, React.Dispatch<T>] {
   const initialString = serializer.serialize(initial);
   const [value, setValue] = useLocalStorage(key, initialString);
-  return [
-    serializer.deserialize(value),
+  const setNewValue = useCallback<(v: T) => void>(
     (v) => setValue(serializer.serialize(v)),
-  ];
+    [serializer.serialize, setValue],
+  );
+  return [serializer.deserialize(value), setNewValue];
 }
 
 export function useCode(

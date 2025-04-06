@@ -7,7 +7,7 @@ description: Dynamische Webseiten erstellen mittels Bibliotheken und Frameworks 
 
 # Kapitel 7 - UI-Frameworks
 
-Bisher haben wir native Funktionalitaten kennengelernt, die direkt
+Bisher haben wir native Funktionalitäten kennengelernt, die direkt
 vom Browser bereitgestellt werden. Reichen diese nicht aus?
 
 Webseiten wurden immer komplexer, aus Webseiten wurden Webapps . Es hat sich
@@ -18,6 +18,27 @@ Im Rahmen dieser Vorlesung können wir uns nicht mit diesen genauer beschäftige
 und erlernen. Stattdessen wollen wir uns einige davon heraussuchen und anschauen,
 welche Probleme bei der Erstellung von Webseiten, Webapps und UIs diese versuchen
 zu lösen und wie sie das schaffen.
+
+An dieser Stellen noch eine Erläuterung zu den Begrifflichkeiten
+
+* Library und Framework - Bezieht sich beides auf (JavaScript-)Code, der von
+  Drittanbietern geschrieben wurde und von uns eingebunden wird. Der Unterschied
+  ist vage und nicht genau definiert. Allgemein können wir aber sagen, eine Bibliothek
+  stellt Funktionen bereit, die von uns in beliebiger Weise verwendet werden kann.
+  Ein Framework gibt vor, in welcher Weise wir unsere Anwendung schreiben und gestalten
+  sollen. Oft übernimmt ein Framework die Steuerung des gesamten Ablaufs, den wir mit
+  unserem Code anpassen. Üblicherweise können beliebig viele Bibliotheken verwendet
+  werden, aber nur 1 Framework.
+* Widget - Eine interaktive Komponente, die unabhängig und wiederverwertbar ist
+  und per JavaScript gesteuert wird. Beispiele sind etwa Datepicker, Colorpicker,
+  Balkendiagramm, Overlay-Dialog oder Accordion-Panel. Beispiele für Bibliotheken,
+  die vorgefertigte Widgets bereitstellen: [PrimeFaces](https://www.primefaces.org/showcase/ui/input/toggleSwitch.xhtml),
+  [Fluent UI React](https://react.fluentui.dev/?path=/docs/components-carousel-carousel--docs)
+* Webapp - Allgemein eine Webseite, die aus mehr als der Anzeige von Informationen
+  besteht. Oft gibt es einen Login. Ein Webshop kann eine Webapp sein oder ein
+  [Online-Editor](https://draw.io/) für Diagramme. Oft, aber nicht zwingend, setzen
+  Webapps UI-Frameworks ein. Uns interessieren an dieser clientbasierte Frameworks,
+  die JavaScript zur Umsetzung der Darstellung und Interaktivität verwenden.
 
 ```mdx-code-block
 import DocCardList from '@theme/DocCardList';

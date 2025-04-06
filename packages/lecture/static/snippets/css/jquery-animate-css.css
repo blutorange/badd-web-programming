@@ -1,0 +1,18 @@
+@keyframes fancyFadeOut {
+  0% {
+    opacity: 1;
+    left: 0;
+  }
+  100% {
+    opacity: 0.25;
+    height: 0;
+    left: 50px;
+  }
+}
+
+#book {
+  animation-name: fancyFadeOut;
+  animation-duration: 5s;
+  animation-fill-mode: both;
+  animation-play-state: paused;
+}

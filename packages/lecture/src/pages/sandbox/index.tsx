@@ -78,6 +78,7 @@ function Sandbox(): ReactNode {
     false,
     BooleanSerializer,
   );
+
   const [activeIndex, setActiveIndex] = useMappedLocalStorage(
     "sandbox_index",
     0,
@@ -99,6 +100,13 @@ function Sandbox(): ReactNode {
     resetCss();
     resetJs();
   };
+
+  useEffect(() => {
+    const initialIndex = findActiveIndexOverride();
+    if (initialIndex) {
+      setActiveIndex(initialIndex);
+    }
+  }, [setActiveIndex]);
 
   useEffect(() => {
     if (html.loading || css.loading || js.loading) {
@@ -139,12 +147,15 @@ function Sandbox(): ReactNode {
         </div>
         <div className="sandbox__width-slider">
           <span>Breite Editor-Vorschau</span>
-          <Slider id="widthSlider"
+          <Slider
+            id="widthSlider"
             value={codeWidth}
             min={0}
             max={100}
             step={1}
-            onChange={(e) => setCodeWidth(typeof e.value === "number" ? e.value : e.value[0])}
+            onChange={(e) =>
+              setCodeWidth(typeof e.value === "number" ? e.value : e.value[0])
+            }
           />
         </div>
 
@@ -171,7 +182,10 @@ function Sandbox(): ReactNode {
         )}
       </div>
       <div className="sandbox__code">
-        <div className="sandbox__code-left" style={{flexBasis: `${codeWidth}%`}}>
+        <div
+          className="sandbox__code-left"
+          style={{ flexBasis: `${codeWidth}%` }}
+        >
           <TabView
             activeIndex={activeIndex}
             onTabChange={(e) => setActiveIndex(e.index)}
@@ -217,7 +231,10 @@ function Sandbox(): ReactNode {
             </TabPanel>
           </TabView>
         </div>
-        <div className="sandbox__code-right" style={{flexBasis: `${100-codeWidth}%`}}>
+        <div
+          className="sandbox__code-right"
+          style={{ flexBasis: `${100 - codeWidth}%` }}
+        >
           <div className="sandbox__iframe-container" ref={contentRef} />
         </div>
       </div>
@@ -352,4 +369,19 @@ function buildSubmitHtml(event: SubmitEvent, win: typeof globalThis): string {
 function destroyOldIFrame(container: HTMLDivElement) {
   const oldIframe = container.querySelector("iframe");
   oldIframe?.contentWindow?.dispatchEvent(new Event("beforeunload"));
+}
+
+function findActiveIndexOverride(): number | undefined {
+  const url = new URL(window.location.href);
+  const tab = url.searchParams.get("tab");
+  switch (tab) {
+    case "html":
+      return 0;
+    case "css":
+      return 1;
+    case "js":
+      return 2;
+    default:
+      return undefined;
+  }
 }

@@ -49,7 +49,7 @@ function HtmlSnippetContent(props: HtmlSnippetProps): ReactNode {
   return (
     <>
       <Link
-        to={`/sandbox?snippet=${encodeURIComponent(props.path)}`}
+        to={`/sandbox?snippet=${encodeURIComponent(props.path)}&tab=${props.type ?? "html"}`}
         className={`${styles.trySandbox} ${styles.headerButton}`}
         target="_blank"
         rel="noopener noreferrer"
