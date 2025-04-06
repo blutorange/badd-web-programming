@@ -1,0 +1,15 @@
+.html-snippet__tab-view.p-tabview {
+  border: 1px solid #ccc;
+
+  .p-tabview-nav {
+    margin: 0;
+  }
+
+  .p-tabview-panels {
+    padding: 0;
+  }
+
+  li.p-unselectable-text {
+    margin: 0;
+  }
+}

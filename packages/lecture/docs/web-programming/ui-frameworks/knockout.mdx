@@ -1,0 +1,221 @@
+---
+id: framework-knockout
+slug: /framework/knockout
+sidebar_position: 2
+description: Data-Binding mit Knockout
+---
+
+import HtmlSnippet from "@site/src/components/HtmlSnippet";
+import Link from "@docusaurus/Link";
+
+# Abschnitt 2 - Data-Binding (Knockout)
+
+[Knockout](https://knockoutjs.com/index.html) ist eine kleine Bibliothek, die
+eine Abwandlung von MVC &mdash; [MVVM - Model, View, View Model](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel) &mdash;
+implementiert.
+
+:::info
+Bitte nicht von diesen Begriffen abschrecken lassen. Wir werden sehen, wie die
+Bibliothek funktioniert. MVMM ist nur eine abstrakte Beschreibung der Architektur.
+:::
+
+Denken wir aber erst einmal noch an den letzten Abschnitt zurück und reflektieren,
+welche Probleme es mit der nativen DOM-API und jQuery noch geben könnte.
+
+## Probleme jQuery
+
+jQuery hat uns die Arbeit mit dem DOM im Vergleich zur DOM-API vereinfacht. Doch
+die generelle Funktionsweise, direkt im DOM Änderungen vorzunehmen, blieb die gleiche.
+
+Wer einmal versucht hat, die TODO-App mit der DOM-API oder jQuery selber umzusetzen,
+der wird (wahrscheinlich) festgestellt haben, dass dies keine angenehme Erfahrung
+war. Wir brauchen nur einmal die falsche Klasse im JavaScript nehmen oder
+vergessen, eine Eigenschaft im DOM zu aktualisieren, und schon haben wir unseren
+ersten Bug.
+
+Konkret bei der TODO-App hatten wir einen Zähler, der die Anzahl der erledigten
+TODOs zählt. Immer, wenn sich die Anzahl der TODOs ändert (neues TODO, TODO
+gelöscht, alle gelöscht) oder ein TODO erledigt wird, mustten wir manuell
+daran denken, den Zähler neu zu berechnen und zu aktualisieren.
+
+Ein anderes Beispiel ist die Filterung. Bei jeder Änderung der TODOs mussten wir
+die Filterung manuell erneut durchführen und den DOM entsprechend aktualisieren.
+
+Das ist ein Problem der bisherigen Vorgehensweise: das direkte Arbeiten
+auf dem DOM ist fehleranfällig und schwierig.  Der DOM ist für den Browser
+gedacht, ist aber kein gutes Modell für die Logik unserer TODO-Anwendung.
+
+Das Modell für unsere TODO-Anwendung ist eine Liste von TODOs, die einen Text
+und einen Status (offen, abgeschlossen) haben. Wir hatten aber den DOM als Modell
+verwendet. Falls wir also wissen wollten, welche TODOs schon abgeschlossen waren,
+mussten wir die entsprechenden Elemente selektieren und prüfen, ob die Checkbox
+angehakt war.
+
+Das stellt auch deshalb noch ein Problem dar, weil wir uns so sehr abhängig von
+der konkreten HTML-Struktur machen. Sollten wir uns später entschließen, dass
+HTML zu ändern (andere Elemente, andere Anordnung, andere CSS-Klassen etc.),
+ist das potentiell mit viel Aufwand verbunden. Wir müssen durch das gesamte JavaScript
+gehen, Selektoren ändern und Logik anpassen.
+
+Diese Probleme machen sich schon bei der TODO-App bemerkbar. In größeren Webapps
+sind diese Probleme noch um ein Vielfaches größer.
+
+Bevor wir uns Knockout im Vergleich zu jQuery anschauen und ob es eine Lösung
+für diese Probleme hat, wollen wir uns mit der grundlegenden Funktionsweise von
+Knockout vertraut machen.
+
+## Knockout
+
+Hier ist ein einfaches Beispiel für Knockout, basierend auf einem
+[Tutorial von Knockout](https://learn.knockoutjs.com/#/?tutorial=custombindings):
+
+<HtmlSnippet path="knockout-simple" type="html" tabs="html,js" />
+
+Das mag auf den ersten Blick viel erscheinen. Konzentrieren wir uns erst einmal
+darauf, wie die Antwortmöglichkeiten im HTML erzeugt werden.
+
+Im HTML finden wir vertraute HTML-Elemente wieder. Die `data-bind`-Attribute
+ignorieren wir erst einmal. Dieses HTML ist das, was der Nutzer sieht, und stellt
+die `View` aus `Model, View, View Model` dar.
+
+Im JavaScript finden wir die `class SurveyViewModel {}`. Diese enthält die Eigenschaften
+und Methoden, die wir für die HTML-View brauchen. `SurveyViewModel` ist unser
+`View Model` aus `Model, View, View Model`.
+
+In `SurveyViewModel` finden wir nun die Eigenschaft `answers`, eine Array mit
+den Antwortmöglichkeiten. Auf HTML-Seite wird nun auf die Antwortmöglichkeiten
+zugegrifen:
+
+```html
+<tbody data-bind="foreach: answers">
+  <tr>
+    <td data-bind="text: answerText"></td>
+    <td><select data-bind="options: [1,2,3,4,5], value: points"></select></td>
+  </tr>    
+</tbody>
+```
+
+Das spezielle Attribut `data-bind="foreach: answers"` sagen wir Knockout, dass es
+bitte für jede Antwortmöglichkeit ein `<tr>` erzeugen soll. In anderen Worten,
+aus dem HTML ist nun ein __HTML-Template__ geworden.
+
+Template bedeutet hier, dass es nur als Vorlage gilt und noch verändert wird,
+bevor es dem Nutzer angezeigt wird. Auf diese Weise brauchen wir nicht mit
+der DOM API via `document.createElement("tr")` im JavaScript umständlich neue
+Elemente erzeugen.
+
+Schauen wir nochmal in die Antwortmöglichkeiten im HTML. Dort finden wir noch folgende Zeile:
+
+```html
+<td data-bind="text: answerText"></td>
+```
+
+Mit diesem `data-bind`-Attribut sagen wir Knockout, dass es bitte die Eigenschaft
+`answerText` von der `class Answer {}` als Textinhalt des `<td>`-Elements
+nehmen soll. Anders ausgedrückt, haben wir den Wert aus unserem `View Model`
+an eine Eigenschaft des HTML-Elements _gebunden_. Das nennt man daher auch
+`Data Binding`.
+
+Die folgende Zeile ist ähnlich:
+
+```html
+<td><select data-bind="options: [1,2,3,4,5], value: points"></select></td>
+```
+
+Hier sagen wir Knockout, dass es die Eigenschaft `points` von der `class Answer {}`
+als Wert des `<select>`-Element nehmen soll.
+
+Damit aber nicht genug: im JavaScript haben wir die Eigenschaft `points` wie folgt
+definiert:
+
+```js
+this.points = ko.observable(1);
+```
+
+`ko.observable` ist eine spezielle Funktion von Knockout, die den eigentlichen
+Wert (eine Zahl) kappselt. Wenn wir nun, wie oben im HTML, diesen gekappselten
+Wert an `value: points` _binden_, haben wir ein `2-Way Data Binding` geschaffen.
+
+Das bedeutet:
+
+* Wenn sich der Wert im HTML ändert, wird automatisch auch der Wert im View Model geändert.
+* Wenn sich der Wert in View Model ändert, wird automatisch auch der Wert im HTML geändert.
+
+Damit kümmert sich Knockout darum, dass der Wert in der `Answer`-Klasse immer
+dem Wert im HTML entspricht; und umgekehrt. Wir müssen uns also nicht mehr selber
+darum kümmern, was eine Quelle von Fehler vermeidet. Sobald wir im JavaScript
+den Wert von `Answer.points` ändern, wird automatisch das HTML aktualisiert.
+
+Und um dem ganzen noch eine Sahnehäubchen aufzusetzen, schauen wir einmal unten
+in die Berechnung der Punkte. Im HTML finden wir:
+
+```html
+<p>Sie können noch <strong data-bind="text: pointsBudget - pointsUsed()"></strong> Punkte vergeben.</p>
+```
+
+Die bereits vergebenen Punkte werden also von Budget abgezogen und als Text angezeigt.
+Im JavaScript werden die vergebenen wie folgt berechnet:
+
+```js
+this.pointsUsed = ko.computed(() =>
+  this.answers.reduce((sum, answer) => sum + answer.points(), 0),
+);
+```
+
+Wir brauchen nur über das `answers`-Array mit den Antworten iterieren und die
+Punkte zusammenzuzählen. Mit `ko.compute` sagen wir Knockout, dass der Wert bei
+allen Änderungen neu berechnet werden soll. Ändert sich der Wert (also die Summe
+der vergebenen Punkte), aktualisiert Knockout für uns automatisch das HTML.
+
+Während das nur ein einfaches Beispiel war: stellen wir uns vor, wir hätten
+eine größere Webapp. Mit der DOM API oder JQuery müssten wir dann manuell
+alle HTML-Elemente selektieren und entsprechend aktualisieren. Ist das nicht
+fehleranfällig?
+
+Als Übung empfehle ich, in dem Beispiel einen Button einzubauen, der beim Klicken
+die Punkte aller Antwortmöglichkeiten um 1 hochzählt. Dabei wird man feststellen:
+Nur durch Änderung im View Model werden automatisch alle abhängigen Werte im
+HTML aktualisiert.
+
+## Ergebnisse
+
+Nachdem wir uns nun mit der Architektur und Vorgehensweise von Knockout vertraut
+gemacht haben &mdash; löst es die Probleme, die beim direkten Arbeiten mit dem
+DOM auftreten?
+
+Bevor wir diese Frage beantworten, hier unsere TODO-App, umgesetzt mit Knockout:
+
+<p>
+  <Link to="/sandbox?snippet=todo-app-knockout&tab=js" target="_blank" rel="noopener noreferrer">Playground &mdash; TODO-App (Knockout)</Link>
+</p>
+
+Die Länge des Codes ist etwa gleich &mdash; doch die Länge von Code alleine ist
+noch nicht das Ende der Weisheit. Wichtig sind auch:
+
+* die Verständlichkeit des Codes
+* die Wartbarkeit des Codes
+* die Qualität des Codes (wie fehleranfällig er ist)
+* die Zeit zum Schreiben des Codes
+
+Das mag zu einem gewissen Grad subjektiv sein, aus meiner Sicht schneidet die
+TODO-App mit Knockout aber in allen Punkten besser ab. Im Durchschnitt sind alle
+Zeilen bei der jQuery-Version länger und schwerer verständlich, da wir immer
+das HTML im Hinterkopf behalten müssen, um die ganzen Selektoren zu verstehen.
+Auch die Fehleranfälligkeit ist höher, es ist nie einfach zu erkennen, ob wir
+nicht vergessen haben, eine HTML-Element im DOM zu aktualisieren. Und schließlich
+war auch das Schreiben des Codes wesentlich angenehmer und schneller. Zudem haben
+beim Schreiben des Codes viele Teile "einfach funktioniert", während das bei
+jQuery und der nativen DOM-API nicht der Fall war.
+
+Im obigen Teil, als wir uns Knockout angeschaut haben, sahen wir schon, wie
+es die Probleme der direkten DOM-Manipualtion löst. Um es nochmal zusammenzufassen,
+sind die wesentlichen Punkte:
+
+* Nutzung eines Template-Mechanismus (View)
+* Vom DOM separates View Model, zugeschnitten auf die Business-Logik (TODO-App)
+* 2-Way-Data-Binding zwischen View und View Model.
+* Observable-Mechanismus, um Werte zu Beschreibung, die von anderen abhängig sind.
+
+Diese Herangehensweise verleiht der UI-Programmierung mehr Struktur, wodurch
+die Fehleranfälligkeit im Vergleich zum unstrukturierten direkt DOM-Zugriff
+reduziert wird.

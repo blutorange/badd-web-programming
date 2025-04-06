@@ -1,3 +1,4 @@
+import "./custom.css";
 import styles from "./styles.module.css";
 
 import CodeBlock from "@theme/CodeBlock";
@@ -5,12 +6,14 @@ import Link from "@docusaurus/Link";
 import { useEffect, useState, type ReactNode } from "react";
 
 import { loadCode, type Pending } from "@site/src/utils/sandbox-utils";
+import { TabPanel, TabView } from "primereact/tabview";
 
 export interface HtmlSnippetProps {
   title?: string;
   path: string;
-  type?: "html" | "js" | "css",
+  type?: "html" | "js" | "css";
   nonDeterministic?: boolean;
+  tabs?: string;
   toggleable?: boolean;
 }
 
@@ -38,14 +41,34 @@ function Toggleable(props: HtmlSnippetProps): ReactNode {
 }
 
 function HtmlSnippetContent(props: HtmlSnippetProps): ReactNode {
-  const [code, setCode] = useState<Pending<string>>({ loading: true });
+  const [htmlCode, setHtmlCode] = useState<Pending<string>>({ loading: true });
+  const [cssCode, setCssCode] = useState<Pending<string>>({ loading: true });
+  const [jsCode, setJsCode] = useState<Pending<string>>({ loading: true });
+
+  const code =
+    props.type === "js" ? jsCode : props.type === "css" ? cssCode : htmlCode;
 
   useEffect(() => {
-    if (code.loading) {
-      loadAndSetHtmlCode(setCode, props.type ?? "html", props.path);
+    const tabs = props.tabs?.split(",") ?? [];
+    if (htmlCode.loading && (props.type === "html" || tabs.includes("html"))) {
+      loadAndSetCode(setHtmlCode, "html", props.path);
     }
-  }, [code.loading, props.type, props.path]);
+    if (cssCode.loading && (props.type === "css" || tabs.includes("css"))) {
+      loadAndSetCode(setCssCode, "css", props.path);
+    }
+    if (jsCode.loading && (props.type === "js" || tabs.includes("js"))) {
+      loadAndSetCode(setJsCode, "js", props.path);
+    }
+  }, [
+    htmlCode.loading,
+    cssCode.loading,
+    jsCode.loading,
+    props.tabs,
+    props.type,
+    props.path,
+  ]);
 
+  const tabs = props.tabs?.split(",") ?? [];
   return (
     <>
       <Link
@@ -56,19 +79,63 @@ function HtmlSnippetContent(props: HtmlSnippetProps): ReactNode {
       >
         In Sandbox öffnen
       </Link>
-      <CodeBlock
-        className={styles.codeBlock}
-        title={props.title ?? props.path}
-        showLineNumbers={true}
-        language={props.type ?? "html"}
-      >
-        {code.loading ? "loading..." : code.value}
-      </CodeBlock>
+      {props.tabs ? (
+        <TabView
+          className="html-snippet__tab-view"
+          activeIndex={props.type === "html" ? 0 : props.type === "css" ? 1 : 2}
+        >
+          {props.type === "html" || tabs.includes("html") ? (
+            <TabPanel header="HTML">
+              <CodeBlock
+                className={styles.codeBlock}
+                title={props.title ?? props.path}
+                showLineNumbers={true}
+                language="html"
+              >
+                {htmlCode.loading ? "loading..." : htmlCode.value}
+              </CodeBlock>
+            </TabPanel>
+          ) : undefined}
+          {props.type === "css" || tabs.includes("css") ? (
+            <TabPanel header="CSS">
+              <CodeBlock
+                className={styles.codeBlock}
+                title={props.title ?? props.path}
+                showLineNumbers={true}
+                language="css"
+              >
+                {cssCode.loading ? "loading..." : cssCode.value}
+              </CodeBlock>
+            </TabPanel>
+          ) : undefined}
+          {props.type === "js" || tabs.includes("js") ? (
+            <TabPanel header="JS">
+              <CodeBlock
+                className={styles.codeBlock}
+                title={props.title ?? props.path}
+                showLineNumbers={true}
+                language="javascript"
+              >
+                {jsCode.loading ? "loading..." : jsCode.value}
+              </CodeBlock>
+            </TabPanel>
+          ) : undefined}
+        </TabView>
+      ) : (
+        <CodeBlock
+          className={styles.codeBlock}
+          title={props.title ?? props.path}
+          showLineNumbers={true}
+          language="javascript"
+        >
+          {code.loading ? "loading..." : code.value}
+        </CodeBlock>
+      )}
     </>
   );
 }
 
-export async function loadAndSetHtmlCode(
+export async function loadAndSetCode(
   setCode: (code: Pending<string>) => void,
   type: "html" | "js" | "css",
   path: string,
