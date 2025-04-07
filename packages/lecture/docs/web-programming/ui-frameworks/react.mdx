@@ -1,19 +1,68 @@
 ---
 id: framework-react
 slug: /framework/react
-sidebar_position: 2
+sidebar_position: 3
 description: Reaktive Programmierung mit React und Vue
 ---
 
 import HtmlSnippet from "@site/src/components/HtmlSnippet";
+import Link from "@docusaurus/Link";
 
-# Abschnitt 2 - Reaktive Programmierung (React)
+# Abschnitt 3 - Komponenten, Typisierung, Reaktivität (React, Vue)
 
-## Probleme JQuery
+In diesem Abschnitt wollen wir uns [React](https://react.dev/) anschauen.
+React ist aktuell ein weit verbreitete UI-Bibliothek, siehe etwa die im
+Abschnitt 1 erwähnten Statistiken wie [State of JavaScript - The annual developer survey of the JavaScript ecosystem](https://stateofjs.com/).
 
+[Vue](https://vuejs.org/) ist in seiner Herangehensweise und Architektur React
+sehr ähnlich. Daher sei es an dieser Stelle nur erwähnt, wir werden uns in diesem
+Abschnitt auf React beschränken. 
 
+:::info
+Diese Webseite, auf der du gerade bist, verwendet React!
+:::
 
-## React / Vue.js
+## Probleme Knockout
+
+Im Vergleich zur direkten Arbeit mit dem DOM, hat Knockout schon einige wichtige
+Verbesserungen gebracht.
+
+Doch besinnen wir uns noch einmal auf die Arbeit mit Knockout &mdash;. Was war
+daran vielleicht weniger optimal und wo besteht Potential für Verbesserungen?
+
+Ein Punkt ist die Typensicherheit. Wer hat mit Knockout gearbeitet und nicht
+in den `data-bind`-Attributen einen Schreibfehler gehabt? Das Problem an den
+HTML-Templates, die Knockout verwendet, besteht darin, dass das Data-Binding
+nur als String geschrieben und erst zur Laufzeit von Knockout interpretiert wird.
+
+So ist es schwer bis gar nicht für Tools möglich, vor der Ausführung beim Build-Prozess
+zu prüfen, ob in HTML-Templates nicht vermeidbare Fehler enthalten sind. Wir hatten
+bisher nur eine einfache TODO-App, die dank der Sandbox auch schnell testbar war.
+
+In der Praxis mit größeren Webapps kann der Prozess vom Schreiben des Codes
+bis zur Ausführung wesentlich länger sein. Weiterhin ist es in großen Webapps
+schwer möglich, bei jeder Änderung die gesamte Webapp zu testen. Es kommt nun
+aber vor, dass eine Änderung an einem Teil der Webapp Fehler an anderen Teilen
+mit sich bringen kann, die wir als Programmierer nicht vorhergesehen haben.
+[Auch wenn wir natürlich unseren Code immer gut mit Unit-Tests ausgestattet haben](https://programmerhumor.io/programming-memes/developers-love-hate-relationship-with-unit-tests/),
+es ist gut, mehrere Checks zu haben, welche die Qualität des Code verbessern.
+
+React bietet hier eine Lösung. Zudem gestaltet es React auch einfacher,
+kleine, gekappselte, wiederverwendbare Komponenten zu schreiben, wie wir in diesem
+Abschnitt sehen werden. 
+
+## React
+
+:::warning
+Um in der Sandbox mit React zu arbeiten, muss ganz am Anfang des Codes
+`babel "jsx";` stehen.
+:::
+
+<p>
+  <Link to="/sandbox?snippet=todo-app-react&tab=js" target="_blank" rel="noopener noreferrer">Playground &mdash; TODO-App (React)</Link>
+</p>
+
+## Ergebnisse
 
 komponenten
 type safety

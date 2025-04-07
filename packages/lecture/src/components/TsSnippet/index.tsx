@@ -5,8 +5,6 @@ import Link from "@docusaurus/Link";
 import { useEffect, useState, type MouseEvent, type ReactNode } from "react";
 import { compressToEncodedURIComponent } from "lz-string";
 
-import initSwc from "@swc/wasm-web";
-
 import {
   type AsyncResultHandler,
   evaluateTypeScript,
@@ -48,7 +46,6 @@ function Toggleable(props: TsSnippetProps): ReactNode {
 function TsSnippetContent(props: TsSnippetProps): ReactNode {
   const [code, setCode] = useState<Pending<string>>({ loading: true });
   const [result, setResult] = useState<JsResult[] | undefined>(undefined);
-  const [initialized, setInitialized] = useState<"pending"|"success"|"failure">("pending");
 
   const asyncResultHandler: AsyncResultHandler = (asyncResults) => {
     setResult(asyncResults);
@@ -57,14 +54,9 @@ function TsSnippetContent(props: TsSnippetProps): ReactNode {
   const execute = (e: MouseEvent) => {
     e.preventDefault();
     if (!code.loading) {
-      initSwc();
       setResult(evaluateTypeScript(code.value, props.path, asyncResultHandler));
     }
   };
-
-  useEffect(() => {
-    initSwc().then(() => setInitialized("success")).catch(() => setInitialized("failure"));
-  }, []);
 
   useEffect(() => {
     if (code.loading) {
@@ -84,7 +76,7 @@ function TsSnippetContent(props: TsSnippetProps): ReactNode {
           Im TypeScript-Playground öffnen
         </a>
       )}
-      {initialized === "success" && (result === undefined || props.nonDeterministic) && !code.loading && (
+      {(result === undefined || props.nonDeterministic) && !code.loading && (
         <Link
           onClick={execute}
           className={`${styles.headerButton} ${styles.execute}`}

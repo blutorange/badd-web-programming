@@ -1,5 +1,5 @@
 import type { ColorMode } from "@docusaurus/theme-common";
-import { transformSync } from "@swc/wasm-web";
+import { transform } from "@babel/standalone";
 
 import { useCallback, useEffect, useState, type Dispatch } from "react";
 
@@ -73,7 +73,8 @@ export function prepareHtmlContent(
 
   if (js.length > 0) {
     const scriptCustom = document.createElement("script");
-    scriptCustom.textContent = `document.addEventListener("readystatechange", function(){if(document.readyState!=="complete")return;\n${js}\n;})`;
+    const transpiled = transpileScript(js);
+    scriptCustom.textContent = `document.addEventListener("readystatechange", function(){if(document.readyState!=="complete")return;\n${transpiled}\n;})`;
     doc.body.appendChild(scriptCustom);
   }
 
@@ -106,10 +107,13 @@ export default function useLocalStorage(
     () => window.localStorage.getItem(key) ?? initialValue,
   );
 
-  const setItem = useCallback<(newValue: string) => void>((newValue) => {
-    setValue(newValue);
-    window.localStorage.setItem(key, newValue);
-  }, [key]);
+  const setItem = useCallback<(newValue: string) => void>(
+    (newValue) => {
+      setValue(newValue);
+      window.localStorage.setItem(key, newValue);
+    },
+    [key],
+  );
 
   useEffect(() => {
     const newValue = window.localStorage.getItem(key);
@@ -194,22 +198,57 @@ export function useCode(
   ];
 }
 
+export function findBabelPlugins(code: string): string[] {
+  let pragma = "";
+  for (let i = 0; i < 1000 && i < code.length; i += 1) {
+    if (code[i] !== "") {
+      if (code[i] === '"' || code[i] === "'") {
+        const end = code.indexOf(code[i], i + 1);
+        if (end >= 0) {
+          const value = code.substring(i + 1, end);
+          if (value.startsWith("babel ")) {
+            pragma = value.substring("babel ".length);
+          }
+        }
+      }
+      break;
+    }
+  }
+  return pragma
+    .split(",")
+    .map((x) => x.trim())
+    .filter((x) => x.length > 0);
+}
+
+export function transpileScript(code: string) {
+  const plugins = findBabelPlugins(code);
+  return plugins.length > 0 ? transformBabel(code, plugins) : code;
+}
+
 export function evaluateTypeScript(
   code: string,
   key: string,
   asyncResultHandler?: AsyncResultHandler,
 ): JsResult[] {
-  let javaScript: string;
+  const transpiled = transformBabel(code, ["transform-typescript"]);
+  return evaluateJavaScript(transpiled, key, asyncResultHandler);
+}
+
+function transformBabel(code: string, plugins: string[]): string {
   try {
-    javaScript = transformSync(code, {
-      sourceMaps: "inline",
-      filename: "file.ts",
-    }).code;
+    return (
+      transform(code, {
+        compact: false,
+        filename: "script.js",
+        plugins: [...plugins],
+        sourceType: "script",
+        sourceMaps: "inline",
+      }).code ?? ""
+    );
   } catch (e) {
-    console.error("Unable to transpile JavaScript", e);
-    return [];
+    console.error("Unable to transpile code to JavaScript", e);
+    return "";
   }
-  return evaluateJavaScript(javaScript, key, asyncResultHandler);
 }
 
 export function evaluateJavaScript(

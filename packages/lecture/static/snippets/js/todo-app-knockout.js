@@ -11,7 +11,7 @@ class TodoAppModel {
     );
 
     // Store in localStorage whenever persistent state changes
-    ko.pureComputed(() => this.toJS()).subscribe((data) => storeTodoData(data));
+    ko.pureComputed(() => this.toJS()).subscribe((data) => storeTodoItems(data));
 
     bindMethods(this);
   }
@@ -141,14 +141,14 @@ class TodoItem {
   }
 }
 
-ko.applyBindings(TodoAppModel.fromJS(loadTodoData()));
+ko.applyBindings(TodoAppModel.fromJS(loadTodoItems()));
 
 // Speichern und Laden im localStorage
-function storeTodoData(todoData) {
+function storeTodoItems(todoData) {
   localStorage.setItem("todo-app-items-knockout", JSON.stringify(todoData));
 }
 
-function loadTodoData() {
+function loadTodoItems() {
   try {
     const itemDataString = localStorage.getItem("todo-app-items-knockout");
     return itemDataString ? JSON.parse(itemDataString) : undefined;

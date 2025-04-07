@@ -15,11 +15,11 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@babel/standalone": "^7.27.0",
     "@docusaurus/core": "3.7.0",
     "@docusaurus/preset-classic": "3.7.0",
     "@mdx-js/react": "^3.0.0",
     "@monaco-editor/react": "^4.7.0",
-    "@swc/wasm-web": "^1.11.12",
     "clsx": "^2.0.0",
     "docusaurus-plugin-image-zoom": "^3.0.1",
     "lz-string": "^1.5.0",
@@ -37,6 +37,7 @@
     "@docusaurus/module-type-aliases": "3.7.0",
     "@docusaurus/tsconfig": "3.7.0",
     "@docusaurus/types": "3.7.0",
+    "@types/babel__standalone": "^7",
     "@types/react": "^18.3.12",
     "typescript": "~5.7.0"
   },
