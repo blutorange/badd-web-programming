@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[8731],{8731:(e,c,s)=>{s.r(c),s.d(c,{default:()=>t});const t='<script src="https://code.jquery.com/jquery-3.7.1.js"><\/script>\n\n<div></div>'}}]);

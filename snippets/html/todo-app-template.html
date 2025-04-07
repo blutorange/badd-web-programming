@@ -1,0 +1,46 @@
+<section class="todoapp">
+
+  <header>
+    <h1>TODOs</h1>
+    <div class="input-container">
+      <input class="new-todo" id="todo-input" type="text" autocomplete="off" placeholder="Was muss getan werden?">
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="toggle-all-container">
+      <input class="toggle-all" type="checkbox" id="toggle-all">
+      <label class="toggle-all-label" for="toggle-all">Alle als erledigt / unerledigt markieren</label>
+    </div>
+
+    <ul class="todo-list">
+      <li class="todo-list-item">
+        <div class="view">
+          <input class="toggle" type="checkbox">
+          <label class="todo-list-item-content">Webprogrammierung üben</label>
+          <button class="destroy"></button>
+        </div>
+        <input class="edit" id="todo-edit-input" type="text">
+      </li>
+    </ul>
+  </main>
+
+  <footer class="footer">
+    <span class="todo-count">1 TODO verbleibend!</span>
+    <ul class="filters">
+      <li class="filter-all"><a>Alle</a></li>
+      <li class="filter-active"><a>Aktive</a></li>
+      <li class="filter-completed"><a>Fertige</a></li>
+    </ul>
+    <button class="clear-completed">Fertige TODOs löschen</button>
+  </footer>
+
+</section>
+
+<footer class="info">
+  <p>Doppelklick, um ein TODO zu bearbeiten</p>
+  <p>TODOs werden im <a
+      href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API">localStorage</a>
+    gespeichert</p>
+  <p>Basierend auf <a href="http://todomvc.com">TodoMVC</a></p>
+</footer>

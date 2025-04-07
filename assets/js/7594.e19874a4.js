@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[7594],{7594:(t,e,u)=>{u.r(e),u.d(e,{default:()=>n});const n='$("input").on("input", function() {\n  const currentColor = $(this).val();\n  $("output").text(`Gew\xe4hlte Outfit-Farbe: ${currentColor}`);\n});'}}]);

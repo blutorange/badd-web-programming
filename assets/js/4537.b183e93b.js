@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[4537],{4537:(e,n,t)=>{t.r(n),t.d(n,{default:()=>a});const a="table {\n  background-color: #cde;\n  padding: 1em;\n  border-radius: 0.5em;\n}\n\ntable th {\n  text-align: left;\n}\n\ntable th:last-child {\n  min-width: 130px;\n}\n"}}]);

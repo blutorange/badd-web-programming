@@ -1,0 +1,58 @@
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-min.js"></script>
+
+<section class="todoapp">
+
+  <header>
+    <h1>TODOs</h1>
+    <div class="input-container">
+      <input class="new-todo" id="todo-input" type="text" autocomplete="off" placeholder="Was muss getan werden?"
+        data-bind="textInput: newTodo, event: { keydown: addTodo }">
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="toggle-all-container">
+      <input class="toggle-all" type="checkbox" id="toggle-all" data-bind="event: { change: toggleAll }">
+      <label class="toggle-all-label" for="toggle-all">Alle als erledigt / unerledigt markieren</label>
+    </div>
+
+    <ul class="todo-list" data-bind="foreach: filteredTodoItems">
+      <li class="todo-list-item" data-bind="class: classNames">
+        <div class="view">
+          <input class="toggle" type="checkbox" data-bind="checked: completed">
+          <label class="todo-list-item-content" data-bind="text: content, event: { dblclick: $parent.editTodo }"></label>
+          <button class="destroy" data-bind="event: { click: $parent.removeTodo }"></button>
+        </div>
+        <input class="edit" id="todo-edit-input" type="text" data-bind="textInput: newContent, hasFocus: editing, event: { keydown: onKeyDown }">
+      </li>
+    </ul>
+  </main>
+
+  <footer class="footer" data-bind="visible: todoItems().length > 0">
+    <span class="todo-count"><span data-bind="text: activeCount"></span> TODO verbleibend!</span>
+    <ul class="filters">
+      <li class="filter-all" data-bind="class: filter() === 'all' ? 'selected' : ''">
+        <a data-bind="event: { click: filterAll }">Alle</a>
+      </li>
+      <li class="filter-active" data-bind="class: filter() === 'active' ? 'selected' : ''">
+        <a data-bind="event: { click: filterActive }">Aktive</a>
+      </li>
+      <li class="filter-completed" data-bind="class: filter() === 'completed' ? 'selected' : ''">
+        <a data-bind="event: { click: filterCompleted }">Fertige</a>
+      </li>
+    </ul>
+    <button class="clear-completed" data-bind="event: { click: removeCompletedTodos }">
+      Fertige TODOs löschen
+    </button>
+  </footer>
+
+</section>
+
+<footer class="info">
+  <p>Doppelklick, um ein TODO zu bearbeiten</p>
+  <p>TODOs werden im <a
+      href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API" target="_blank">localStorage</a>
+    gespeichert</p>
+  <p>Basierend auf <a href="http://todomvc.com" target="_blank">TodoMVC</a></p>
+</footer>

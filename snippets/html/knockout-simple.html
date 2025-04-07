@@ -1,0 +1,22 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-min.js"></script>
+
+<h3 data-bind="text: question"></h3>
+<p>
+    Bitte <strong data-bind="text: pointsBudget"></strong> Punkte zwischen folgenden Antworten verteilen.
+</p>
+
+<table>
+    <thead><tr><th>Antwort</th><th>Wichtigkeit</th></tr></thead>
+    <tbody data-bind="foreach: answers">
+        <tr>
+            <td data-bind="text: answerText"></td>
+            <td><select data-bind="options: [1,2,3,4,5], value: points"></select></td>
+        </tr>    
+    </tbody>
+</table>
+
+<h3 data-bind="visible: pointsUsed() > pointsBudget">
+    Sie haben zu viele Punkte vergeben. Bitte entfernen Sie die überstehenden.
+</h3>
+<p>Sie können noch <strong data-bind="text: pointsBudget - pointsUsed()"></strong> Punkte vergeben.</p>
+<button type="button" data-bind="enable: pointsUsed() <= pointsBudget, click: save">Fertig</button>
