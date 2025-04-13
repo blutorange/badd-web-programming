@@ -6,6 +6,7 @@ description: Reaktive Programmierung mit React und Vue
 ---
 
 import HtmlSnippet from "@site/src/components/HtmlSnippet";
+import TsPlaygroundLink from "@site/src/components/TsPlaygroundLink";
 import Link from "@docusaurus/Link";
 
 # Abschnitt 3 - Komponenten, Typisierung, Reaktivität (React, Vue)
@@ -16,7 +17,10 @@ Abschnitt 1 erwähnten Statistiken wie [State of JavaScript - The annual develop
 
 [Vue](https://vuejs.org/) ist in seiner Herangehensweise und Architektur React
 sehr ähnlich. Daher sei es an dieser Stelle nur erwähnt, wir werden uns in diesem
-Abschnitt auf React beschränken. 
+Abschnitt auf React beschränken.
+
+Wer mehr React lernen möchte, kann etwa mit dem
+[offiziellen Tutorial](https://react.dev/learn) starten.
 
 :::info
 Diese Webseite, auf der du gerade bist, verwendet React!
@@ -81,6 +85,85 @@ Im JavaScript selber sehen wir die einzelnen Funktionen für die verschiedenen
 Komponenten &mdash; Header, Navigation, QuickInfo, MainContent und Footer. Innerhalb
 dieser Funktionen steht das entsprechende HTML für die jeweilige Komponente.
 
+```jsx
+function Aside() {
+  return (
+    <aside>
+      <h3>Related Info</h3>
+      <p>Some additional information goes here.</p>
+    </aside>
+  );
+}
+```
+
+Nicht jede Komponente hat immer den gleichen Inhalt. Wir können jeder Funktion
+einen Parameter `props` geben. Dort, wo wir die Komponente verwenden, können
+wir dann Werte an die Komponenten übergeben:
+
+```jsx
+function Parent() {
+  return (
+    <div>
+      <Header header="My Website" subheader="Welcome to my page!" />
+    </div>
+  );
+}
+
+function Header(props) {
+  return (
+    <header>
+      <h1>{props.header}</h1>
+      <h2>{props.subheader}</h2>
+    </header>
+  );
+}
+```
+
+Eine häufiger Fall in der Praxis ist noch, dass wir eine Liste von Werten übergeben
+wollen. Für jeden Eintrag soll ein Element erzeugt werden. (Bei unserer TODO-App
+ist das die Liste von TODOs). In React brauchen wir dazu nur ein Array von
+Komponenten ausgeben:
+
+```jsx
+function UnorderedList() {
+  return (
+    <ul>
+      {[<li key="1">1</li>, <li key="2">2</li>, <li key="3">3</li>]}
+    </ul>
+  );
+}
+```
+
+In der Regel verwenden wir die [map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map)-Funktion,
+um das Array dynamisch zu erzeugen.
+
+```jsx
+function UnorderedList(props) {
+  return (
+    <ul>
+      {props.items.map(item => <li key={item.id}>{item.text}</li>)}
+    </ul>
+  );
+}
+
+function Content() {
+  const items = [
+    {id: "1", text: "One"},
+    {id: "2", text: "Two"},
+    {id: "3", text: "Three"}
+  ];
+  return (
+    <div>
+      <UnorderedList items={items} />
+    </div>
+  );
+}
+```
+
+Wichtig zu erwähnen ist hierbei noch, dass der `key` wichtig ist. Wenn in der
+Liste etwa Elemente hinzukommen oder entfernt werden, benötigt React diese,
+um diese korrekt den HTML-Elementen zuzuordnen.
+
 :::info
 HTML direkt im JavaScript zu schreiben ist kein Bestandteil der Sprache JavaScript.
 Es handelt sich hierbei um eine Erweiterung von JavaScript, die [JSX](https://react.dev/learn/writing-markup-with-jsx)
@@ -96,21 +179,185 @@ verwendet. Es gibt sogar Versuche, JSX außerhalb der UI-Entwicklung als generis
 [DSL](https://en.wikipedia.org/wiki/Domain-specific_language) für Baumstrukturen zu verwenden ([Beispiel](https://github.com/achrafl0/jsqx)).
 :::
 
-Die Grundidee von React steckt im Namen -- reaktiv. In dieser Hinsicht ist React
-analog zu Knockout.js. Die UI reagiert auf Änderungen im Datenmodell und passt
-sich automatisch entsprechend an.
+### Reaktivität
 
-<HtmlSnippet path="react-reactive" type="js" />
+Eine weitere Grundidee von React steckt im Namen -- reaktiv. In dieser Hinsicht
+verhält React sich analog zu Knockout.js. Die UI reagiert auf Änderungen im Datenmodell und passt
+sich automatisch entsprechend an. Hier ein einfaches Beispiel, wo mit Buttons
+ein Zähler erhöht oder erniedrigt wird:
+
+<HtmlSnippet path="react-reactive" type="js" toggleable />
+
+[useState](https://react.dev/reference/react/useState) ist ein sogenannter
+[Hook](https://react.dev/reference/react/hooks). Grundlegend sollte jede Komponente
+(=Funktion) nur Properties als Parameter erhalten und darauf basierend HTML
+zurückliefern. Nun müssen aber diese Daten irgendwo herkommen. Hooks sind ein
+von React bereitgestellter Mechanismus, um so etwas zu ermöglichen.
+
+Mit `useState` sagen wir React, dass wir einen Wert haben möchten, der zwischen
+Aufrufen der Funktion bestehen bleibt. Diesesn Wert können wir dann  in das
+HTML einfließen lassen.
+
+```jsx
+function Counter() {
+  const [count, setCount] = useState(0);
+  return <output>Zähler ist {count}</output>;
+}
+```
+
+Über `setCount` können wir den Wert ändern. Bei Änderungen des Werts ruft React
+die Funktion erneut auf, um das HTML zu aktualisieren.
+
+```jsx
+function Counter() {
+  const [count, setCount] = useState(0);
+  return (
+    <div>
+      <output>Zähler ist {count}</output>
+      <button type="button" onClick={() => setCount(count + 1)}>Hochzählen</button>
+    </div>
+  );
+}
+```
+
+Es gibt noch [viele weitere Hooks](https://react.dev/reference/react/hooks), zudem
+können wir auch selber neue Hooks schreiben. Für einen groben Überblick über React
+reicht dies aber, wir werden uns diese hier daher nicht genauer anschauen. 
+
+### Virtual DOM
+
+Bei der Arbeit mit React werden wir nie direkt mit dem Virtual DOM in Kontakt
+kommen. Zum Verständnis der Funktionsweise von React und seinen Vor- und Nachteilen
+ist es aber wichtig, dass wir ein grundlegendes Verständnis haben, worum es sich
+dabei handelt.
+
+Der Virtual DOM ist die technische Vorgehensweise, um HTML in den JavaScript-Funktionen
+zu ermöglichen und performant zu halten.
+
+Betrachten wir nochmal unser Beispiel mit dem Zähler:
+
+```jsx
+function Counter() {
+  const [count, setCount] = useState(0);
+  return (
+    <div>
+      <output>Zähler ist {count}</output>
+      <button type="button" onClick={() => setCount(count + 1)}>Hochzählen</button>
+    </div>
+  );
+}
+```
+
+Was macht React, wenn sich Daten (der Zähler) ändert? Die entsprechenden
+HTML-Elemente müssen aktualisiert werden. Theoretisch könnte React die gesammte
+Seite nehmen, alle Komponenten neu rendern und das gesamte HTML austauschen.
+
+Das wäre aber sehr inperformant, hätte also hohen CPU-Bedarf und würde länger
+dauern. Zudem müsste alle Event-Listener neu registriert werden, was die Performance
+weiter senkt.
+
+Stattdessen ist der Ansatz von React, nur die Teile des DOM zu aktualisieren,
+bei denen es wirklich Änderungen gab. Um das zu tun, erzeugt React aus den
+Komponenten nicht direkt HTML, sondern eine Zwischenform, den `Virtual DOM` (VDOM).
+Dieser ist dem DOM sehr ähnlich, existiert aber nur im Speichern. Anschließend vergleicht
+React den erzeugten VDOM mit dem aktuellen DOM und ermittelt die Unterschiede.
+Schließlich passt React den DOM dort an, wo es Unterschiede gab, sodass DOM
+und VDOM nun gleich sind.
+
+In der folgenden Abbildung ist dieser Prozess am Beispiel des Zählers illustriert (klicken zum Vergrößern).
+
+![Darstellung des Re-Render-Prozesses mittels Virtual DOM](/img/web/react-vdom.svg)
+
+Von links nach rechts:
+
+1. Ausgangszustand. DOM und VDOM sind gleich
+2. Zähler erhöht sich um 1
+3. Komponente wird erneut gerendert, DOM und VDOM sind nun verschieden
+4. Ermittlung der Unterschiede zwischen DOM und VDOM (hier: Text des Zählers)
+5. Erzeugung von DOM-API befehlen, um den Unterschied zu beseitigen (hier: Text mittels [textContent](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent) setzen)
+6. DOM und VDOM sind nun wieder gleich
 
 ## Ergebnisse
+
+Nachdem wir uns nun mit den Grundlagen von React vertraut gemacht haben, schauen
+wir uns die TODO-App in React an und prüfen anschließend, welche Vor- und Nachteile
+React bietet.
 
 <p>
   <Link to="/sandbox?snippet=todo-app-react&tab=js" target="_blank" rel="noopener noreferrer">Playground &mdash; TODO-App (React)</Link>
 </p>
 
 
-komponenten
-type safety
-vdom
+Im Vergleich zu jQuery und direkter DOM-Manipulation ist unserer TODO-App ähnlich
+wie bei Knockout wesentlich besser strukturiert. Die Logik ist im Wesentlichen
+in der `TodoApp`-Komponente, die restlichen Komponenten wie `TodoHeader` oder
+`TodoItem` enthalten nur das HTML und die Registrierung von Event-Listener.
 
-clientseitiges rendering, probleme, seo, vorteile
+:::note
+Wir haben immer noch recht viel Logik in der `TodoApp`-Komponente. Für komplexere
+Anwendungen können wir zusätzlich Bibliotheken wie [Zustand](https://github.com/pmndrs/zustand)
+oder [Redux](https://redux.js.org/) verwenden, um die Logik weitere auszulagern.
+Unsere Komponenten sind dann nur noch dafür zuständig, HTML zu erzeugen und bei
+Events wie Mausklicks `Zustand` oder `Redux` darüber zu informieren.
+:::
+
+Eine weitere Verbesserung in der Architektur sind die Komponenten von React. In einer
+gewissen Form stellten auch die einzelnen Klassen bei Knockout Komponenten dar,
+in React wird die Auftrennung in Komponenten aber noch einmal stärker in den Fokus
+gerückt.
+
+Weiterhin gibt es bei React keine separaten Templates im HTML mehr &mdash; das
+gesamte HTML befindet sich in Form von JSX im JavaScript. JSX ist wie erwähnt
+eine (Syntax-)Erweiterung von JavaScript. Diese wird von vielen Tools bereits
+unterstützt, darunter auch von TypeScript.
+
+Somit ist es TypeScript möglich, die Struktur unserer Komponente zu verstehen
+und zu prüfen. Verwenden wir korrekte Typen für unserer Komponenten-Funktionen,
+kann TypeScript vollständig prüfen, ob alle Pflichattribute gesetzt sind und
+den richtigen Typ haben. In der folgenden Abbildung ist ein solcher Fehler zu sehen:
+
+![TypeScript zeigt bei falschen Properties für React-Komponenten Fehler an](/img/web/react-ts-error.png)
+(<TsPlaygroundLink text="Im TypeScript-Playground öffnen" path="react-ts-error" extension="tsx" />)
+
+Bei größeren Webapp kann diese zusätzliche Typensicherheit
+und Prüfung einen Vorteil darstellen, um Fehler frühzeitig zu erkennen und zu
+beheben. Zudem ist es für neue Entwickler so auch einfacher, sich an der Entwicklung
+der Webapp zu beteiligen.
+
+An Vorteilen ist noch erwähnenswert, dass React inzwischen eines der am häufigsten
+verwendeten UI-Frameworks ist. Bei der bereits erwähnten Umfrage
+[State of JS &mdash; Front-end Frameworks Ratios Over Time](https://2024.stateofjs.com/en-US/libraries/front-end-frameworks/#front_end_frameworks_ratios)
+etwa liegt React auf Platz 1. Die große Verbreitung eines Frameworks oder einer
+Bibliothek ist für uns aus mehreren Gründen vorteilhaft. So werden wir allgemein
+mehr Ressourcen wie Tutorials oder Selbsthilfe-Communities finden. In jeder
+Software wird es Bugs (Fehler) geben. React ist Open-Source und ermöglicht jedem
+der Community, aktiv an deren Behebung mitzuarbeiten. Durch die hohe Verwendung ist
+es zudem auch wahrscheinlicher, dass Bugs bereits erkannt und behoben wurden.
+Falls wir vorhaben, ein Software-Projekt zu starten, welches über längere Zeit
+andauert, ist es auch wichtig, dass die eingesetzten Bibliotheken über lange
+Zeit betreut und weiterentwickelt werden. Dies ist ebenfalls wahrscheinlicher,
+wenn die Bibliothek oder das Framework große Verbreitung und Verwendung hat.
+
+Ein Nachteil von React liegt darin, dass dass komplette HTML erst durch JavaScript
+erzeugt wird. Zum Einen kann es passieren, dass auf schwächeren Geräten wie
+alten Handys die Webseite so etwas länger braucht, bis der Nutzer den ersten
+Inhalt sieht ([First Contentful Paint](https://web.dev/articles/fcp)). Zum anderen
+ist es für Suchmaschinen so schwieriger, den Inhalt der Seite zu indizieren. Seit
+einiger Zeit führen aber auch Suchmaschinen beim Indizieren JavaScript aus.
+Weiterhin bietet React Möglichkeiten, das HTML auch bereits
+[auf dem Server zu erzeugen](https://react.dev/reference/rsc/server-components)
+und dann den JavaScript-Code die Kontrolle für Interaktivität zu übergeben.
+
+Ein weiterer Nachteil betsteht im Virtual DOM (VDOM). Auch wenn React bereits
+viele Performance-Optimierungen vollzieht, ist der Umweg über den VDOM ein Overhead,
+der in Abhängigkeit vom Anwendungsfall und Größe der Webapp für
+Performance-Engpässe sorgen kann. Dies sollten wir daher bei der Auswahl eines
+UI-Frameworks bedenken und ggf. einen Prototyp zum Testen erstellen.
+
+:::info
+Persönlich finde ich React in Kombination mit einer Bibliothek für State-Management
+vor allem bei dynamischen Anwendungen sinnvoll, also beispielsweise für einen
+[Diagramm-Editor](https://github.com/projectstorm/react-diagrams?tab=readme-ov-file), 
+einen [Kalender mit Terminen](https://fullcalendar.io/demos) oder einen
+[Flowchart-Editor](https://www.formcycle.eu/en/functions/workflow-designer).
+:::

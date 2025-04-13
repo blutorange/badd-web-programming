@@ -338,8 +338,8 @@ export function evaluateJavaScript(
   return results;
 }
 
-export async function loadCode(type: CodeType, path: string): Promise<string> {
-  const resolvedPath = path.endsWith(`.${type}`) ? path : `${path}.${type}`;
+export async function loadCode(type: CodeType, path: string, extension: string = type): Promise<string> {
+  const resolvedPath = path.indexOf(`.${extension}`) ? path : `${path}.${extension}`;
   try {
     const code = await import(
       `!!raw-loader!../../static/snippets/${type}/${resolvedPath}`

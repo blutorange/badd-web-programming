@@ -116,7 +116,7 @@ function TsSnippetContent(props: TsSnippetProps): ReactNode {
   );
 }
 
-export async function loadAndSetTsCode(
+async function loadAndSetTsCode(
   setCode: (code: Pending<string>) => void,
   path: string,
 ): Promise<void> {

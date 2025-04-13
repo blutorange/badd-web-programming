@@ -12,7 +12,7 @@ function MyApp() {
         <output>{count}</output>
       </p>
       <button onClick={() => setCount(count - 1)} type="button">Runterzählen</button>
-      <button onClick={() => setCount(count - 1)} type="button">Zurücksetzen</button>
+      <button onClick={() => setCount(0)} type="button">Zurücksetzen</button>
       <button onClick={() => setCount(count + 1)} type="button">Hochzählen</button>
     </div>
   );
