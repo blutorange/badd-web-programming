@@ -1,9 +1,11 @@
 import type { ColorMode } from "@docusaurus/theme-common";
-import { transform } from "@babel/standalone";
+import { transform as babelTransform } from "@babel/standalone";
 
 import { useCallback, useEffect, useState, type Dispatch } from "react";
+import { compile as svelteCompile } from "svelte/compiler";
 
 import { getConstructorNames, isPromise } from "./lang-utils";
+import { ImportMap } from "./import-map";
 
 const basicStyleLight = `
 html {
@@ -35,6 +37,8 @@ export type JsResultType =
   | "error"
   | "result";
 
+type ResourceFiles = Record<"html" | "css" | "js", string>;
+
 export interface JsResult {
   type: JsResultType;
   value: string;
@@ -43,6 +47,14 @@ export interface JsResult {
 export interface Serializer<T> {
   serialize: (v: T) => string;
   deserialize: (v: string) => T;
+}
+
+interface TranspileResult {
+  js: string;
+  css: string;
+  html: string;
+  importmap: string;
+  type: "script" | "module";
 }
 
 export function nonPending<T>(value: T): Pending<T> {
@@ -56,7 +68,23 @@ export function prepareHtmlContent(
   colorMode: ColorMode,
 ): string {
   const parser = new DOMParser();
-  const doc = parser.parseFromString(html, "text/html");
+  const transpiled = transpileResources({ css, js, html });
+
+  const doc = parser.parseFromString(transpiled.html, "text/html");
+
+  {
+    const importMap = document.createElement("script");
+    importMap.type = "importmap";
+    importMap.textContent = JSON.stringify(ImportMap, null, 2);
+    doc.head.appendChild(importMap);
+  }
+
+  if (transpiled.importmap) {
+    const importMap = document.createElement("script");
+    importMap.type = "importmap";
+    importMap.textContent = transpiled.importmap;
+    doc.head.appendChild(importMap);
+  }
 
   {
     const styleTheme = document.createElement("style");
@@ -65,16 +93,21 @@ export function prepareHtmlContent(
     doc.head.appendChild(styleTheme);
   }
 
-  if (css.length > 0) {
+  if (transpiled.css.length > 0) {
     const styleCustom = document.createElement("style");
-    styleCustom.textContent = css;
+    styleCustom.textContent = transpiled.css;
     doc.head.appendChild(styleCustom);
   }
 
-  if (js.length > 0) {
+  if (transpiled.js.length > 0) {
     const scriptCustom = document.createElement("script");
-    const transpiled = transpileScript(js);
-    scriptCustom.textContent = `document.addEventListener("readystatechange", function(){if(document.readyState!=="complete")return;\n${transpiled}\n;})`;
+    if (transpiled.type === "module") {
+      scriptCustom.type = "module";
+      scriptCustom.defer = true;
+      scriptCustom.textContent = transpiled.js;
+    } else {
+      scriptCustom.textContent = `document.addEventListener("readystatechange", function(){if(document.readyState!=="complete")return;\n${transpiled.js}\n;})`;
+    }
     doc.body.appendChild(scriptCustom);
   }
 
@@ -198,6 +231,10 @@ export function useCode(
   ];
 }
 
+export function requiresSvelteTranspilation(code: string): boolean {
+  return code.startsWith('"svelte";') || code.startsWith("'svelte';");
+}
+
 export function findBabelPlugins(code: string): string[] {
   let pragma = "";
   for (let i = 0; i < 1000 && i < code.length; i += 1) {
@@ -220,9 +257,28 @@ export function findBabelPlugins(code: string): string[] {
     .filter((x) => x.length > 0);
 }
 
-export function transpileScript(code: string) {
-  const plugins = findBabelPlugins(code);
-  return plugins.length > 0 ? transformBabel(code, plugins) : code;
+export function transpileResources(code: ResourceFiles): TranspileResult {
+  const babelPlugins = findBabelPlugins(code.js);
+  if (babelPlugins.length > 0) {
+    return {
+      css: code.css,
+      html: code.html,
+      importmap: "",
+      js: transformBabel(code.js, babelPlugins),
+      type: "script",
+    };
+  }
+  const usesSvelte = requiresSvelteTranspilation(code.js);
+  if (usesSvelte) {
+    return { ...transformSvelte(code), type: "module" };
+  }
+  return {
+    css: code.css,
+    html: code.html,
+    importmap: "",
+    js: code.js,
+    type: "script",
+  };
 }
 
 export function evaluateTypeScript(
@@ -234,10 +290,137 @@ export function evaluateTypeScript(
   return evaluateJavaScript(transpiled, key, asyncResultHandler);
 }
 
+function splitSvelte(code: string, pattern: RegExp): Record<string, string> {
+  const result: Record<string, string> = {};
+  const matches = [...code.matchAll(pattern)];
+  const first = matches[0];
+  if (first !== undefined) {
+    const part = code.substring(0, first.index);
+    result[""] = part;
+  }
+  for (let i = 0; i < matches.length; i++) {
+    const part = code.substring(
+      matches[i].index + matches[i][0].length,
+      matches[i + 1]?.index ?? Number.POSITIVE_INFINITY,
+    );
+    const name = matches[i][1]?.trim() ?? "";
+    if (name) {
+      result[name] = part.trim();
+    }
+  }
+  return result;
+}
+
+function removeExtension(path: string): string {
+  const lastSlash = path.lastIndexOf("/");
+  const fileName = lastSlash >= 0 ? path.substring(lastSlash + 1) : path;
+  const index = fileName.lastIndexOf(".");
+  return index >= 0 ? fileName.substring(0, index) : fileName;
+}
+
+/**
+ * Compiles svelte components.
+ *
+ * The CSS, HTML and JS code must define multiple files via comments, e.g.
+ *
+ * ```js
+ * // file: App.js
+ * // contents of App.js
+ *
+ * // file: Counter.js
+ * // contents of Counter.js
+ * ```
+ *
+ * or
+ *
+ * ```html
+ * <!-- file: App.html -->
+ * <div>...</div>
+ *
+ * <!-- file: Counter.html -->
+ * <div>...</div>
+ * ```
+ * There must be an App.js file representing the root entry point.
+ *
+ * Svelte makes heavy use of ESM. We use blob URL as a workaround to load
+ * individual modules. In the future, I might consider using a bundler like
+ * rollup + @rollup/plugin-virtual to bundle all files into one, removing the
+ * need for an ESM workaround.
+ */
+function transformSvelte(
+  code: ResourceFiles,
+): Record<"html" | "css" | "js" | "importmap", string> {
+  try {
+    const htmlFiles = splitSvelte(
+      code.html,
+      /^\s*<!--\s*file:\s*([^*\n\r-]+)\s*-->\s*$/gm,
+    );
+    const jsFiles = splitSvelte(
+      code.js,
+      /^\s*\/\/\s*file:\s*([^*\n\r-]+)\s*$/gm,
+    );
+    const cssFiles = splitSvelte(
+      code.css,
+      /^\s*\/\*\s*file:\s*([^*\n\r-]+)\*\/\s*$/gm,
+    );
+    const fileNames = new Set(
+      [
+        ...Object.keys(jsFiles),
+        ...Object.keys(cssFiles),
+        ...Object.keys(htmlFiles),
+      ].map(removeExtension),
+    );
+    const importMap: Record<string, string> = {};
+    const jsUrls: Record<string, string> = {};
+    const mainJs: string[] = [];
+    const mainCss: string[] = [];
+    
+    // Global CSS
+    fileNames.delete("");
+    mainCss.push(cssFiles[""] ?? "");
+
+    for (const fileName of fileNames) {
+      const svelteFile = `
+      <style>
+      ${cssFiles[`${fileName}.css`] ?? ""}
+      </style>
+      <script>
+      ${jsFiles[`${fileName}.js`] ?? ""}
+      </script>
+      ${htmlFiles[`${fileName}.html`] ?? ""}
+    `;
+      const result = svelteCompile(svelteFile, {
+        generate: "client",
+        runes: true,
+        filename: `${fileName}.svelte`,
+        hmr: false,
+        dev: false,
+      });
+      mainCss.push(result.css?.code ?? "");
+      const blob = new Blob([result.js.code], { type: "text/javascript" });
+      const blobUrl = URL.createObjectURL(blob);
+      jsUrls[fileName] = blobUrl;
+      importMap[`@sandbox/${fileName}.js`] = blobUrl;
+    }
+    mainJs.push(`import { mount } from "svelte";`);
+    mainJs.push(`import App from "@sandbox/App.js";`);
+    mainJs.push("mount(App, {target: document.body, props: {}})");
+    return {
+      css: mainCss.join("\n"),
+      html: "",
+      importmap: JSON.stringify({ imports: importMap }, null, 2),
+      js: mainJs.join("\n"),
+    };
+  } catch (e) {
+    console.error("Unable to transpile Svelte code to JavaScript", e);
+    return { css: "", html: "", js: "", importmap: "" };
+  }
+}
+
 function transformBabel(code: string, plugins: string[]): string {
   try {
     return (
-      transform(code, {
+      babelTransform(code, {
         compact: false,
         filename: "script.js",
         plugins: [...plugins],
@@ -338,8 +521,14 @@ export function evaluateJavaScript(
   return results;
 }
 
-export async function loadCode(type: CodeType, path: string, extension: string = type): Promise<string> {
-  const resolvedPath = path.indexOf(`.${extension}`) ? path : `${path}.${extension}`;
+export async function loadCode(
+  type: CodeType,
+  path: string,
+  extension: string = type,
+): Promise<string> {
+  const resolvedPath = path.endsWith(`.${extension}`)
+    ? path
+    : `${path}.${extension}`;
   try {
     const code = await import(
       `!!raw-loader!../../static/snippets/${type}/${resolvedPath}`

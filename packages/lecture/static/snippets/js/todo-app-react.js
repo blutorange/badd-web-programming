@@ -65,12 +65,14 @@ function TodoApp() {
         onItemRemove={removeItem}
         onToggleAll={toggleAll}
       />
-      <TodoFooter
-        filter={filter}
-        activeCount={activeCount}
-        onFilterChange={changeFilter}
-        onRemoveCompleted={removeCompleted}
-      />
+      {items.length > 0 && (
+        <TodoFooter
+          filter={filter}
+          activeCount={activeCount}
+          onFilterChange={changeFilter}
+          onRemoveCompleted={removeCompleted}
+        />
+      )}
     </section>
   );
 }

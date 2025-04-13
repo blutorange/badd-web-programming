@@ -6,9 +6,202 @@ description: Reduzierung des Overhead des Virtual DOM mit Svelte
 ---
 
 import HtmlSnippet from "@site/src/components/HtmlSnippet";
+import Link from "@docusaurus/Link";
 
 # Abschnitt 4 - Performance (Svelte)
 
+In den letzten beiden Abschnitten wollen wir uns noch 2 Möglichkeiten für die
+Entwicklung von UIs anschauen, die erst kürzlich entwickelt wurden. Wir beginnen
+mit [Svelte](https://svelte.dev/).
+
+:::info
+Aufgrund seiner technischen Struktur ist Svelte in unserer Sandbox aktuell nicht
+ganz so einfach zu verwenden. Daher sei an dieser Stelle auch auf den offiziellen
+[Svelte Playground](https://svelte.dev/playground/hello-world?version=5.26.2)
+verwiesen.
+
+<details>
+Um Svelte in unserer Sandbox zu verwenden, orientiert sich am besten an den
+Code-Beispielen unten. Kurz zusammengefasst:
+
+- Ganz am Anfang des JavaScript muss das magische Wort `"svelte";` stehen.
+- Danach müssen in jedem Teil (HTML, CSS, JavaScript) eine oder mehrere Dateien
+  definiert werden, z.B.
+
+```js
+// file: Counter.js
+// ...
+
+// file: App.js
+import Counter from "@sandbox/Counter.js"
+// ...
+```
+
+Es muss mindestens die Datei `App.js` geben, welche den Einstiegspunkt darstellt.
+
+Imports im JavaScript von anderen Dateien müssen dem Format
+`import ... from "@sandbox/filename.js"` entsprechen.
+</details>
+:::
+
+
 ## Probleme React
 
+Ein Problem von React, was wir bereits besprochen hatten: durch den Virtual DOM
+entsteht Overhead, der die Performance beeinflussen kann.
+
+Ein weiteres Problem, was wir noch nicht besprochen hatten: React ist nur
+für HTML und JavaScript zuständig, nicht für CSS. CSS kann natürlich unabhängig
+von React geschrieben werden &mdash; denn am Ende entsteht bei React auch nur
+HTML, was wir per CSS stylen können.
+
+Es besteht dann aber die Gefahr, dass verschiedene CSS-Regeln in Konflikte geraten.
+Wir können versuchen, diese Konflikte zu vermeiden, indem wir etwa Namenschemata
+wie das bereits besprochene [BEM](https://getbem.com/) verwenden. Wäre es aber nicht
+schön, wenn ein UI-Framework hier Lösungsansätze bieten könnte? 
+
 ## Svelte
+
+Svelte ist in vieler Hinsicht ähnlich zu React und Knockout. Wir wollen uns hier
+daher auf einen kurzen Überblick beschränken.
+
+### Grundstruktur
+
+Im Gegensatz zu React verwendet Svelte separate Teile für HTML, CSS und JavaScript.
+Ein einfacher Button mit einem Zähler sind in Svelte wie folgt aus: 
+
+<HtmlSnippet path="svelte-counter" type="html" tabs="html,css,js" />
+
+:::info
+In unserer Sandbox sind HTML, CSS und JavaScript 3 getrennten Tabs. Normalerweise
+verwendet Svelte Dateien mit der Endung `.svelte`, diese enthalten HTML, CSS
+und JavaScript in der folgenden Form:
+
+```
+<script>...</script>
+<style>...</style>
+<div><button>...</button></div>
+```
+:::
+
+Genauso wie bei React sehen wir im HTML, dass Variablen aus dem JavaScript
+verwendet werden mittels geschweiften Klammern. Das HTML kann der Browser nicht
+direkt interpretieren, Svelte erzeugt daraus erst HTML für den Browser.
+
+Ebenso wie bei React definieren wir im HTML einen Event-Listener auf das
+`click`-Ereignis.
+
+Der Event-Listener selber befindet sich im JavaScript. Im Vergleich zu React
+sehen wir dort folgendes:
+
+```js
+// react: const [count, setCount] = useState(0);
+let count = $state(0);
+
+function increment() {
+  // react: setState(count + 1);
+  count = count + 1;
+}
+```
+
+### Reaktivität
+
+Es wird nur eine Variable neu zugewiesen. Bei React informieren das Framework
+über den Aufruf der `setCount`-Funktion, dass sich etwas geändert hat? Wie kann
+Svelte wissen, dass eine Variable neu zugewiesen wurde und daher das HTML aktualisiert
+werden muss? Die Variable `count` ist auch kein speziellen Objekt, was wir prüfen,
+können in dem wir uns den Wert per `console.log(typeof count)` ausgeben: es ist
+einfach nur eine `number`.
+
+Die Antwort liegt im Svelte-Compiler. Jede `*.svelte`-Datei wird von Svelte analysiert
+und entsprechend vorbereitet. Mittels `count = $state(0)` informieren wir
+Svelte, dass `count` eine reaktive Variable ist, deren Wert Auswirkung auf die UI hat.
+
+Ebenso analysiert Svelte auch das HTML und prüft, wo die Variable `count` verwendet
+wird. Durch dieses Vorgehen ist Svelte in der Lage, im Voraus zu bestimmen, welche
+Teile des HTML angepasst werden müssen, wenn sich die Variable `count` ändert
+(nämlich der `textContent` des Buttons).
+
+In anderen Worten: Svelte benötigt keinen Virtual DOM mehr! Es kann bei Änderungen
+direkt den DOM im Browser aktualisieren und muss keine Differenz zwischen dem
+Virtual DOM und dem Browser-DOM mehr berechnen.
+
+Bei Interesse ist hier das JavaScript der `Counter.js` aus obigen Beispiel, nachdem
+der Svelte-Compiler es analysiert und umgewandelt hat: 
+
+<details>
+```js
+import 'svelte/internal/disclose-version';
+import * as $ from 'svelte/internal/client';
+
+function increment(_, count) {
+	$.set(count, $.get(count) + 1);
+}
+
+var root = $.template(`<button class="svelte-1l68e0"> </button>`);
+
+export default function Counter($$anchor) {
+	let count = $.state(0);
+	var button = root();
+
+	button.__click = [increment, count];
+
+	var text = $.child(button);
+
+	$.reset(button);
+
+	$.template_effect(() => $.set_text(text, `Clicked ${$.get(count) ?? ''}
+	${($.get(count) === 1 ? 'time' : 'times') ?? ''}`));
+
+	$.append($$anchor, button);
+}
+
+$.delegate(['click']);
+```
+</details>
+
+### CSS-Scoping
+
+Ein weiterer angenehmer Nebeneffekt, den wir aus der Tatsache erhalten, dass
+Svelte die `*.svelte`-Dateien genauer analysiert: Scoping von CSS.
+
+Svelte stellt sicher, dass unser CSS nur Auswirkung auf die aktuelle Komponente
+haben kann, für die es gedacht war. Das ereicht Svelte auf einfache Weise.
+Schauen wir nochmal in das CSS und JavaScript, welches der Svelte-Compiler erzeugt:
+
+```js
+var root = $.template(`<button class="svelte-1l68e0"> </button>`);
+```
+
+```css
+button.svelte-1l68e0 {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 0.5em 2em;
+  border-radius: 10px;
+}
+```
+
+Svelte generiert einfach unvorhersehbare CSS-Klassen und schreibt diese mit
+an das HTML und CSS. Auf diese Weise ist sichergestellt, dass die entsprechende
+CSS-Regel nicht auf andere Elemente im DOM Auswirkung hat.
+
+## Ergebnisse
+
+Bevor wir uns Svelte im Vergleich anschauen, hier unser TODO-App-Beispiel mit Svelte:
+
+<p>
+  <Link to="/sandbox?snippet=todo-app-svelte&tab=js" target="_blank" rel="noopener noreferrer">Playground &mdash; TODO-App (Svelte)</Link>
+</p>
+
+
+Trennung von HTML und JS kann auch gut sein fuer uebersichtlichkeit
+
+Erzwingt Struktur mit 1 Komponente pro Datei, react ist das best practice, aber nicht zwang
+
+DeepState erkennt aenderungen, einfacher zu schreiben
+
+Bloecke wie `{#if}{/if}` und `{#each}{/each}` erleichtern lesbarkeit
+
+dependencies nicht manuell angeben
