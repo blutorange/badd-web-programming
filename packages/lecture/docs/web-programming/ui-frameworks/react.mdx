@@ -51,19 +51,66 @@ React bietet hier eine Lösung. Zudem gestaltet es React auch einfacher,
 kleine, gekappselte, wiederverwendbare Komponenten zu schreiben, wie wir in diesem
 Abschnitt sehen werden. 
 
-## React
+## Grundkonzept von React
 
 :::warning
 Um in der Sandbox mit React zu arbeiten, muss ganz am Anfang des Codes
 `babel "jsx";` stehen.
 :::
 
+### Komponenten
+
+In React ist alles eine sogenannte Komponente. Eine Komponente ist ein eigenständiger
+Bestandteile einer Webseite, zum Beispiel Button, Datumswähler,
+Navigationsleiste oder Footer-Leiste. Manchmal besteht eine Komponente nur aus
+1 HTML-Element, manchmal aus mehreren.
+
+Jede Komponente in React ist eine JavaScript-Funktion, welche basierend auf den
+Daten das entsprechende HTML zurückgibt.
+
+<HtmlSnippet path="react-component" toggleable type="js" />
+
+Wir erkennen an diesem Beispiel einige Merkmale von React.
+
+Zum einen steht im HTML so gut wie kein Inhalt, sondern lediglich ein `<div>`
+React generiert das HTML komplett per JavaScript und schreibt dieses in das `<div>`.
+Dieses Vorgehen nennt man clientseitiges Rendering, der Server liefert also kein
+HTML mehr aus, sondern nur noch JavaScript und CSS.
+
+Im JavaScript selber sehen wir die einzelnen Funktionen für die verschiedenen
+Komponenten &mdash; Header, Navigation, QuickInfo, MainContent und Footer. Innerhalb
+dieser Funktionen steht das entsprechende HTML für die jeweilige Komponente.
+
+:::info
+HTML direkt im JavaScript zu schreiben ist kein Bestandteil der Sprache JavaScript.
+Es handelt sich hierbei um eine Erweiterung von JavaScript, die [JSX](https://react.dev/learn/writing-markup-with-jsx)
+(JavaScript XML) heißt.
+
+JavaScript-Dateien, die JSX verwenden, können nicht
+direkt vom Browser ausgeführt werden, sondern müssen erst in normales JavaScript
+umgewandelt werden ([Transpilation](https://en.wikipedia.org/wiki/Source-to-source_compiler)).
+
+JSX wurde ursprünglich für React entwickelt. Inzwischen hat es sich aber als praktische
+Erweiterung herausgestellt und wird auch von [anderen UI-Bibliotheken](https://vuejs.org/guide/extras/render-function#jsx-tsx)
+verwendet. Es gibt sogar Versuche, JSX außerhalb der UI-Entwicklung als generische
+[DSL](https://en.wikipedia.org/wiki/Domain-specific_language) für Baumstrukturen zu verwenden ([Beispiel](https://github.com/achrafl0/jsqx)).
+:::
+
+Die Grundidee von React steckt im Namen -- reaktiv. In dieser Hinsicht ist React
+analog zu Knockout.js. Die UI reagiert auf Änderungen im Datenmodell und passt
+sich automatisch entsprechend an.
+
+<HtmlSnippet path="react-reactive" type="js" />
+
+## Ergebnisse
+
 <p>
   <Link to="/sandbox?snippet=todo-app-react&tab=js" target="_blank" rel="noopener noreferrer">Playground &mdash; TODO-App (React)</Link>
 </p>
 
-## Ergebnisse
 
 komponenten
 type safety
 vdom
+
+clientseitiges rendering, probleme, seo, vorteile
