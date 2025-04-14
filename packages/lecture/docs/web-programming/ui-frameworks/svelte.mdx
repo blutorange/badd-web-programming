@@ -195,13 +195,100 @@ Bevor wir uns Svelte im Vergleich anschauen, hier unser TODO-App-Beispiel mit Sv
   <Link to="/sandbox?snippet=todo-app-svelte&tab=js" target="_blank" rel="noopener noreferrer">Playground &mdash; TODO-App (Svelte)</Link>
 </p>
 
+Vergleichen wir die Lösung in Svelte mit React, fällt noch einmal auf, wie sehr
+die beiden UI-Frameworks sich ähneln, beispielsweise bei `useState / $state`
+und `useEffect / $effect`.
 
-Trennung von HTML und JS kann auch gut sein fuer uebersichtlichkeit
+Die klare Trennung von Svelte zwischen HTML und JavaScript hat mir persönlich
+besser gefallen. Das mag subjektiv sein, war aber mein Eindruck beim schreiben
+der TODO-App. In React werden Komponenten schneller unübersichtlich, wenn diese
+sowohl HTML als auch JavaScript vermischen.
 
-Erzwingt Struktur mit 1 Komponente pro Datei, react ist das best practice, aber nicht zwang
+Bezüglich der Übersicht des Codes selber erzwingt Svelte auch die strikte
+Trennung von Komponenten: jede Datei kann nur eine einzelne Komponente
+enthalten. Während es in React zwar auch empfehlenswert ist, verschiedene
+Dateien für verschiedene Komponenten zu verwenden, ist das nur eine Empfehlung.
+In einem großen Team kann es so eher passieren, dass der Code unübersichtlich wird.
 
-DeepState erkennt aenderungen, einfacher zu schreiben
+Ein weiterer Unterschied bezüglich der Lesbarkeit besteht darin, dass bei
+Svelte das Aktualisieren der Daten einfacher ist. Wollen wir etwa ein neues
+Element zu einem Array hinzufügen, müssen wir bei React immer neues Array erzeugen,
+sonst erkennt React die Änderung nicht.
 
-Bloecke wie `{#if}{/if}` und `{#each}{/each}` erleichtern lesbarkeit
+```js
+setItems([...items, {id: "10", name: "Item 10"}]);
+```
 
-dependencies nicht manuell angeben
+Bei Svelte können wir auch ein neues Array erzeugen, wenn wir möchten. Es ist
+aber auch nicht falsch, ein neues Element direkt in das Array zu pushen.
+
+```js
+items.push({id: "10", name: "Item 10"});
+```
+
+Ebenso können wir in Svelte auch direkt ein Element im Array modifizieren, was
+bei React nicht erlaubt ist.
+
+```js
+items[2].name = "New name";
+```
+
+Durch diese Möglichkeiten sind uns keine Grenzen gesetzt beim Schreiben von Code,
+sondern wir können Änderungen an den Daten so implementieren, wie wir es am
+einfachsten und lesbarsten finden. Zudem reduziert das auch Fehler &mdash; es
+ist schwerer, Code zu schreiben, der nicht funktionieren wird.
+
+:::info
+Technisch verwendet Svelte derzeit sogenannte [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy),
+um zu überwachen, wie und wann ein Objekt oder Array sich verändert. 
+:::
+
+Eine weiterer Vorteil für die Lesbarkeit des Codes bietet Svelte bei bedingten
+und wiederholten Elementen. Erinnern wir zurück an React, hier habeb wir
+reine JavaScript-Konstrukte verwendet.
+
+```jsx
+{ items.length > 0 ? <TodoFooter /> : "Keine TODOs"}
+{ items.map(item => <TodoItem key={item.id} item={item} />) }
+```
+
+Bei Svelte steht uns separate Syntax zur Verfügung, die mehr an `if-else`  und
+`for ... of ...` erinnert.
+
+```jsx
+{#if items.length > 0}
+  <TodoFooter />
+{:else}
+  "Keine TODOs"
+{/if}
+
+{#each items as item (item.id)}
+  <TodoItem item={item}/>
+{/each}
+```
+
+Das ist etwas länger als einfache Fälle bei React, aus meiner Sicht aber klarer
+strukturierter und einfach zu schreiben und zu lesen. 
+
+Noch ein weitere Vorteil besteht in der Behandlung der Abhängigkeiten. In React
+ist es erforderlich, etwa beim [useEffect](https://react.dev/reference/react/useEffect)-Hook
+manuell anzugeben, von welchen Werten dieser abhängt. Ändern sich einer dieser
+Werte, wird der Effekt erneut ausgeführt. Aufgrund der Tatsache, dass Svelte
+die `*.svelte`-Dateien mit den Komponenten einer gründlicheren Analyse unterzieht,
+ist das bei Svelte nicht erforderlich. Svelte erkennt automatisch, von welchen
+Werte ein [$effect](https://svelte.dev/docs/svelte/$effect) abhängt.  
+
+Schließlich verbessert Svelte auch die Performance, indem es wie besprochen
+keinen Virtual DOM mehr benötigt, sondern Änderungen direkt auf dem DOM ausführt.
+Hier sei aber nochmal ausdrücklich darauf hingewiesen, dass Performance immer
+praktisch getestet werden muss. Abhängig vom Anwendungsfall kann der Unterschied
+in der Performance auch gering oder nicht vorhanden sein. [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark?tab=readme-ov-file)
+ist ein Benchmark, wo Svelte etwas besser als React abschneidet. Der dort getestete
+Testfall muss aber nicht zwingend Aussage über echte Fälle in der Praxis liefern.
+
+Bezüglich der Performance sollten wir noch bedenken, dass bei Svelte weniger
+manuelle Optimierungen notwendig sind. Bei React gibt es verschiedene Hooks
+wie [useMemo](https://react.dev/reference/react/useMemo) oder
+[useCallback](https://react.dev/reference/react/useCallback), welche im Wesentlichen
+nur dafür gedacht sind, Probleme mit dem Render-Modell und Virtul DOM zu beheben.
+Als Entwickler müssen wir diese aber manuell und mit Bedacht einsetzen.
