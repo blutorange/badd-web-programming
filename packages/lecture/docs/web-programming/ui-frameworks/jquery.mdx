@@ -52,7 +52,7 @@ verschieden UI-Bibliotheken und Frameworks umgesetzt wurde.
 ## Probleme DOM API
 
 Um die Probleme mit der DOM API beim Erstellen von Webapp zu sehen, implementieren
-wir die TODO-Ap beispielshaft mit der nativen DOM API (gerne auch mal selber
+wir die TODO-Ap beispielhaft mit der nativen DOM API (gerne auch mal selber
 versuchen!):
 
 <p>
@@ -74,9 +74,9 @@ notwendig ist und aus welchem Grund.
 Wer sich selber an dieser Übung versucht hat, wird bereits einige Probleme erkannt
 haben. Es gibt mehrere Probleme, von den jQuery einige löst.
 
-### Kompatiblität mit älteren Browser
+### Kompatibilität mit älteren Browser
 
-Wir haben in der TODO-App Gebrauch von verschiedenen DOM-API-Funtionen gemacht,
+Wir haben in der TODO-App Gebrauch von verschiedenen DOM-API-Funktionen gemacht,
 wie [classList](https://developer.mozilla.org/en-US/docs/Web/API/Element/classList),
 [closest](https://developer.mozilla.org/en-US/docs/Web/API/Element/closest) oder
 [iterierbare NodeList](https://developer.mozilla.org/en-US/docs/Web/API/NodeList#browser_compatibility).
@@ -143,7 +143,7 @@ Wir wollen uns nun noch einen kurzen Überblick über die wesentliche Funktionsw
 von jQuery verschaffen. jQuery hat eine sehr gute Dokumentation, die wir
 unter [jQuery API](https://api.jquery.com/) einsehen können.
 
-jQuery lässt sich am besten als Hilfsbibliohek beschreiben, welche neben
+jQuery lässt sich am besten als Hilfsbibliothek beschreiben, welche neben
 DOM-API-Funktionalitäten auch noch weitere Hilfen für die tägliche Programmierung
 bereitstellt. Aufgebaut ist jQuery aus mehreren Teilen, die sich kurz wie
 folgt zusammenfassen lassen.
@@ -174,7 +174,7 @@ wenn einmal kein Element gefunden wird. Bei der DOM-API kommt im dem Fall
 $(".missing").text();
 
 // Schlecht, führt zu Laufzeitfehler
-document.querySelector(".mising").textContent;
+document.querySelector(".missing").textContent;
 ```
 
 Auf die gleiche Weise können wir auch neue Elemente erstellen, in dem wir `$(...)`
@@ -211,7 +211,7 @@ DOM-API, hier brauchten wir `element.addEventListener("event", callback)`.
 
 <HtmlSnippet path="jquery-events" type="js"/>
 
-Im obigen Beispiel reagieren wir auf Änderungen im Eingabfeld und geben
+Im obigen Beispiel reagieren wir auf Änderungen im Eingabefeld und geben
 den aktuellen Wert darunter aus.
 
 Was wir an diesem Beispiel auch erkennen: jQuery macht starken Gebrauch vom
@@ -279,7 +279,7 @@ nur per JavaScript umsetzen können. Oft können wir aber Animation auch nur mit
 CSS ([transition](https://developer.mozilla.org/en-US/docs/Web/CSS/transition) und
 [@keyframes](https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes))
 umsetzen. Wo möglich, sollten wir auf JavaScript-basierte Animationen verzichten:
-das ist weniger fehleranfällig, performanter und sieht potentiell auch flüßiger
+das ist weniger fehleranfällig, performanter und sieht potentiell auch flüssiger
 aus, da der Browser die Animation besser timen kann:
 
 <HtmlSnippet path="jquery-animate-css" type="css"/>
@@ -315,14 +315,14 @@ um.
 </p>
 
 Einige Stellen wurden durch jQuery kürzer. Gerade wenn wir Operationen mit
-mehreren  Elementen durchführen, können wir das mit jQuery kompatker schreiben:
+mehreren  Elementen durchführen, können wir das mit jQuery kompakter schreiben:
 
 ```js
 // vorher 
 for (const item of todoList.querySelectorAll(".todo-list-item")) {
   item.classList.remove("editing");
 
-// NACHER
+// nachher
 todoList.find(".todo-list-item").removeClass("editing");
 ```
 
@@ -334,7 +334,7 @@ todoList.find(".toggle").filter(":checked").closest(".todo-list-item").remove()`
 ```
 
 Wir sehen aber auch, dass wir manchmal Elemente extra noch einmal in jQuery
-wrappen müssen (`$(e.target)`), wo wir vorher direkt auf dem Element arbeiten
+kappseln müssen (`$(e.target)`), wo wir vorher direkt auf dem Element arbeiten
 konnten.
 
 Insgesamt sind die Verbesserungen durch jQuery aber gering. Die Struktur des Codes
@@ -370,7 +370,7 @@ der gleichen Seite:
 Ein weiterer interessanter Datenpunkt ist das [2024 Developer Survey](https://survey.stackoverflow.co/2024/technology)
 von Stack Overflow. Stack Overflow ist ein beliebte Seite, wo Fragen von Programmierern
 gestellt und beantwortet werden. In dieser Umfrage wurden Teilnehmer von Stack Overflow
-gefragt, mit welchen Technologien sie im letzten Jahr gerarbeitet haben und im
+gefragt, mit welchen Technologien sie im letzten Jahr gearbeitet haben und im
 nächsten Jahr arbeiten werden. Hier ist [React auf Platz 2 mit knapp 40% und
 jQuery auf Platz 3 mit 21%.](https://survey.stackoverflow.co/2024/technology#1-web-frameworks-and-technologies)
 

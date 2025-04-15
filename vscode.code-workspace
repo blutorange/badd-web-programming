@@ -49,6 +49,15 @@
 		"node_modules": true
 	  },
     "typescript.tsdk": ".yarn/sdks/typescript/lib",
-    "typescript.enablePromptUseWorkspaceTsdk": true,  
+		"typescript.enablePromptUseWorkspaceTsdk": true,
+		"cSpell.language": "en,de-DE",
+		"cSpell.words": [
+			"angehakt",
+			"kappseln",
+			"MVVM",
+			"VDOM",
+			"Verbosität"
+		],
+		
   }
 }

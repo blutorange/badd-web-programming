@@ -35,7 +35,7 @@ ersten Bug.
 
 Konkret bei der TODO-App hatten wir einen Zähler, der die Anzahl der erledigten
 TODOs zählt. Immer, wenn sich die Anzahl der TODOs ändert (neues TODO, TODO
-gelöscht, alle gelöscht) oder ein TODO erledigt wird, mustten wir manuell
+gelöscht, alle gelöscht) oder ein TODO erledigt wird, mussten wir manuell
 daran denken, den Zähler neu zu berechnen und zu aktualisieren.
 
 Ein anderes Beispiel ist die Filterung. Bei jeder Änderung der TODOs mussten wir
@@ -49,7 +49,7 @@ Das Modell für unsere TODO-Anwendung ist eine Liste von TODOs, die einen Text
 und einen Status (offen, abgeschlossen) haben. Wir hatten aber den DOM als Modell
 verwendet. Falls wir also wissen wollten, welche TODOs schon abgeschlossen waren,
 mussten wir die entsprechenden Elemente selektieren und prüfen, ob die Checkbox
-angehakt war.
+angehabt war.
 
 Das stellt auch deshalb noch ein Problem dar, weil wir uns so sehr abhängig von
 der konkreten HTML-Struktur machen. Sollten wir uns später entschließen, dass
@@ -208,7 +208,7 @@ beim Schreiben des Codes viele Teile "einfach funktioniert", während das bei
 jQuery und der nativen DOM-API nicht der Fall war.
 
 Im obigen Teil, als wir uns Knockout angeschaut haben, sahen wir schon, wie
-es die Probleme der direkten DOM-Manipualtion löst. Um es nochmal zusammenzufassen,
+es die Probleme der direkten DOM-Manipulation löst. Um es nochmal zusammenzufassen,
 sind die wesentlichen Punkte:
 
 * Nutzung eines Template-Mechanismus (View)

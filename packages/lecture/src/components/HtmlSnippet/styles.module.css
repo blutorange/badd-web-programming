@@ -7,7 +7,7 @@
 }
 
 .summary {
-  font-size: 15.2px;
+  font-size: 15px;
   font-weight: 500;
   padding: 12px 16px;
   background-color: #f6f8fa;
@@ -27,6 +27,8 @@
 
 .trySandbox {
   right: 0;
+  font-size: 16px;
+  font-weight: normal;
 }
 
 .execute {

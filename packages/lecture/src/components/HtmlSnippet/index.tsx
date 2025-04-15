@@ -24,6 +24,7 @@ export default function HtmlSnippet(props: HtmlSnippetProps): ReactNode {
 function Static(props: HtmlSnippetProps): ReactNode {
   return (
     <div className={`${styles.htmlSnippet} ${styles.htmlSnippetContainer}`}>
+      <HtmlSnippetLink {...props} />
       <HtmlSnippetContent {...props} />
     </div>
   );
@@ -32,11 +33,27 @@ function Static(props: HtmlSnippetProps): ReactNode {
 function Toggleable(props: HtmlSnippetProps): ReactNode {
   return (
     <details className={styles.htmlSnippetContainer}>
-      <summary className={styles.summary}>{props.path}</summary>
+      <summary className={styles.summary}>
+        <HtmlSnippetLink {...props} />
+        <span>{props.path}</span>
+      </summary>
       <div className={styles.htmlSnippet}>
         <HtmlSnippetContent {...props} title="" />
       </div>
     </details>
+  );
+}
+
+function HtmlSnippetLink(props: HtmlSnippetProps): ReactNode {
+  return (
+    <Link
+      to={`/sandbox?snippet=${encodeURIComponent(props.path)}&tab=${props.type ?? "html"}`}
+      className={`${styles.trySandbox} ${styles.headerButton}`}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      In Sandbox öffnen
+    </Link>
   );
 }
 
@@ -71,14 +88,6 @@ function HtmlSnippetContent(props: HtmlSnippetProps): ReactNode {
   const tabs = props.tabs?.split(",") ?? [];
   return (
     <>
-      <Link
-        to={`/sandbox?snippet=${encodeURIComponent(props.path)}&tab=${props.type ?? "html"}`}
-        className={`${styles.trySandbox} ${styles.headerButton}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        In Sandbox öffnen
-      </Link>
       {props.tabs ? (
         <TabView
           className="html-snippet__tab-view"

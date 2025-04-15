@@ -56,7 +56,7 @@ von React geschrieben werden &mdash; denn am Ende entsteht bei React auch nur
 HTML, was wir per CSS stylen können.
 
 Es besteht dann aber die Gefahr, dass verschiedene CSS-Regeln in Konflikte geraten.
-Wir können versuchen, diese Konflikte zu vermeiden, indem wir etwa Namenschemata
+Wir können versuchen, diese Konflikte zu vermeiden, indem wir etwa Namenskonventionen
 wie das bereits besprochene [BEM](https://getbem.com/) verwenden. Wäre es aber nicht
 schön, wenn ein UI-Framework hier Lösungsansätze bieten könnte? 
 
@@ -166,7 +166,7 @@ Ein weiterer angenehmer Nebeneffekt, den wir aus der Tatsache erhalten, dass
 Svelte die `*.svelte`-Dateien genauer analysiert: Scoping von CSS.
 
 Svelte stellt sicher, dass unser CSS nur Auswirkung auf die aktuelle Komponente
-haben kann, für die es gedacht war. Das ereicht Svelte auf einfache Weise.
+haben kann, für die es gedacht war. Das erreicht Svelte auf einfache Weise.
 Schauen wir nochmal in das CSS und JavaScript, welches der Svelte-Compiler erzeugt:
 
 ```js
@@ -235,8 +235,8 @@ items[2].name = "New name";
 
 Durch diese Möglichkeiten sind uns keine Grenzen gesetzt beim Schreiben von Code,
 sondern wir können Änderungen an den Daten so implementieren, wie wir es am
-einfachsten und lesbarsten finden. Zudem reduziert das auch Fehler &mdash; es
-ist schwerer, Code zu schreiben, der nicht funktionieren wird.
+einfachsten und am leichtesten zu lesen finden. Zudem reduziert das auch Fehler
+&mdash; es ist schwerer, Code zu schreiben, der nicht funktionieren wird.
 
 :::info
 Technisch verwendet Svelte derzeit sogenannte [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy),
@@ -244,7 +244,7 @@ um zu überwachen, wie und wann ein Objekt oder Array sich verändert.
 :::
 
 Eine weiterer Vorteil für die Lesbarkeit des Codes bietet Svelte bei bedingten
-und wiederholten Elementen. Erinnern wir zurück an React, hier habeb wir
+und wiederholten Elementen. Erinnern wir zurück an React, hier haben wir
 reine JavaScript-Konstrukte verwendet.
 
 ```jsx
@@ -290,5 +290,5 @@ Bezüglich der Performance sollten wir noch bedenken, dass bei Svelte weniger
 manuelle Optimierungen notwendig sind. Bei React gibt es verschiedene Hooks
 wie [useMemo](https://react.dev/reference/react/useMemo) oder
 [useCallback](https://react.dev/reference/react/useCallback), welche im Wesentlichen
-nur dafür gedacht sind, Probleme mit dem Render-Modell und Virtul DOM zu beheben.
+nur dafür gedacht sind, Probleme mit dem Render-Modell und Virtual DOM zu beheben.
 Als Entwickler müssen wir diese aber manuell und mit Bedacht einsetzen.

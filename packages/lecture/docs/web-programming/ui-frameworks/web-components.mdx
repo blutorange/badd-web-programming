@@ -6,9 +6,244 @@ description: Native Komponenten für das Web
 ---
 
 import HtmlSnippet from "@site/src/components/HtmlSnippet";
+import Link from "@docusaurus/Link";
 
-# Abschnitt 5 - Standardisierung (Native Web Components)
+# Abschnitt 5 - Standardisierung (Native Komponenten)
 
-UI Frameworks hoeren irgendwann auf zu existieren, schlecht fuer laengere Projekte
+Was ist den meisten UI-Bibliotheken und UI-Frameworks gemeinsam, die wir bisher
+gesehen haben? Alle basieren auf Komponenten, welcher wiederum zu größeren
+Komponenten zusammengesetzt werden und so eine größeren Webseite oder Webapp
+bilden.
 
-Was ist allen gemeinsam? Komponentisierung. Inzw. hat HTML native Kompnenten.
+Bibliotheken und Frameworks sind keine schlechte Idee, bergen aber immer die
+Gefahr, dass die Bibliothek oder das Framework irgendwann einmal nicht mehr
+weiterentwickelt wird. Falls wir auf längere Zeit entwickeln, sollten wir uns
+auch einmal die Frage nach Standardisierung stellen. Wäre es nicht schön, wenn
+es in einem Standard wie der DOM API eine Möglichkeit gäbe, Komponenten zu erstellen?
+
+Diese Möglichkeit gibt es nun schon seit [einiger Zeit](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry#browser_compatibility)
+und nennt sich [Custom Elements](https://html.spec.whatwg.org/multipage/custom-elements.html)
+oder auch Web Components.
+
+## Überblick Custom Elements
+
+### Registrierung
+
+Ein [Custom Elements](https://html.spec.whatwg.org/multipage/custom-elements.html)
+ist eine HTML-Element wie `div` oder `button`, dass wir selber geschrieben haben.
+Hier ist ein ganz einfaches Beispiel für ein `<hello-world>`-Element, welches
+nur den Text `Hallo Welt!` ausgibt:
+
+<HtmlSnippet path="custom-components-basic" type="js" tabs="html,js" />
+
+Wir sehen, im HTML können wir das Element wie jedes andere Element über
+`<hello-world>` verwenden.
+
+Im JavaScript müssen wir eine Klasse schreiben, welche `HTMLElement` (aus der DOM API)
+erbt. Schließlich müssen wir noch unsere Klasse mittels
+[customElements.define](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define)
+bekannt machen. Danach kann unser Element im HTML verwendet werden.
+
+### Constructor function
+
+Die Klasse für das Custom Element, welche von `HTMLElement`, kann einige spezielle
+Methoden und Felder besitzen, mit denen wir das Verhalten der Komponente steuern können.
+Im obigen Beispiel hatten wir schon die Methode `connectedCallback` gesehen, wo
+das Element mit dem Text `Hallo Welt!` erzeugt wurde.
+
+Alle verfügbaren Möglichkeiten finden sich [in der Spezifikation](https://html.spec.whatwg.org/multipage/custom-elements.html#custom-element-reactions).
+Hier einige der wichtigsten kurz zusammengefasst:
+
+- constructor &mdash; Wenn eine neue Instanz des Elements erstellt werden soll,
+  also z.B. jedesmal, wenn das Element im HTML verwendet wird. Hier können
+  wir Instanzfelder befüllen oder eine Shadow Root (weiter unten erklärt) erzeugen.
+- connectedCallback &mdash; Wenn das Element zum DOM hinzugefügt wurde. Hier
+  können wir etwa [Event Listener registrieren](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener).
+- connectedCallback &mdash; Wenn das Element vom DOM entfernt wurde. Hier
+  können wir etwa [Event Listener wieder entfernen](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener).
+- attributeChangedCallback &mdash; Wenn ein Attribut geändert wurde, etwa wenn
+  wir in den DevTools des Browser ein Attribut anklicken und dessen Wert ändern
+  oder die [DOM-API-Methode setAttribute](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute)
+  verwenden. Falls notwendig, müssen wir hier unser internes HTML aktualisieren.
+- observedAttributes &mdash; Ein statisches Feld mit den Namen der Attribute, für
+  die `attributeChangedCallback` aufgerufen werden soll.
+
+```js
+class HelloWorld extends HTMLElement {
+  static observedAttributes = ["value", "label"];
+  
+  constructor() {
+    console.log("Element wurde neu erstellt");
+  }
+
+  connectedCallback() {
+    console.log("Element wurde zum DOM hinzugefügt");
+  }
+
+  disconnectedCallback() {
+    console.log("Element wurde vom DOM entfernt");
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    // name ist entweder "value" oder "label", nie etwas anderes,
+    // da wir nur diese beiden Attribute in observedAttributes definiert haben.
+    console.log(`Attribut ${name} wurde geändert von ${oldValue} zu ${newValue});
+  }
+}
+```
+
+Ein Beispiel für einen Zähler mit diesen Methoden findet sich weiter unten.
+
+### Weitere Möglichkeiten
+
+Bisher haben wir gesehen, wie Custom Elements definiert und registriert werden können.
+FÜr die praktische Nutzung stellt der Standard noch weitere Möglichkeiten zur Verfügung,
+die zwar oft im Zusammenhang mit Custom Elements verwendet werden, aber unabhängig
+davon sind und prinzipiell auch ohne Custom Elements verwendet werden könnten.
+
+__Shadow DOM__
+
+Im Kapitel zu HTML hatten wir bereits den Shadow DOM kennengelernt. Erinnern
+wir uns: der Shadow DOM war eine Möglichkeit, das interne HTML
+abzutrennen vom Rest der Webseite. In unserem einfachen Beispiel oben hatten
+wir direkt ein Kindelement erzeugt, in der Praxis ist es aber üblich, das interne
+HTML in den Shadow DOM einzuhängen.
+
+Den Shadow DOM können wir auf ganz normale Weise mit Custom Elements nutzen,
+indem wir per [attachShadow](https://developer.mozilla.org/en-US/docs/Web/API/Element/attachShadow)
+eine [Shadow Root](https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot) erzeugen
+und dort dann unsere Kinderelemente einhängen. Das sieht dann wie folgt aus:
+
+<HtmlSnippet path="custom-components-shadow" type="js" tabs="html,js" />
+
+Im obigen Beispiel haben wir noch die Methode [attachInternals](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/attachInternals)
+verwendet und in einem Instanzfeld gespeichert. Darüber können wir später auf
+die erzeugte ShadowRoot wieder zugreifen.
+
+__Slot__
+
+Bisher besteht unser `<hello-world>` nur aus einem statischen Text. Allgemein
+können HTML-Elemente auch Kinder haben. Es stellt sich dann die Frage, wo
+diese Kinderelement in unserem Custom Element dargestellt werden.
+[Slots](https://developer.mozilla.org/en-US/docs/Web/API/HTMLSlotElement)
+sind eine Möglichkeit, mit der wir eine oder mehrere Stellen in unserem Custom Element
+definieren können, wo Nutzer unseres Custom Element beliebige Kinder-Elemente
+einfügen können.
+
+Als Beispiel passen wir unser `<hello-world>` so an, dass es 3 Parts gibt, 1
+Part für den Inhalt am Anfang, 1 Part für den Inhalt zwischen `Hallo` und `Welt`;
+und einen Part für den Inhalt am Ende:
+
+<HtmlSnippet path="custom-components-slot" type="html" tabs="html,js" />
+
+Mittels dem Element `<slot name="before">` innerhalb unseres Custom Element haben
+wir den Slot definiert. Nutzer unseres Custom Element können dann ein beliebiges HTML-Element
+an dieser Stelle einfügen, indem sie das gewünschte HTML-Element als Kindelement
+zu `<hello-world>` hinzufügen und das Attribut `slot="before"` setzen. 
+
+__Part__
+
+Der Shadow-DOM kappselt den Inhalt unseres Custom Element von der darumliegenden
+Webseite ab. Dazu gehört auch, dass kein CSS der Webseite auf unser Custom Element
+Einfluß hat.
+
+Nun kann es aber sein, dass wir wollen, dass Nutzer bestimmte Teile unseres
+Custom Element per CSS stylen können. Mittels dem HTML-Attribut
+[part](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/part)
+können wir Teile unseres Custom Element definieren, auf die Nutzer per CSS
+zugreifen dürfen. Im CSS können wir den Part dann mit dem Pseudo-Element
+[::part(name)](https://developer.mozilla.org/en-US/docs/Web/CSS/::part) selektieren.
+
+<HtmlSnippet path="custom-components-part" type="css" tabs="html,js,css" />
+
+Im obigen Beispiel haben wir einen Part `exclamation` definiert, der nur das
+Ausrufezeichen am Ende von `Hallo Welt!` enthält. Diesen können wir dann mittels
+CSS stylen.
+
+:::info
+Das CSS der Webseite kann den Inhalt unseres Custom Element indirekt beeinflussen.
+Genauer gesagt verhält es sich so, dass CSS-Selektoren keine Elemente innerhalb
+des Shadow-DOM selektieren können.
+[Vererbbare CSS-Attribute](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascade/Inheritance)
+finden aber weiterhin Anwendung, auch über Shadow-DOM-Grenzen hinaus. Setzt die
+Webseite beispielsweise die Schriftgröße auf 20 und die Schriftarbe auf Rot, dann
+hat auch der Inhalt unseres Custom Element diese Schriftgröße und Schriftarbe, sofern
+wie diese nicht per CSS überschreiben.
+:::
+
+## Ergebnisse
+
+Im Folgenden verwenden wir den Begriff `Web Components` als Sammelbegriff für
+Custom Elements und weitere APIs wie Slots oder Shadow DOM, die damit im Zusammenhang
+stehen.
+
+Aus Gründen, die wir gleich noch diskutieren, verzichten wir an dieser Stelle
+auf eine Implementierung der TODO-App mittels Web Components. Stattdessen
+ist hier ein Beispiel für eine einfache Counter-Komponente,  bestehende aus
+der Ausgabe des aktuellen Zählerwerts, 2 Buttons zum Hoch- und Runterzählen sowie
+einem Slot zum Einfügen eigener Buttons:
+
+<p>
+  <Link to="/sandbox?snippet=custom-components-counter&tab=js" target="_blank" rel="noopener noreferrer">Playground &mdash; Counter</Link>
+</p>
+
+Ein weiteres Beispiel mit einem Emoji-Picker (Drittbibliothek, [Quellcode bei github](https://github.com/nolanlawson/emoji-picker-element/blob/cd2db5ab0de0a72518edcf5604ed50cf2269fdc3/src/picker/components/Picker/Picker.js#L33)):
+
+<p>
+  <Link to="/sandbox?snippet=custom-components-emoji-picker&tab=js" target="_blank" rel="noopener noreferrer">Playground &mdash; Emoji-Picker</Link>
+</p>
+
+
+Eine Implementierung der TODO-App mit Web Components findet sich bei Interesse auf
+[TodoMVC](https://todomvc.com/examples/web-components/dist/).
+
+Eine Sache, die uns sofort ins Auge springt, wenn wir unser den Zähler oder den Quellcode
+des Emoji-Pickers bzw. der TODO-App anschauen: Es ist sehr viel Code.
+
+Im Vergleich zu UI-Bibliotheken und Frameworks sind Web Components bewusst [low-level](https://en.wiktionary.org/wiki/low-level)
+gehalten. Ziel ist, alle Möglichkeiten bereit, die wir brauchen, um Funktionen
+theoretisch umzusetzen. Aber kein Ziel ist, es uns so einfach wie möglich zu machen.
+
+Auch Reaktivität besteht kaum bis gar nicht. Wir können höchstens (per `attributeChangedCallback`)
+auf Änderungen der Attribute reagieren. Aber wenn wir etwa intern ein Datemodell
+wie ein Array von TODO-Items haben, stellen uns Web Components keine Möglichkeiten
+zur Verfügung, bei Änderungen die UI zu aktualisieren. Falls wir reaktive Funktionen
+brauchen, müssen wir diese entweder selber implementieren oder eine Bibliothek
+verwenden.
+
+Das Ziel, einen Standard darzustellen, erfüllen Web Components offenbar, denn
+sie sind ja Bestandteil des HTML Living Standard. Ein Mantra des HTML-Standards
+ist ["Don't break the web"](https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Web_standards/The_web_standards_model#dont_break_the_web).
+Neue Funktionalitäten oder Erweiterungen bestehender Funktionalitäten werden
+immer so angelegt, dass alle bestehenden Webseiten immer noch so wie bisher
+funktionieren. In dieser Hinsicht können wir davon ausgehen, dass Web Components
+zukunftssicher sind. Web Components können daher ein geeignetes Mittel sein, wenn
+ein System entwickelt wird, was langfristig betreut werden muss. Auch sind Web Components
+sinnvoll, wenn es aus externen Gründen nicht möglich oder erwünscht ist, eine Drittbibliothek
+eines Drittanbieters einzusetzen; oder der Wunsch besteht, Framework-unabhängig zu sein.
+
+Auch bei kleinen, in sich geschlossene Widgets wie dem erwähnte Emoji-Picker oder
+einem [Star Rating](https://github.com/jameschristou/star-rating-web-component)
+können Web Components eine gute Wahl sein. Diese haben in der Regel keine
+Kinderelemente und können auch in UI-Frameworks wie Svelte oder [React](https://react.dev/reference/react-dom/components#custom-html-elements)
+verwenden werden (genauso wie native Elemente wie `<div>`).
+
+Für komplexe, interaktive Anwendungen sind Web Components aber eher nicht das
+Mittel der Wahl. Allgemein sollten wir immer anhand der Anforderungen prüfen,
+welche technischen Möglichkeiten in Frage kommen und ob wir Gründe finden,
+eine Bibliothek oder ein UI-Framework einzusetzen.
+
+Da Web Components wie erwähnt recht viel Code erfordern und nicht sehr einfach
+anzuprogrammieren sind, gibt es auch Bibliotheken, welche das Ziel haben,
+die Erstellung von Web Components zu vereinfachen.
+
+Im autonomous custom element  und  customized built-in element. features builtin elements, noch nicht perfekt
+
+https://html.spec.whatwg.org/multipage/custom-elements.html#custom-elements-core-concepts
+
+
+
+Nachteile: - low level
+Vorteile: standard, tools wie svelte erlauben export nach custom elements
+
+frameworks fuer komponenten wie stencil

@@ -195,7 +195,7 @@ zurückliefern. Nun müssen aber diese Daten irgendwo herkommen. Hooks sind ein
 von React bereitgestellter Mechanismus, um so etwas zu ermöglichen.
 
 Mit `useState` sagen wir React, dass wir einen Wert haben möchten, der zwischen
-Aufrufen der Funktion bestehen bleibt. Diesesn Wert können wir dann  in das
+Aufrufen der Funktion bestehen bleibt. Diesen Wert können wir dann  in das
 HTML einfließen lassen.
 
 ```jsx
@@ -249,7 +249,7 @@ function Counter() {
 ```
 
 Was macht React, wenn sich Daten (der Zähler) ändert? Die entsprechenden
-HTML-Elemente müssen aktualisiert werden. Theoretisch könnte React die gesammte
+HTML-Elemente müssen aktualisiert werden. Theoretisch könnte React die gesamte
 Seite nehmen, alle Komponenten neu rendern und das gesamte HTML austauschen.
 
 Das wäre aber sehr inperformant, hätte also hohen CPU-Bedarf und würde länger
@@ -313,7 +313,7 @@ unterstützt, darunter auch von TypeScript.
 
 Somit ist es TypeScript möglich, die Struktur unserer Komponente zu verstehen
 und zu prüfen. Verwenden wir korrekte Typen für unserer Komponenten-Funktionen,
-kann TypeScript vollständig prüfen, ob alle Pflichattribute gesetzt sind und
+kann TypeScript vollständig prüfen, ob alle Pflichtattribute gesetzt sind und
 den richtigen Typ haben. In der folgenden Abbildung ist ein solcher Fehler zu sehen:
 
 ![TypeScript zeigt bei falschen Properties für React-Komponenten Fehler an](/img/web/react-ts-error.png)
@@ -348,7 +348,7 @@ Weiterhin bietet React Möglichkeiten, das HTML auch bereits
 [auf dem Server zu erzeugen](https://react.dev/reference/rsc/server-components)
 und dann den JavaScript-Code die Kontrolle für Interaktivität zu übergeben.
 
-Ein weiterer Nachteil betsteht im Virtual DOM (VDOM). Auch wenn React bereits
+Ein weiterer Nachteil besteht im Virtual DOM (VDOM). Auch wenn React bereits
 viele Performance-Optimierungen vollzieht, ist der Umweg über den VDOM ein Overhead,
 der in Abhängigkeit vom Anwendungsfall und Größe der Webapp für
 Performance-Engpässe sorgen kann. Dies sollten wir daher bei der Auswahl eines
