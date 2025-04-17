@@ -1,0 +1,258 @@
+---
+id: dep-package-manager
+slug: /dep/package-manager
+sidebar_position: 1
+description: Wozu benötigen wir Bibliotheken und Package Manager?
+---
+
+import HtmlSnippet from "@site/src/components/HtmlSnippet";
+
+# Abschnitt 1 - Package Management
+
+## Notwendigkeit von Bibliotheken
+
+Der Begriff Bibliothek (Library) bezieht auf Software von Drittanbietern. Also
+hier konkret auf JavaScript-Code, der von anderen Personen geschrieben wurde.
+
+Um nur einige Beispiele zum besseren Verständnis zu nennen:
+
+- [lodash](https://lodash.com/) ist eine  Bibliothek mit vielen allgemeinen
+Hilfsfunktionen
+- [ibankit](https://www.npmjs.com/package/ibankit) zum Validieren von [Internationale Bankkontonummern (IBAN)](https://en.wikipedia.org/wiki/International_Bank_Account_Number).
+- [PDF.js](https://github.com/mozilla/pdf.js#online-demo) von Mozilla erlaubt
+  die Darstellung von PDF-Dokumenten im Browser.
+- [Axios](https://axios-http.com/) unterstützt bei der Kommunikation via HTTP
+- [@microsoft/microsoft-graph-client](https://www.npmjs.com/package/@microsoft/microsoft-graph-client)
+  vereinfacht die Arbeit mit der [Microsoft Graph](https://learn.microsoft.com/en-us/graph/overview) API.
+- [Bouncy Castle](https://www.bouncycastle.org/) stellt kryptographische Algorithmen (Verschlüsselung) bereit
+- [Jest](https://jestjs.io/) hilft bei der Erstellung automatischer Tests
+- [D3](https://d3js.org/) ermöglicht die Visualisierung von Daten in Form interaktiver Diagramme
+- [Pixi](https://pixijs.com/) hilft bei der Erstellung von browserbasierten WebGL-Inhalten und Spielen, 
+
+Abhängig von den Lizenzbedingungen können wir diesen Bibliotheken verwenden.
+Warum sollten wir das tun? Können wir den Code nicht selber schreiben? Es gibt
+viele gute Gründe
+
+- Zeitersparnis &mdash; Natürlich könnten wir Hilfsfunktionen wie lodash selber
+  schreiben, aber dann erfinden wir das Rad neu. Nutzen wir die Bibliothek,
+  können wir uns stattdessen auf die eigentlichen Business-Anforderungen konzentrieren.
+- Komplexität &mdash; Themen wie WebGL oder PDF sind so komplex, dass wir uns
+  lange in die Fachlichkeiten einarbeiten müssten, um den Code selber zu schreiben.
+- Edge Cases &mdash; Themen wie Kryptographie erfordern nicht nur Fachwissen,
+  sondern auch gewissenhaftes Testen. Sicherheitslücken entstehen oft in
+  Randfällen (Edge Cases), die wir als Programmierer nicht bedacht haben. Daher
+  stammt die Empfehlung, [nie selber sicherheitsrelevante Algorithmen zu schreiben.](https://crypto.stackexchange.com/questions/43272/why-is-writing-your-own-encryption-discouraged)
+
+Sollten wir also so viele Bibliotheken wie möglich verwenden? Wie gesagt kann
+der Einsatz sinnvoll sein, andererseits müssen wir aber auch die Nachteile bedenken,
+die der Einsatz einer Bibliothek hat. Es muss Gründe geben, warum große Projekte
+wie TypeScript sich entschieden haben, [keine Abhängigkeiten](https://www.npmjs.com/package/typescript?activeTab=dependencies),
+also [Zero Dependencies](https://0dependencies.dev/), zu verwenden. Einige Punkte,
+die wir bei der Verwendung von Bibliotheken bedenken sollten:
+
+- Wartung &mdash; Bei langfristigen Projekten ist es wichtig, dass diese auch noch
+  in vielen Jahren funktionieren. Stellt der Entwickler einer Bibliothek etwa
+  aus privaten Gründen ein, müssen wir einen Ersatz hierfür finden. Das wird
+  sehr gut illustriert im Web-Comic [XKCD 2347](https://xkcd.com/2347/)
+- Sicherheit &mdash; Code von Drittanbietern, den wir nicht kontrollieren, stellt ein potentielles Sicherheitsproblem
+  dar. Bei sogenannten Supply-Chain-Angriffen [wird Schadcode in einer Bibliothek inijiziert](https://thehackernews.com/2021/10/popular-npm-package-hijacked-to-publish.html),
+  die von vielen eingesetzt wird.
+- Bugs &mdash; Fehler in Software sind nahezu unvermeidbar. Fehler, die wir
+  selber durch unseren Code behoben haben, können wir schnell und einfach beheben.
+  Falls aber eine von uns verwendete Bibliothek einen Fehler hat, ist es in der Regel
+  schwieriger und benötigt mehr Zeit, um diesen Fehler zu beheben.
+- Konflikte zwischen Abhängigkeiten &mdash; Bibliotheken können selber wieder
+  andere Bibliotheken verwenden. Wenn wir viele Bibliotheken verwenden, können
+  so Konflikte entstehen. Z.B. wenn Bibliothek `A` die Bibliothek `C` in Version 1
+  und  Bibliothek `B` die Bibliothek `C` in Version 2 benötigt.
+- Inkompatibilitäten der Lizenz
+
+## Verwendung von Bibliotheken
+
+Unter Abwägung der Vor- und Nachteile haben wir uns nun entschieden, die
+Bibliothek [lodash](https://lodash.com/) zu verwenden. Wir tun wir das?
+
+Bei JavaScript ist die einfachste Möglichkeit, das JavaScript über einen
+`<script>`-Tag einzubinden. Bei lodash konkret könnte das wie folgt aussehen:
+
+<HtmlSnippet path="lib-lodash" type="html" />
+
+Das funktioniert recht gut bei eigenständigen Bibliotheken, für die es eine
+einzelne JavaScript-Datei gibt. Oft haben Bibliotheken aber wiederum andere
+Bibliotheken als Abhängigkeit (Dependency). In dem Fall müssen wir diese das JavaScript
+dieser Abhängigkeiten auch einbinden und dabei die Reihenfolge beachten.
+Es ist nicht schwer, sich vorzustellen, dass der Aufwand hierbei wesentlich
+steigt, je mehr Bibliothek wir verwenden: 10 Bibliotheken, von denen jede Bibliothek
+von 3 anderen Bibliotheken abhängt und jede dieser 3 Bibliotheken wiederum von 2
+weiteren Bibliotheken etc.
+
+:::warning
+cdn.jsdelivr.net ist ein sogenanntes Content Distribution Network (CDN).
+
+CDN vereinfachen die Einbettung von Ressourcen und erhöhen die Ladegeschwindigkeit durch
+Server in verschiedenen Ländern. Um die Ressource zu laden, muss der Browser
+aber zwingendermaßen ein HTTP-Request an das CDN stellen. Gesetze wie die
+[Datenschutz-Grundverordnung](https://dsgvo-gesetz.de/) erfordern, dass das
+CDN den entsprechenden datenschutzrechtlichen Anforderungen gerecht wird. Ob
+und in welcher Weise etwa die Übertragung der IP-Adresse durch bloßes Laden einer
+Ressource vom CDN per GET-Request eine Verletzung des Datenschutzes darstellt,
+[ist umstritten](https://www.jsdelivr.com/blog/how-the-german-courts-ruling-on-google-fonts-affects-jsdelivr-and-why-it-is-safe-to-use/).
+
+Aus diesem Grund kann es sinnvoll sein, Ressourcen soweit möglich von unseren eigenem
+Servern auszuliefern, wo auch die Webseite oder Webapp läuft. 
+:::
+
+Alternativ können wir auch die JavaScript-Ressourcen herunterladen und lokal
+in unserem Webseiten-Projekt hinterlegen. Diese Dateien werden dann wie unser
+selbstgeschriebener JavaScript-Code mit ausgeliefert. Hier gibt es aber mindestens
+2 Probleme.
+
+Zum Einen ist das Update der Bibliothek schwieriger. Fast alle Bibliothek
+haben eine Version. Behebt der Autor der Bibliothek Fehler behoben oder fügt
+neue Funktionalitäten hinzu, wird eine neue Version der Bibliothek veröffentlicht.
+Dabei können sich auch die Abhängigkeiten ändern, welche die Bibliothek benötigt.
+Wir müssen beim Update dann nicht nur die JavaScript-Datei neu herunterladen
+und in unserem Projekt einfügen, sondern auch alle Abhängigkeit prüfen und
+gegebenenfalls aktualisieren.
+
+Zum Anderen besteht die Gefahr, dass wir in Versuchung geraten und im Quellcode
+der Bibliothek Änderungen vornehmen. Das ist ungünstig, weil damit das Verhalten
+der Bibliotheken geändert und wird und etwa nicht mehr mit der Dokumentation
+der Bibliothek übereinstimmt. Bei einem Update der Bibliothek auf eine neue
+Version haben wir Probleme, wenn wir vergessen, die Änderung erneut vorzunehmen.
+
+## Package Manager
+
+Ein Package Manager löst diese Probleme bei der Verwendung von Abhängigkeiten.
+Er kümmert sich um das Ermitteln aller benötigten Abhängigkeiten und um das 
+Herunterladen der Abhängigkeiten.
+
+Viele Programmiersprachen haben inzwischen einen solchen Package Manager eingeführt.
+Beispielsweise heißen diese:
+
+- [Composer](https://getcomposer.org/) bei [php](https://www.php.net/)
+- [Maven](https://maven.apache.org/) oder [Gradle](https://gradle.org/) bei [Java](https://www.java.com/)
+- [RubyGems](https://rubygems.org/) bei [Ruby](https://www.ruby-lang.org/)
+- [NuGet](https://www.nuget.org/) bei [C#](https://learn.microsoft.com/en-us/dotnet/csharp/)
+- [Cargo](https://doc.rust-lang.org/cargo/) bei [Rust](https://www.rust-lang.org/)
+
+Allen gemeinsam ist, dass wir in einer Manifest-Datei definieren, welche Bibliotheken
+wir gerne in welcher Version nutzen möchten. Der Package Manager kümmert sich
+dann um den Rest.
+
+Für JavaScript gibt es mehrere verschiedene Package Manager. Der ursprüngliche und
+immer noch weiter verbreitete ist [NPM](https://docs.npmjs.com//). Andere populäre
+Package Manager sind  [Yarn](https://yarnpkg.com/) und [pnpm](https://pnpm.io/).
+Diese unterscheiden sich in Details, das meiste in diesem Kapitel ist auf alle
+Package Manager anwendbar. Wir beschränken wir uns hier auf einen groben Überblick von NPM.
+
+:::info
+Historisch bedingt bezieht sich der Begriff `NPM` sowohl auf den Package Manager
+selber als auch auf den [Online-Service](https://www.npmjs.com)
+(die sogenannte NPM-Registry), welcher die Abhängigkeiten und Bibliotheken
+bereitstellt. Dieser Online-Service wird auch von den anderen Package Managern
+Yarn und pnpm verwendet.
+:::
+
+## NPM
+
+:::warn
+Zum Ausprobieren von NPM muss dieses erst einmal installiert werden. Für Linux empfiehlt
+sich die Installation per [nvm (Node Version Manager)](https://github.com/nvm-sh/nvm).
+Für Windows kann es von der [offiziellen Webseite heruntergeladen](https://nodejs.org/en)
+werden.
+:::
+
+Wie genau funktioniert das Management von Packages (Bibliotheken) nun mit NPM?
+
+Herzstück eines JavaScript-Projekts mit NPM ist die Datei `package.json`. Das ist
+eine JSON-Datei und enthält grundlegende Informationen über unser JavaScript-Projekt:
+
+```json
+{
+  "name": "my-project",
+  "version": "0.0.1",
+  "description": "This project is awesome",
+  "main": "index.js",
+  "scripts": [],
+  "dependencies": {}
+}
+```
+
+:::info
+Über den Befehl `npm init` können wir auch eine solche package.json-Datei erzeugen lassen.
+:::
+
+In der Eigenschaft `dependencies` stehen alle Bibliotheken, die wir verwenden
+möchten. Um also etwa lodash zu verwenden:
+
+```json
+{
+  "name": "my-project",
+  "version": "0.0.1",
+  "description": "This project is awesome",
+  "main": "index.js",
+  "scripts": [],
+  "dependencies": {
+    "lodash": "~4.17.21"
+  }
+}
+```
+
+Mit `"lodash": "~4.17.21"` sagen wir NPM, dass wir gerne lodash in Version
+`4.17.21` verwenden möchten. Die Tilde `~` bedeutet, dass bei Konflikten
+auch Versionen mit einer anderen Versionsnummer an letzter Stelle (z.B. `4.17.24`)
+verwendet werden dürfen.
+
+Nun müssen wir nur noch den folgenden Befehl ausführen:
+
+```sh
+npm install
+```
+
+NPM lädt `lodash` und alle eventuell benötigten Abhängigkeiten herunter. Wo
+genau diese auf der Festplatte gespeichert werden, hängt vom Package Manager ab.
+NPM speichert diese im Unterordner `node_modules` des aktuellen Ordners. 
+
+Jetzt können wir lodash verwenden. Zum Beispiel können wir die Datei `index.js`
+erstellen und darin folgendes schreiben:
+
+```js
+import _ from "lodash";
+
+console.log("Was lodash loaded - ", typeof _ === "function");
+console.log(_.partition([1, 2, 3, 4], n => n % 2));  
+```
+
+Zum Ausführen verwenden wir folgenden Befehl:
+
+```sh
+node index.js
+```
+
+Haben wir alles richtig gemacht, wird lodash geladen und kann verwendet werden.
+
+:::note
+Statt manuell den Namen und die Version der Abhängigkeit in die `package.json` zu schreiben,
+können wir auch den Befehl `npm install lodash` verwenden. Dabei wird lodash
+in der `package.json` mit der aktuellen Version eingetragen und im Anschluss gleich
+heruntergeladen.
+:::
+
+## Node.js
+
+Einen Moment &mdash; haben wir eben JavaScript außerhalb des Browsers ausgeführt?
+Wie ist das möglich?
+
+WIP
+
+deno und bun erwähnen
+
+## Semver
+
+Wir haben gesehen, dass jedes Bibliothek eine Version hat. Diese Versionen
+folgen dem Schema `x.y.z`. Dieses Schema hat auch einen Name: [Semantic Versioning](https://semver.org/),
+oft abgekürzt zu `semver`.
+
+WIP
+
