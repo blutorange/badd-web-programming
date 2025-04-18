@@ -1,0 +1,17 @@
+digraph G {
+  webapp -> "axios@1.2.0";
+  webapp -> "btoa@2.5.0";
+  webapp -> "m-qr-code@3.1.2";
+  webapp -> "paper-paypal-component@4.0.0";
+
+  "axios@1.2.0" -> "form-data@2.3.0"
+  "paper-paypal-component@4.0.0" -> "form-data@2.3.0"
+  "paper-paypal-component@4.0.0" -> "express@9.1.0"
+  "paper-paypal-component@4.0.0" -> "btoa@2.5.0"
+  "svg2img@8.1.0" -> "btoa@2.5.0"
+  "m-qr-code@3.1.2" -> "svg2img@8.1.0"
+  
+  webapp [shape = rectangle]
+  "btoa@2.5.0" [style = filled, color = lightgreen]
+  "form-data@2.3.0" [style = filled, color = orange]
+}

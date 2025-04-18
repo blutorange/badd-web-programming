@@ -244,15 +244,214 @@ heruntergeladen.
 Einen Moment &mdash; haben wir eben JavaScript außerhalb des Browsers ausgeführt?
 Wie ist das möglich?
 
-WIP
+Die Antwort lautet [Node.js](https://nodejs.org/). Node.js ist ein Programm,
+mit dem JavaScript ohne Browser auf dem Rechner ausgeführt werden kann. Technisch
+wird dabei die [V8-Engine verwendet](https://v8.dev/), die auch von Chromium-basierten
+Browsern zur Ausführung von JavaScript eingesetzt wird.
 
-deno und bun erwähnen
+### Node.js als Server
+
+Node.js hat mehrere Anwendungsfälle. Eine Anwendungsfall ist die Nutzung als
+Webserver. Auch ganz ohne Abhängigkeiten und Drittbibliotheken können wir mit
+Node.js einen Server starten, da Node.js bereits entsprechende APIs dafür
+mitbringt. Wir werden uns in dieser Vorlesung nicht mit der serverseitigen Programmierung
+beschäftigen, daher an dieser Stelle nur eine kurzes Beispiel:
+
+```js
+import http from "node:http";
+
+const port = 8080;
+const host = "127.0.0.1";
+
+const server = http.createServer((request, response) => {
+  const url = new URL(request.url, `http://${host}`);
+  const x = parseFloat(url.searchParams.get("x"));
+  const y = parseFloat(url.searchParams.get("y"));
+  response.statusCode = 200;
+  response.setHeader("Content-Type", "text/plain");
+  response.end([
+    `You made a ${request.method} request to ${url}`,
+    `${x} + ${y} = ${x + y}`,
+  ].join("\n"));
+});
+
+server.listen(port, host, () => {
+  console.log(`Server running at http://${host}:${port}/`);
+});
+```
+
+Wenn wir obige Datei als `server.js` speichern, können wir mittels `node server.js`
+die JavaScript-Datei ausführen und den Server starten. Dieser Code gibt die URL
+aus, an die das Request gestellt wurde. Zudem wird die Summe der Werte aus den
+URL-Parameter `x` und `y` zurückgegeben. Rufen wir etwa den Server über die URL
+`http://127.0.0.1:8080/foo?x=5&y=3` auf, erhalten wir folgende Antwort:
+
+```
+You made a GET request to http://127.0.0.1/foo?x=5&y=3
+5 + 3 = 8
+```
+
+### Node.js als Build-System
+
+Ein anderer Anwendungsfall ist die Nutzung als Build-System. Zum Beispiel ist der
+Package Manager NPM selber ist in JavaScript geschrieben und erfordert Node.js.
+Auch TypeScript ist in JavaScript geschrieben. Mittels Node.js können wir
+TypeScript unseren Code überprüfen und in normales JavaScript umwandeln lassen.
+
+Allgemein können Node.js verwenden, um aus unserem Quellcode mittels verschiedener
+Tools zu verarbeiten und die finalen Ressourcen für unserer Webseite oder Webapp
+zu erstellen.
+
+Im nächsten Abschnitt schauen wir uns einige typische Kategorien von Tools an,
+die häufig verwendet werden.
+
+### Weitere JavaScript-Runtimes
+
+
+Node.js war die erste JavaScript-Runtime für den Server, die große Bekanntheit
+erfuhr. Der Vollständigkeit halber sei noch angemerkt, dass aktuell auch noch
+andere weitere Plattformen für die Ausführung von JavaScript erstellt wurden:
+
+- [Deno](https://deno.com/) &mdash; Der Name entstand durch Vertauschung der Silben von `No-de`.
+  Im Wesentlichen verhält sich Deno ähnlich wie Node.js, hat aber einige eingebauten
+  Funktionalitäten wie die native Unterstützung zur Ausführung von TypeScript (*)
+  und verbesserte eingebaute APIs.
+- [Bun](https://bun.sh/) &mdash; Während Node.js und Deno die V8-Engine zur Ausführung
+  von JavaScript verwenden, setzt Bun auf [JavaScriptCore](https://docs.webkit.org/Deep%20Dive/JSC/JavaScriptCore.html),
+  der JavaScript-Engine von Webkit (Safari-Browser). Es behauptet von sich,
+  sowohl bei der Verwaltung von Abhängigkeiten als auch bei der Ausführung
+  schneller zu sein.
+
+(*) Mittlerweile [ermöglicht auch Node.js die direkte Ausführung von TypeScript.](https://nodejs.org/en/learn/typescript/run-natively)
 
 ## Semver
 
 Wir haben gesehen, dass jedes Bibliothek eine Version hat. Diese Versionen
-folgen dem Schema `x.y.z`. Dieses Schema hat auch einen Name: [Semantic Versioning](https://semver.org/),
-oft abgekürzt zu `semver`.
+folgen dem Schema `x.y.z`. Prinzipiell könnte die Version nach Belieben und
+Ermessen der einzelnen Entwickler festgelegt werden. In der Praxis hat sich
+aber ein Schema für die Festlegung von Versionen bewährt.
 
-WIP
+Dieses Schema nenn sich [Semantic Versioning](https://semver.org/),
+oft abgekürzt zu `semver`. Bei Semver hat jeder Teil der Version eine bestimmte
+Bedeutung:
 
+> MajorVersion.MinorVersion.PatchVersion
+
+In der Version `3.1.9` beispielsweise ist `3` die Major-Version, `1` die Minor-Version
+und `9` die Patch-Version. Wenn wir eine neue Version von unserer Software
+veröffentlichen, müssen wir je nach Art der vorgenommenen Änderungen die Version
+anpassen:
+
+- Major-Version &mdash; Die Major-Version muss erhöht werden, wenn eine neue
+  Version der Bibliothek inkompatibel mit der bisherigen Version ist. Wenn
+  wir beispielsweise eine Funktion entfernen, müssen wir die Major-Version hochsetzen.
+- Minor-Version &mdash; Die Minor-Version steht für neue Funktionalitäten, die
+  mit der bisherigen Version kompatibel sind. Fügen wir eine neue Option hinzu,
+  die optional ist, brauchen wir nur die Minor-Version zu erhöhen.
+- Patch-Version &mdash; Die Patch-Version erhöhen wir, wenn wir nur Fehler in der
+  aktuellen Version beheben.
+
+Dieses Vorgehen zur Benamung von Versionen hat mehrere Vorteile.
+
+Es erleichtert uns zum Einen die Arbeit, wenn wir die Abhängigkeiten unserer
+Anwendung aktualisieren. Nur anhand der Versionsnummer erhalten wir bereits
+eine grobe Vorstellung davon, welche Änderungen an einer Abhängigkeit vorgenommen
+wurde. Setzen wir etwa aktuell die Abhängigkeit `immer` in Version `2.3.1` ein
+und ist ein Update auf `2.3.9` verfügbar, können wir uns bereits recht sicher sein,
+dass wir dieses Update problemfrei durchführen können. Falls es bereits die
+Version `2.6.2` gibt, sollten wir kurz über den Changelog (Beschreibung der Änderungen)
+schauen, fühlen uns aber immer noch recht sicher. Falls aber schon die Version
+`4.8.0` verfügbar ist, werden wir das Update nicht sofort durchführen und erst
+genau prüfen, was bei dem Update zu beachten ist.
+
+Ein zweiter Vorteil ergibt sich bei Verwendung von einem Package Manager wie NPM.
+Um das zu illustrieren, nehmen wir an, unsere Webapp hätte folgende Abhängigkeiten
+in den folgenden Versionen:
+
+![Sample dependency graph for a webapp with duplicate dependencies](/img/web/duplicate-dependencies.svg)
+
+Zum Verständnis: Unserer Webapp benötigt zum Beispiel die Abhängigkeit `axios`
+in Version `1.2.0`. `axios` benötigt die Abhängigkeit `form-data` in Version
+`2.1.1`.
+
+In diesem konkreten Fall gibt es ein Problem: Die Abhängigkeit `btoa` wird
+dreimal in 3 verschiedenen Versionen benötigt, `form-data` in 2 verschiedenen
+Versionen. Der Package Manager NPM ist prinzipiell in der Lage, mit so einem
+Fall umzugehen, indem die Abhängigkeiten in mehreren Versionen heruntergeladen
+und entsprechend zugeordnet werden. Dennoch ist das problematisch. Die Gesamtgröße
+unserer Anwendung wird dadurch erhöht, zudem kann es zu subtilen Problemen kommen,
+wenn eine Bibliothek globale Variablen verwendet und sich darauf verlässt, nur
+einmal geladen zu werden.
+
+Und das bringt uns zurück zu Semver. Wenn wir davon ausgehen, dass sich die
+Abhängigkeiten an Semver halten, dann brauchen wir etwa die Abhängigkeit
+`btoa` nur einmal herunterladen in Version `2.5.0`. Es unterscheiden sich nur die
+Minor-Versionen. `2.5.0` hat möglicherweise neue Funktionalitäten, ist aber
+abwärtskompatibel mit `2.1.0` und `2.3.4`. Das gleich gilt für `form-data`. Damit
+erhalten wir folgende deduplizierten Abhängigkeiten:
+
+![Sample dependency graph for a webapp with deduplicated dependencies](/img/web/duplicate-dependencies-dedup.svg)
+
+## Modul-Systeme
+
+Zum Schuss dieses Abschnitts noch einige Worte zu Modulsystemen in JavaScript.
+
+Historisch hatte JavaScript kein Modulsystem. Falls eine JavaScript-Datei eine
+andere Datei oder Bibliothek als Voraussetzung (Abhängigkeit) hatte, mussten
+wir die entsprechende Datei manuell einbinden und sicherstellen, dass diese
+in der richtigen Reihenfolge geladen werden.
+
+```html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autonumeric/1.9.46/autoNumeric.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="../js/my-webapp.js"></script>
+```
+
+Dieses Vorgehen hat sich als impraktikabel erwiesen, wenn die Anzahl der Abhängigkeiten
+steigt. Besser wäre es, wenn jede JavaScript-Datei sagen könnte, welche Abhängigkeiten
+sie hat. Dann können diese automatisch geprüft und aufgelöst werden. Jede Datei
+nennt sich dann `Modul`.
+
+In der Vergangenheit gab es mehrere Versuche von Drittanbietern zu Modulsystemen.
+2 bekannte Modulsysteme sind [CommonJS](https://nodejs.org/api/modules.html)
+und [AMD](https://requirejs.org/docs/whyamd.html).
+
+CommonJS etwa wurde von Node.js entwickelt und sieht in der Praxis etwa wie folgt aus:
+
+```js
+const { get } = require("axios");
+
+module.exports.getSampleData = async () => {
+  const response = await get(`/data?count=${count}`);
+  return response.data;
+}
+```
+
+Mit `require` sagen wir, dass wir eine Abhängigkeit benötigen, mit `module.exports`
+stellen wir anderen Dateien Funktionen bereit.
+
+CommonJS ist aber kein offizieller Standard und hat verschiedene Probleme.
+Beispielsweise ist es sehr schwierig für Tools, genau herauszufinden, welche
+Funktionen eine Datei bereitstellt. Etwa erlaubt CommonJS, den Namen eines
+Exports dynamisch zu berechnen:
+
+```js
+module.export[Math.random()] = "Hallo";
+```
+
+Seit 2015 gibt es mit EcmaScript2015 ein offizielles Modulsystem namens
+ESM &mdash; EcamScript Modules. ESM wird inzwischen sowohl vom Browser
+als auch von Node.js unterstützt. Unser Beispiel von eben sieht mit ESM
+wie folgt aus:
+
+```js
+import { get } from "axios";
+
+export async function getSampleData() {
+  const response = await get(`/data?count=${count}`);
+  return response.data;
+}
+```
+
+Mit `import` importieren wir Funktionen von anderen Modulen und Dateien, mit
+`export` stellen wir Funktionen anderen Dateien und Modulen bereit.
