@@ -324,6 +324,53 @@ andere weitere Plattformen für die Ausführung von JavaScript erstellt wurden:
 
 (*) Mittlerweile [ermöglicht auch Node.js die direkte Ausführung von TypeScript.](https://nodejs.org/en/learn/typescript/run-natively)
 
+## Dev-Dependencies
+
+Wir hatten gesehen, dass wir mittels `dependencies` in der `package.json` eine
+Abhängigkeit angeben konnten, die installiert werden soll. Erinnern wir uns:
+
+```json
+{
+  "name": "my-project",
+  "version": "0.0.1",
+  "description": "This project is awesome",
+  "main": "index.js",
+  "scripts": [],
+  "dependencies": {
+    "lodash": "~4.17.21"
+  }
+}
+```
+
+Die `dependencies` sind für Abhängigkeiten gedacht, die wir tatsächlich zur Laufzeit
+benötigen, also etwa wenn ein Nutzer unsere Webapp im Browser lädt.
+
+Es gibt aber auch Abhängigkeiten, die wir nur für einen Build-Schritt brauchen,
+etwa zum Prüfen unseres TypeScript auf Typenfehler; oder zum Ausführungen von
+automatisierten Software-Tests. Solche Abhängigkeiten sollten wir als sogenannte
+`devDependencies` deklarieren:
+
+```json
+{
+  "name": "my-project",
+  "version": "0.0.1",
+  "description": "This project is awesome",
+  "main": "index.js",
+  "scripts": [],
+  "dependencies": {
+    "lodash": "~4.17.21"
+  },
+  "dependencies": {
+    "typescript": "~5.8.3",
+    "jest": "~29.7.0"
+  }
+}
+```
+
+Falls wir eine Bibliothek schreiben, die wir auf NPM veröffentlichen, verhindert
+das, dass NPM automatisch diese `devDependencies` mit herunterlädt und installiert,
+wenn jemand unsere Bibliothek installiert.
+
 ## Semver
 
 Wir haben gesehen, dass jedes Bibliothek eine Version hat. Diese Versionen
@@ -421,7 +468,7 @@ CommonJS etwa wurde von Node.js entwickelt und sieht in der Praxis etwa wie folg
 ```js
 const { get } = require("axios");
 
-module.exports.getSampleData = async () => {
+module.exports.getSampleData = async (count) => {
   const response = await get(`/data?count=${count}`);
   return response.data;
 }
@@ -447,7 +494,7 @@ wie folgt aus:
 ```js
 import { get } from "axios";
 
-export async function getSampleData() {
+export async function getSampleData(count) {
   const response = await get(`/data?count=${count}`);
   return response.data;
 }

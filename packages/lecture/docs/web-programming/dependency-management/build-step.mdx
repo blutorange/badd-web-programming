@@ -9,15 +9,533 @@ import HtmlSnippet from "@site/src/components/HtmlSnippet";
 
 # Abschnitt 2 - Build Step
 
-WIP
+Nachdem wir nun gesehen haben, dass wir Abhängigkeiten mit Package Managern verwalten
+können, wollen wir uns anschauen, wozu wir das für die Entwicklung von Webapps
+verwenden können: der sogenannte Build-Step oder Build-Prozess.
 
-Build step - wozu?
-  - Bundler
-  - Transpiler
-  - babel, typescript, jsx, svelte, neue ES-Features
-  - webpack/esbuild/parcel/browserify/rollup/..., 
+Build bezieht sich auf die Erstellung der finalen Dateien, die auf einem Webserver
+hochgeladen werden, um die Webapp produktiv zu schalten. Bei einfachen Webapp
+kann es sein, dass kein Build-Prozess notwendig ist. Ab einer gewissen Komplexität
+wird aber der eine oder andere Schritt notwendig sein, etwa zum Komprimieren
+der JavaScript- und CSS-Dateien oder zum Sicherstellen der Code-Qualität.
 
-## Modulsysteme
+## Bundling
 
-AMD, CJS, ESM
 
+Im vorigen Abschnitten zu Package Manager haben wir gesehen, wie wir verschiedene
+Module (JavaScript-Dateien) schreiben können, die andere Module importieren.
+Zum Beispiel:
+
+```js
+// utils.js
+export function startsWith(value, prefix) {
+  return value.substring(0, prefix) === prefix;
+}
+
+// http.js
+import { startsWith } from "./util.js"
+import { get } from "axios";
+
+export async function canAccessData() {
+  const response = await get(`/data`);
+  return startsWith(response.data.code, "Success:");
+}
+
+// index.js
+import { canAccessData } from "./http.js";
+
+console.log("Can access data", canAccessData());
+```
+
+Bundling bezieht sich nun darauf, aus diesen einzelnen Dateien eine einzige
+Datei zu erstellen mit dem gesamten Inhalt der Einzeldateien. Diese Datei
+nennen wir ein Bundle. In der Regel geben wir einen `Entry point` (Einstiegspunkt)
+an, in dem Fall also `index.js`. Der Bundler sucht dann rekursiv nach allen importieren
+Dateien und erzeugt daraus ein Bundle.
+
+Während Browser bereits das Modulsystem ESM unterstützen, kann es immer noch sinnvoll
+sein, ein Bundle zu erstellen.
+
+- Nutzen wir direkt ESM, muss der Browser jede Datei einzeln laden. Gerade bei
+  größeren oder tieferen NPM-Abhängigkeiten kann dies in einer großen Anzahl
+  von Dateien resultieren und die Ladezeit erhöhen.
+- Wenn wir Bibliotheken von Drittanbietern verwenden, benötigen wir in der
+  Regel nicht alle Funktionalitäten, die eine Bibliothek bereitstellt, sondern
+  nur einen Teil davon. Ein Bundler kann unter bestimmten Umständen den nicht benötigten
+  Teil entfernen und die Gesamtgröße des Bundles reduzieren (sogenanntes
+  [Tree Shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking)).
+- Browser-Support für ESM erfordert die Angabe einer konkreten URL, von wo
+  die Abhängigkeit geladen wird und funktioniert daher nicht mit Abhängigkeiten von NPM.
+  Dort schreiben wir `import {} from "axios"`, der Browser weiß aber nicht, woher
+  er `axios` beziehen soll. Mittlerweise gibt es hier Abhilfe für in Form einer
+  sogenannten [Import-Map](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/script/type/importmap).
+  Aber auch das erstellen einer Import-Map erfordert einen Build-Step. Alternativ
+  gibt es auch Online-Services wie  [esm.sh](https://esm.sh/), die mit ESM-kompatible
+  Versionen von NPM-Packages bereitstellen. Die Stabilität unser Webapp verlässt
+  sich dann aber auf die Verfügbarkeit eines kostenfreien Services eines Drittanbieters.
+
+Um Code zu bundeln, gibt es eine Vielzahl bekannter Tools, darunter etwa:
+
+- [Webpack](https://webpack.js.org/)
+- [Rollup](https://rollupjs.org/)
+- [Parcel](https://parceljs.org/)
+- [Browserify](https://browserify.org/)
+- [SWC](https://swc.rs/)
+- [esbuild](https://esbuild.github.io/)
+
+Ihren Zweck erfüllen alle diese Tools, wir haben also die Qual der Wahl. Einige
+kurze Anmerkungen zu diesen Tools aber noch:
+
+- Webpack ist das erste Bundling-Tool, welches größere Verbreitung erfuhr.
+  Im Vergleich zu anderen Tools sind die Konfigurationsdateien recht groß.
+- Unterschiede gibt es in den konkreten Features und zusätzlichen Plugins. Bevor
+  wir uns für ein Tool entscheiden, sollten wir unsere Anforderungen prüfen.
+- Die meisten dieser Tools sind in JavaScript geschrieben. Während Engines wie V8
+  inzwischen sehr gut darin sind, JavaScript schnell auszuführen, ist JavaScript
+  durch seine dynamische Natur für rechenintensive Aufgaben nicht die geeignete Wahl.
+  SWC und esbuild sind im Vergleich zu den anderen Tools in den Programmiersprachen
+  [Rust](https://www.rust-lang.org/) und [go](https://go.dev/) geschrieben, womit
+  einen nicht unerheblicher Geschwindigkeitsvorteil erzielt wird. Siehe beispielsweise
+  das Benchmark [s1owjke/js-bundler-benchmark](https://github.com/s1owjke/js-bundler-benchmark),
+  [Tony Cabaye - JavaScript bundlers comparison](https://tonai.github.io/blog/posts/bundlers-comparison/#performance-comparison-1)
+  oder [DataStation - Benchmarking](https://datastation.multiprocess.io/blog/2021-11-13-benchmarking-esbuild-swc-typescript-babel.html).  
+
+Um beispielsweise eine Datei mit esbuid zu bundeln, die Abhängigkeiten per `import` verwendet,
+können wir wie folgt vorgehen. Nehmen wir diese Datei als Beispiel:
+
+```js
+import partition from "lodash-es/partition.js";
+console.log(partition([1, 2, 3, 4], n => n % 2));  
+```
+
+Speichern wir die Datei als `index.js` ab, dann können wir ein Bundle wie folgt erzeugen
+und in die Datei `out.js` schreiben:
+
+```sh
+npm install lodash-es
+npm install --save-exact --save-dev esbuild
+npx esbuild index.js --bundle --outfile=out.js
+```
+
+## Minification
+
+Minifizierung bezieht sich darauf, die Größe von Dateien wie JavaScript und
+CSS zu reduzieren.
+
+Nehmen wir beispielsweise das folgende JavaScript:
+
+<details>
+```js
+function sieveOfEratosthenes(n) {
+    const primes = Array(n + 1).fill(true);  // Assume all numbers in array are prime
+    primes[0] = primes[1] = false;         // Except for 0 and 1
+    
+    for (let i = 2; i <= Math.sqrt(n); i++) {
+        if (primes[i]) {
+            for (let j = i * i; j <= n; j += i) {
+                primes[j] = false;         // Mark factors non-prime
+            }
+        }
+    }
+    
+    return primes.reduce((acc, isPrime, index) => {
+        if (isPrime) {
+          acc.push(index);
+        }
+        return acc;
+    }, []);
+}
+
+// Usage:
+const n = 30;
+const primeNumbers = sieveOfEratosthenes(n);
+console.log(primeNumbers);  // Output: [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]
+```
+</details>
+
+Dann könnte dieser Code etwa wie folgt komprimiert werden: 
+
+```js
+function sieveOfEratosthenes(e){let r=Array(e+1).fill(!0);r[0]=r[1]=!1;for(let s=2;s<=Math.sqrt(e);s++)if(r[s])for(let t=s*s;t<=e;t+=s)r[t]=!1;return r.reduce((e,r,s)=>(r&&e.push(s),e),[])}const n=30,primeNumbers=sieveOfEratosthenes(30);console.log(primeNumbers);
+```
+
+Minifizierung macht unseren Code kleiner und hat das Potenzial, die Performance minimal
+zu erhöhen. Es gibt verschiedene Tools, welche das tun können. Um nur einige
+zu nennen:
+
+- JavaScript
+  - [terser](https://github.com/terser/terser)
+  - [Closure Compiler](https://developers.google.com/closure)
+  - [https://esbuild.github.io/](esbuild)
+- CSS
+  - [cssnano](https://cssnano.github.io/cssnano/)
+  - [https://esbuild.github.io/](esbuild)
+
+Um zum Beispiel JavaScript mittels Terser zu minifizieren, können wir wie folgt vorgehen,
+wenn wir obiges Beispiel-JavaScript in der Datei `file.js` abgespeichert haben: 
+
+```sh
+npm install terser
+npx terser --compress -- file.js
+```
+
+Hinweis: Viele Bundler und andere Tools stellen bereits einen Minifier zur Verfügung,
+sodass wir diesen in der Regel nicht manuell aufrufen müssen. 
+
+## Quality assurance
+
+Ein weitere Klasse von Operationen, die wir im Build-Schritt ausführen können,
+ist die Prüfung der Qualität unserer Software.
+
+### Typen-Checker
+
+[TypeScript](https://www.typescriptlang.org/) haben wir bereits kennengelernt als
+Typensystem für JavaScript. Beim Schreiben in einem Code-Editor (IDE) werden uns
+bereits Typenfehler angezeigt. Damit wir sicherstellen können, dass Typenfehler
+auch garantiert vor dem produktiven Einsatz gefunden werden, stellt TypeScript
+ein Kommandozeilenprogramm bereit, womit wir unseren Code auf Typenfehler prüfen
+können.
+
+Zur Illustration legen wir eine Datei `src/greeter.ts` an mit folgenden Inhalt (wer sieht den Fehler?):
+
+```js
+function greeter(person: string): string {
+  return "Hello, " + person.name;
+}
+let user = "Jane User";
+document.body.textContent = greeter(user);
+```
+
+Dazu legen wir noch die Datei [tsconfig.json](https://www.typescriptlang.org/tsconfig/)
+an, um die Konfiguration für TypeScript festzulegen und TypeScript zu sagen, wo
+unser Quellcode zu finden ist:
+
+```json
+{
+  "compilerOptions": {
+    "lib": ["dom", "es2022"],
+    "moduleResolution": "bundler",
+    "module": "esnext",
+    "target": "es2022" 
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
+```
+
+Jetzt können wir den Typen-Checker mit folgenden Befehlen installieren und ausführen:
+
+```sh
+npm install typescript
+npx tsc --noEmit
+```
+
+Und erhalten dabei folgenden Typenfehler:
+
+```
+src/greeter.ts:2:29 - error TS2339: Property 'name' does not exist on type 'string'.
+
+2   return "Hello, " + person.name;
+                              ~~~~
+```
+
+### Linter
+
+Linter sind ein weiteres Werkzeug zur Erhöhung der Code-Qualität. Ein Linter
+prüft Code nach bestimmten Regeln und erzeugt eine Warnung oder einen Fehler,
+wenn diese Regeln verletzt sind. Meist ist der Code auch bei Verletzung einer
+Regeln trotzdem noch gültig, aber aus anderen Gründen problematisch.
+
+Um das einem Beispiel zu illustrieren, schauen wir uns folgendes JavaScript an:
+
+```js
+const user = {
+  age: 20,
+  name: "Renne Bright",
+  age: 62,
+};
+```
+
+In diesem Code wird ein Objekt definiert, wobei die Eigenschaft `age` zweimal
+definiert wird. Das verletzt nicht die Regeln von JavaScript und kann problemlos
+ausgeführt werden, ist aber im besten Fall verwirrend und im schlimmsten Fall
+ein Schreibfehler. Vielleicht wollten wir statt `age` etwa `weight` schreiben?
+
+Ein Linter würde solch ein Problem als Fehler ankreiden.
+
+Bei der Auswahl eines Linters haben wir verschiedene Auswahlmöglichkeiten, darunter:
+
+- [Prettier](https://prettier.io/)
+- [biome](https://biomejs.dev/)
+
+biome ist analog zu esbuild und SWC in einer anderen Programmiersprache (Rust)
+geschrieben, was Geschwindigkeitsvorteile bringt.
+
+Speichern wir obiges JavaScript in der Datei `user.js`, können wir die Datei
+etwa mit biome wie folgt linten:
+
+```sh
+npm install @biomejs/biome
+npx biome lint user.js
+```
+
+Wir erhalten dann folgende Fehlermeldung:
+
+```
+user.js:2:3 lint/suspicious/noDuplicateObjectKeys  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ✖ This property value named age is later overwritten by an object member with the same name.
+  
+    1 │ const user = {
+  > 2 │   age: 20,
+      │   ^^^^^^^
+    3 │   name: "Renne Bright",
+    4 │   age: 62,
+  
+  ℹ Overwritten with this value.
+  
+    2 │   age: 20,
+    3 │   name: "Renne Bright",
+  > 4 │   age: 62,
+      │   ^^^^^^^
+    5 │ };
+    6 │ 
+  
+  ℹ If an object property with the same name is defined multiple times (except when combining a getter with a setter), only the last definition makes it into the object and previous definitions are ignored.
+  
+  ℹ Unsafe fix: Remove this property value named age
+  
+    1 1 │   const user = {
+    2   │ - ··age:·20,
+    3 2 │     name: "Renne Bright",
+    4 3 │     age: 62,
+  
+
+Checked 1 file in 5ms. No fixes applied.
+```
+
+### Prüfung auf Sicherheitslücken in Abhängigkeiten
+
+Die Nutzung von Bibliotheken via NPM erlaubt uns die Nutzung von bestehenden
+Code und bringt uns viele Vorteile. Software ist aber selten fehlerfrei. Manchmal
+sind Fehler kaum bemerkbar oder sorgen nur für Unannehmlichkeiten bei unseren
+Nutzern. Es kann aber auch passieren, dass Fehler in einer Software ein Sicherheitsproblem
+darstellen und im schlimmsten Fall etwa dazu führen können, dass die privaten
+Daten unserer Nutzer gestollen werden können oder ein Angreifer Passwörter abfangen kann.
+
+Ein Dependency Check hat zur Aufgabe, Abhängigkeiten automatisch nach bekannten
+Schwachstellen zu scannen und uns rechtzeitig davon in Kenntnis zu setzen, damit
+wir entsprechende Maßnahmen ergreifen können.
+
+NPM bringt bereits einen solchen Dependency Checker mit. Instalieren wir absichtlich
+eine ältere Version einer Abhängigkeit, können wie den Dependency Checker dann wie folgt
+ausführen:
+
+```sh
+npm install jquery@3.0.0
+npm audit
+```
+
+Wir erhalten folgenden Bericht:
+
+```
+# npm audit report
+
+jquery  <=3.4.1
+Severity: moderate
+XSS in jQuery as used in Drupal, Backdrop CMS, and other products - https://github.com/advisories/GHSA-6c3j-c64m-qhgq
+Potential XSS vulnerability in jQuery - https://github.com/advisories/GHSA-jpcq-cgw6-v4j6
+Potential XSS vulnerability in jQuery - https://github.com/advisories/GHSA-gxr4-xjj5-5px2
+fix available via `npm audit fix`
+node_modules/jquery
+
+1 moderate severity vulnerability
+```
+
+## Code-Formatierer
+
+Wir können auch unseren Code automatisch formatieren lassen. Das kann etwa dann
+sinnvoll sein, wenn viele Personen an einem Software-Projekt arbeiten. Jeder
+schreibt Code auf eine etwas andere Weise. Um die Einheitlichkeit des Codes
+sicherzustellen, sodass jeder den Code gleich gut lesen kann, können wir einen
+automatischen Code-Formatierer einsetzen.
+
+Beide unter Linter genannten Tools (pretter und biome) unterstützen auch die
+Formatierung von Code. Nehmen wir beispielsweise folgende unformatierte
+Datei:
+
+```js
+const m = document.getElementById("gardun").getContext("2d");
+  const atom = function(x,y,c){m.fillStyle=c; m.fillRect(x,y,3,3)}
+  for(let y=1;y<1000; y++){for(let x=1;x<1000;x++){
+      const dx = (x-500)/100000-0.233;const dy = (y-500)/100000-0.655
+  const a = dx;const b = dy;
+for(let t=1;t<200;t++){
+    const d = (a*a)-(b*b)+dx; const b = 2*(a*b)+dy;
+  const a = d;  const H = d>200;
+if(H){atom(x,y,"rgb("+ t*3 +","+ t +","+ t*0.5 +")"); break}
+       }}}
+```
+
+Nennen wir die Datei `mandelbrot.js`, können wir diese wie folgt formatieren:
+
+```
+npm install @biomejs/biome
+npx biome format --indent-style=space --write mandelbrot.js
+```
+
+Die Datei sieht nach der Formatierung wie folgt aus:
+
+<details>
+```js
+const m = document.getElementById("gardun").getContext("2d");
+const atom = function (x, y, c) {
+  m.fillStyle = c;
+  m.fillRect(x, y, 3, 3);
+};
+for (let y = 1; y < 1000; y++) {
+  for (let x = 1; x < 1000; x++) {
+    const dx = (x - 500) / 100000 - 0.233;
+    const dy = (y - 500) / 100000 - 0.655;
+    const a = dx;
+    const b = dy;
+    for (let t = 1; t < 200; t++) {
+      const d = a * a - b * b + dx;
+      const b = 2 * (a * b) + dy;
+      const a = d;
+      const H = d > 200;
+      if (H) {
+        atom(x, y, "rgb(" + t * 3 + "," + t + "," + t * 0.5 + ")");
+        break;
+      }
+    }
+  }
+}
+```
+</details>
+
+## Transpiling
+
+Transpilieren leitet sich ab von `Transformieren` und `Kompilieren`. Kompilieren
+bedeutet die Überführung von Quellcode in Maschinencode und wir etwa bei Sprachen wie C verwendet.
+
+Transpilieren meint das Transformieren von Quellcode, wobei aber wieder Quellcode
+herauskommt. Ein Beispiel für einen Transpiler ist der TypeScript-Transpiler,
+der TypeScript in JavaScript umwandelt. 
+
+Im folgenden schauen wir uns einige häufige verwendete Tools kurz an, um
+eine bessere Übersicht über das JavaScript und Web-Ecosystem zu erhalten.
+
+### TypeScript
+
+Wie erwähnt können wir TypeScript nicht nur nutzen, um unseren Code einem Typen-Check
+zu unterziehen. Sondern auch, um unseren TypeScript-Code in JavaScript umzuwandeln.
+
+Entfernen wir bei unserem obigen Beispiel zum Typen-Check im Befehl `npx tsc --noEmit`
+den Teil `--noEmit`, erstellt TypeScript aus unseren TypeScript-Dateien
+entsprechende JavaScript-Dateien.
+
+### Babel
+
+[Babel](https://babeljs.io/) ist ein Code-Transformator, der zu einer Zeit entstanden
+ist, als mit EcmaScript2016 viele neue Features in die Sprache JavaScript eingefügt wurden.
+
+Viele dieser Features (z.B. Arrow-Funktionen) erleichtern uns die Programmierung.
+Da aber nicht alle Nutzer immer den neusten Browser verwenden, können wir diese
+Features nicht verwenden, sofern wir etwas ältere Browser unterstützen wollen.
+
+Babel ist nun in der Lage, neue JavaScript-Feature so umzuformen, dass diese
+auch von älteren Browsern unterstützt werden.
+
+Aktuell ist Babel etwas weniger relevant, da EcmaScript2016 nun eine Weile zurückliegt
+und inzwischen die meisten Browser es unterstützen.
+
+Zudem unterstützen auch andere Tools wie TypeScript oder esbuild die Transformation
+von brandneuen JavaScript-Features. 
+
+### JavaScript-Erweiterungen
+
+Neben TypeScript gibt es noch weitere Erweiterungen der Programmiersprache
+JavaScript. UI-Bibliotheken wie React oder Svelte, die wir uns im nächsten
+Kapitel anschauen werden, arbeiten mit Erweiterungen, um die Erstellung
+von UIs zu vereinfachen.
+
+Beispielsweise arbeitet React mit Dateien mit der Endung `*.jsx` statt `.js`.
+Diese Dateien können direkt direkt HTML-Schnippsel enthalten:
+
+```jsx
+function Header() {
+  return <h1>Hallo Welt!</h1>;
+}
+```
+
+Abhängig von der Erweiterung werden diese von mehr oder weniger vielen Tools
+unterstüzt. JSX ist beispielsweise recht weit verbreitet und wir inzwischen
+von fast allen Tools unterstützt.
+
+### postcss
+
+[PostCSS](https://postcss.org/) ist ein Tool, um CSS auf verschiedene Arten
+und Weisen zu transformieren. PostCSS selber vollzieht dabei keine Transformation,
+sondern stellt nur das Framework bereit, um CSS zu transformieren. Die eigentlichen
+Transformation werden von Plugins umgesetzt. Dadurch ist es uns möglich, nur
+diejenigen Plugins und Transformationen zu installieren, die wir nutzen möchten.
+
+Es gibt [viele Plugins](https://postcss.org/docs/postcss-plugins) für PostCSS,
+einige nennenswerte Transformationen sind etwa:
+
+- [autoprefixer](https://github.com/postcss/autoprefixer) Fügt automatisch
+  [Vendor-Präfixe](https://developer.mozilla.org/en-US/docs/Glossary/Vendor_Prefix)
+  wie `-webkit-line-clamp` ein. Heutzutage weniger relevant, da die meisten Browser
+  die meisten CSS-Features unterstützen und nur noch sehr wenige solche Präfixe
+  notwendig sind.
+- [postcss-nesting](https://www.npmjs.com/package/postcss-nesting) transformiert
+  geschachtelte CSS-Regeln in ungeschachtelte. Das erlaubt uns bereits, geschachtelte
+  Regeln im CSS zu verwenden, obwohl die [Browser-Unterstützung](https://caniuse.com/css-nesting)
+  noch nicht optimal ist.
+- [postcss-german-stylesheets](https://github.com/timche/postcss-german-stylesheets)
+  erlaubt uns, CSS-Eigenschaften auf Deutsch zu schreiben, also etwa 
+  `hintergrundfarbe: schwarz;` statt `background-color: black;`.
+
+Nehmen wir als Beispiel folgenden CSS-Inhalt:
+
+```css
+form {
+  input::placeholder {
+    color: green;
+  }
+}
+```
+
+Speichern wir diesen Inhalt in der Datei `style.css` ab. Wir müssen anschließend
+noch die Datei `.browserslistrc` anlegen mit folgendem Inhalt:
+
+```js
+> 0.1%
+Chrome >50
+```
+
+Damit sagen wir, dass wir alle Browser unterstützen wollen, die von mehr als
+0.1% der Nutzer verwendet werden; sowie alle Chrome-Versionen ab Version 50.
+(Letzteres nur zur Illustration hier). Dies wird von autoprefixer verwendet,
+um die Präfixe zu bestimmen, die hinzugefügt werden sollen. Dann können wir
+PostCSS mit den Plugins wie folgt installieren und ausführen:
+
+```sh
+npm install postcss-cli autoprefixer postcss-nesting
+npx postcss --use autoprefixer --use postcss-nesting --output out.css style.css
+```
+
+Als Ergebnis erhalten wir in der Datei `out.css`:
+
+```css
+form input::-webkit-input-placeholder {
+  color: green;
+}
+form input:-ms-input-placeholder {
+  color: green;
+}
+form input::placeholder {
+  color: green;
+}
+```
