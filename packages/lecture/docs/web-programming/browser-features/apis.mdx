@@ -1,0 +1,118 @@
+---
+id: browser-features-apis
+slug: /browser-features/apis
+sidebar_position: 1
+description: Weiteres Browser-APIs für die Webentwicklung
+---
+
+import HtmlSnippet from "@site/src/components/HtmlSnippet";
+
+# Abschnitt 1 - Browser-APIs
+
+## Web Storage API
+
+Die [Web Storage API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API)
+erlaubt uns, Daten im Browser zu speichern. Lädt der Browser die Seite erneut
+oder schließt die Webseite und besucht sie später wieder, sind die Daten
+noch vorhanden.
+
+Es gibt 2 Arten von Storage:
+
+- localStorage &mdash; Die Daten werden solange gespeichert, bis wir
+  sie löschen (oder der Nutzer ein Löschen der Daten erzwingt.)
+- sessionStorage &mdash; Die Daten werden gespeichert, bis die Browser-Session
+  vorbei ist. In der Regel ist die Browser-Session vorbei, wenn der Browser
+  geschlossen wird. Das kann aber je nach Browser variieren. Einige Browser
+  erlauben es beispielsweise, die Session beim Neustart beizubehalten.
+
+Wir können auf die beiden Arten von Storage über die globalen Variaben
+`localStorage` und `sessionStorage` zugreifen.
+
+Um Daten zu speichern, benutzen wir die `setItem`-Methode. Key und Value
+müssen jeweils ein String sein:
+
+```js
+localStorage.setItem("key", "value");
+sessionStorage.setItem("key", "value");
+```
+
+Zum Auslesen gespeicherter Daten steht uns die `getItem`-Methode zur Verfügung.
+
+```js
+// Gibt jeweils "value" zurück
+localStorage.getItem("key");
+sessionStorage.getItem("key");
+```
+
+Hier ist ein Beispiel, wo wir den Wert einer Textarea im localStorage speichern.
+Beim Neuladen der Seite geht der Wert nicht verloren.
+
+<HtmlSnippet path="local-storage" type="js" tabs="html,css,js" toggleable />
+
+## Geolocation API
+
+Die Geolocation-API ermöglicht uns, auf den aktuellen Standort des Nutzers zuzugreifen.
+In Kombination mit einem Karten-Widget können wir das etwa nutzen, um den Standort des
+Nutzers anzuzeigen. Aus Datenschutzgründen muss der Nutzer dem zustimmen,
+bevor wir im JavaScript seinen Standort erhalten können.
+
+Im JavaScript können wir auf die Geolocation-API über das globale Objekt
+`navigator.geolocation` zugreifen:
+
+```js
+// Wir müssen ein Callback übergeben, was aufgerufen wird, wenn
+// die Position des Nutzers bekannt ist.
+navigator.geolocation.getCurrentPosition(onSuccess, onError);
+function onSuccess(position) {
+  console.log("Breitengrad", position.coords.latitude);
+  console.log("Längengrad", position.coords.longitude);
+}
+function onError(error) {
+  console.log("Code", error.code);
+  console.log("Nachricht", error.message);
+}
+```
+
+Hier ist ein Beispiel mit anschließender Darstellung auf einer Karte:
+
+<HtmlSnippet path="geolocation" type="js" tabs="html,css,js" toggleable />
+
+## Media Capture and Streams API
+
+Die [Media Capture and Streams API](https://developer.mozilla.org/en-US/docs/Web/API/Media_Capture_and_Streams_API)
+erlaubt uns, auf Audio- und Video-Eingaben des Rechners des Nutzers zuzugreifen.
+Ebenfalls aus Datenschutzgründen muss der Nutzer dem vorher zustimmen.
+
+Audioeingaben können etwa aus einem Mikrofon kommen. Videoeingabe sind beispielsweise
+eine Webcam oder der Inhalt des Bildschirms (Screen Capture).
+
+Um auf Eingabegeräte (Media Devices) zuzugreifen, steht uns das globale
+Object `navigator.mediaDevices` zur Verfügung. Dieses besitzt im Wesentlichen
+zwei Methoden:
+
+- getUserMedia &mdash; Zugriff auf Webcam oder Mikrofon
+- getDisplayMedia &mdash; Zugriff auf den Inhalt des Bildschirms. Fragt den Nutzer
+  danach, was er freigeben möchte (Browser-Tab, Fenster, gesamten Bildschirm). 
+
+Bei beiden Methoden müssen wir ein [Objekt](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia#constraints) übergeben.
+Dieses beschreibt, welche Anforderung der Media Stream haben muss (z.B. Auflösung
+oder Bildwiederholungsrate).
+
+Den so erhaltenen Stream können wir etwa in einem `<video>`-Element abspielen
+oder mittels [ImageCapture](https://developer.mozilla.org/en-US/docs/Web/API/ImageCapture)
+ein Bild machen. Dies wird im folgenden Beispiel illustriert:
+
+<HtmlSnippet path="media-devices" type="js" tabs="html,css,js" toggleable />
+
+## Browser-Support
+
+Nicht jedes neue Feature wird von allen Browsern unterstützt. Wir sollten immer
+vorher prüfen, welche Browser in welchen Version ein Feature unterstützen und
+welche Browser wir unterstützen wollen.
+
+[@mdn/browser-compat-data](https://github.com/mdn/browser-compat-data) stellt
+umfangreiche Daten bereit, welche Browser welche Features unterstützen. Diese
+Daten können wir entweder auf den entsprechenden Seiten von
+[MDN web docs](https://developer.mozilla.org/en-US/docs/Web/API/Element/classList#browser_compatibility)
+oder auf [Can I Use](https://caniuse.com/) einsehen und durchsuchen.
+
