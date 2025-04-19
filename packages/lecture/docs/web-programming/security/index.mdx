@@ -5,29 +5,318 @@ sidebar_position: 8
 description: Grundlegende Konzepte der Sicherheit von Webseiten.
 ---
 
+import Link from "@docusaurus/Link";
+
 # Kapitel 8 - Sicherheit
 
-# Online-Ressource
+Mit wachsender Popularität des Internets wächst auch die Bedeutung, dessen
+Nutzung abzusichern. Sicherheit ist ein komplexes Thema, was wir im Rahmen
+dieses Moduls nicht umfassend behandeln können. Stattdessen wollen wir uns diesem
+letzten Kapitel gezielt einige ausgewählte Aspekte anschauen, die wir bei der
+Entwicklung von Webseiten bedenken und beachten sollten.
 
-OWASP
-  Top 10 https://owasp.org/www-project-top-ten/
-  Cheat Sheet https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html
-NVD, CVE, CWE
+# Online-Ressourcen
+
+Eine bedeutsame Ressource ist OWASP (Open Worldwide Application Security Project).
+OWASP ist eine Online-Community rund um das Thema Sicherheit. Sie stellen
+auf Ihrer Webseite verschiedene Informationen bereit, darunter etwa:
+
+- https://owasp.org/www-project-top-ten/
+  - Top 10 Web Application Security Risks
+- https://owasp.org/www-community/attacks/
+  - Liste bekannter Angriffszenarien
+- https://cheatsheetseries.owasp.org/index.html
+  - Informationen und Anleitungen zum Vermeiden bekannter Sicherheitsprobleme.
+
+In Bezug auf Software-Schwachstellen und Sicherheitslücken ist auch die
+[NVD - National Vulnerability Database](https://nvd.nist.gov/) erwähnenswert.
+Dort werden bekannte Schwachstellen von Software gepflegt und können
+[durchsucht](https://nvd.nist.gov/vuln/search) werden. Diese Liste können wir auch
+beispielsweise beim Build-Step verwenden, um die Abhängigkeiten unserer Webapp
+nach bekannten Sicherheitslücken zu durchsuchen. 2 Begrifflichkeiten, die wir
+bei Verwendung von NVD kennen sollten:
+
+- CWE (Common Weakness Enumeration) &mdash; ID, die bekannten Arten Schwachstellen in
+  Software gegeben wird. Beispielsweise ist [CWE-79](https://cwe.mitre.org/data/definitions/79.html)
+  die ID für XSS (Cross-site Scripting, siehe unten).
+- CVE (Common Vulnerabilities and Exposures) &mdash; ID für konkrete Probleme
+  in einer bestimmten Software und Version. Beispielsweise ist
+  [CVE-2022-31160](https://www.cve.org/CVERecord?id=CVE-2022-31160) eine konkrete
+  XSS-Schwachstelle von [jQueryUI](https://jqueryui.com/) bei Verwendung des
+  Checkbox-Auwahl-Widgets.
+
+Weitere Datenbanken für CVE sind etwa [cve.org](https://www.cve.org/)
+oder die [Snyk Vulnerability Database](https://security.snyk.io/vuln).
 
 ## HTTPS
 
-Verwendung von https
-
-WIP
+HTTPS hatten wir bereits als abgesichertes Protokoll im Kapitel zu HTTP kennengelernt.
+Produktive Webseiten sollten wir als ersten Schritt immer per HTTPS betreiben.
+Falls notwendig, können wir zudem noch eine Form der Ende-Zu-Ende-Verschlüsselung
+anwenden, falls es sich um Daten handelt, die der Server nicht lesen können muss.
+Für weitere Informationen sieh hierzu den Abschnitt
+<Link to="/docs/http/protocol/#https--tls" rel="noopener noreferrer">HTTP / TLS</Link>
+aus dem vorigen Kapitel.
 
 ## Header
 
-HSTS, CORS, CSP
+Webbrowser unterstützen verschiedene HTTP-Header, die wir verwenden können, um die
+Sicherheit unserer Webseite zu erhöhen.
 
-## Bekannte Angriffszenarien
 
-XSS, CSRF, SQL-Injection, (D)DoS z.B. mit RegExp
+### CORS
 
-## Nonce
+Standardmäßig erlauben Browser es nicht, dass eine Webseite bzw. unser JavaScript-Code
+auf Ressourcen und URLs einer anderen Webseite zugreift. Falls ein Server das erlauben
+möchte, kann er den Header `Access-Control-Allow-Origin` setzen, siehe den
+Abschnitt
+<Link to="/docs/http/protocol/#origin" rel="noopener noreferrer">Origin</Link>
+aus dem Kapitel zu HTTP.
 
-WIP
+Erinnern wir uns &mdash; Beispielsweise schlägt folgendes JavaScript fehl:
+
+```js
+await fetch("https://example.com")
+```
+
+Warum gibt es aber diese Einschränkung? Was würde passieren, wenn wir per JavaScript
+HTTP-Requests an jede andere Webseite stellen dürften? Um das zu verstehen,
+betrachten wir 2 Szenarien.
+
+:::warning
+Im folgenden nutzen wir ausgedachte Webseitennamen als Beispiel. Bitte trotzdem
+nicht die Adressen im Browser aufrufen!
+:::
+
+__Session-Cookie__
+
+Damit der Nutzer sich nicht jedesmal neu anmelden muss, können wir einen
+Session-Cookie verwenden. Diesen sendet der Browser bei jedem Aufruf an die
+Webseite automatisch mit.
+
+
+Nehmen wir nun an, die Shopping-Webseite `suppazon.de` erlaubt die Aufgabe
+einer Bestellung über das folgende POST-Request:
+
+```
+POST https://suppazon.de/order HTTP/1.1
+Cookie: spznfbgid=X00-8888999-1111222:3335555666
+Content-Type: application/json
+{
+  "product_id": "web_programming_basics",
+  "amount": "1",
+  "shipping_address": "01234 Musterstand, Musterstr. 42a",
+}
+```
+
+Browser sind heutzutage Multi-Tab-basiert. Nutzer können gleichzeitig bei Suppazon
+angemeldet sein und nebenbei in einem anderen Tab nach weiteren Informationen
+zum Produkt suchen.
+
+Nun besucht der Nutzer aus Versehen die bösartige Webseite `https://check48.de/`.
+check48 könnte nun per JavaScript ein HTTP-Request an `suppazon.de` stellen
+und damit eine Bestellung im Namen des Nutzers auslösen, potentiell mit geänderter
+Lieferaddresse. Das funktioniert, weil der Browser automatisch das Session-Cookie mitsendet.
+
+Da JavaScript im Hintergrund läuft, würde der Nutzer in dem Moment das nicht einmal bemerken.
+
+__Ressourcen im Intranet__
+
+Viele Firmen nutzen ein sogenanntes Intranet. Ein Intranet ist ein Subnetzwerk,
+welches nur für Rechner zugänglich sind, die sich in der Firma befinden. Im Intranet
+könnten etwa firmeninterne Dokumente abgelegt sein. Das Intranet ist vom
+Internet getrennt, sodass ausgeschlossen ist, dass über das Internet Personen
+von außerhalb auf diese Dokumente zugreifen können.
+
+Anders herum ist es aber für Rechner im Intranet der Firma möglich, auf das
+Internet zuzugreifen (sonst wäre heutzutage kaum noch ein Arbeiten möglich).
+
+Nehmen wir nun an, Max Mustermann arbeitet als Produkt-Manager in der Firma
+`Mars Mobile`. Die Firma hat ein Intranet, in dem es unter `https://mmobile.intra.de/chat`
+auch einen internen Chat für die Mitarbeiter gibt.
+
+Max sucht jetzt nach den technischen Daten des neu erschienen Produkts
+`Merry Mobilfon 3`. Aus Versehen landet er dabei auf der bösartigen Webseite
+`https://ur-anus.de/product-overview`. Jetzt könnte diese Webseite per JavaScript
+ein HTTP-Request an `https://mmobile.intra.de/chat` stellen und somit die
+bisher geschriebenen Nachrichten aus dem firmeninternen Chat abrufen.
+
+Das funktioniert, weil der Rechner und Browser von Max sowohl auf das firmeninterne
+Intranet als auch auf das weltweite Internet Zugriff hat. Mögliche Einschränkung
+an Cookie sind in diesem Fall irrelevant, weil die Absicherung hier nur darauf
+basiert, dass das Intranet nicht von außerhalb zugänglich ist.
+
+### HSTS
+
+HSTS steht für [HTTPS Strict-Transport-Security](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Strict-Transport-Security)
+und bezieht sich auf den HTTP-Header `Strict-Transport-Security`.
+
+Setzt ein Server diesen Header, erlaubt der Browser nur den Zugriff per HTTPS.
+Zudem erzwingt der Browser, dass HTTPS korrekt konfiguriert und das Zertifikat
+gültig ist. Ist das nicht der Fall, verweigert der Browser den Zugriff.
+
+Dies war in der Vergangenheit besonders wichtig, als Webseiten ohne HTTPS noch
+häufiger anzutreffen waren. Nutzt eine Webseite kein HTTPS, war es für Browser damit
+nicht möglich herauszufinden, ob die Webseite einfach kein HTTPs unterstützt;
+oder ob die HTTPS-Verschlüsselung durch einen Angreifer ausgehebelt wurde.
+
+Inzwischen zeigen viele Browser bereits standardmäßig eine Warnung, wenn wir
+versuchen, eine Webseite per HTTP aufzurufen. Dennoch ist der HSTS-Header ein
+sinnvolles Mittel, was keine Nachteile hat.
+
+### CSP
+
+CSP stellt für [Content-Security-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP)
+und bezieht sich auf den [gleichnamigen HTTP-Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy).
+
+Mit diesem Header können wir eine große Menge von sicherheitsbezogene Einstellungen
+für unserer vornehmen. Abhängig vom Inhalt des Headers deaktivieren Browser
+dann bestimmte Funktionen auf der Webseite.
+
+Beispielsweise könnten wir folgende Policy im CSP-Header definieren:
+
+```
+Content-Security-Policy: frame-ancestors 'none';
+```
+
+Wir verbieten damit, dass unsere Webseite über
+[`<iframe>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe)
+in andere Webseiten eingebunden wird. Damit verhindern wir zum Beispiel ein
+Angriffszenario bekannt als
+[Clickjacking](https://owasp.org/www-community/attacks/Clickjacking).
+
+Beispielsweise könnte eine bösartige Webseite unseren Webshop als IFrame einbinden,
+per CSS unsichtbar machen und so positionieren, dass der `Account löschen`-Button
+direkt über dem `Gratis-Handy`-Button der Webseite liegt. Über die CSS-Eigenschaft
+[pointer-events: none](https://developer.mozilla.org/en-US/docs/Web/CSS/pointer-events)
+kann die bösartige Webseite dafür sorgen, dass Klicks auf den `Gratis-Handy`-Button
+ignoriert werden und direkt auf den darunterliegenden unsichtbaren IFrame weitergeleitet
+werden.
+
+![Beispiel für Clickjacking mit einer Webseite, die einen Button über einen unsichtbaren IFrame legt.](/img/web/clickjacking.svg)
+
+Viele weitere Policies für den `Content-Security-Policy`-Header finden sich etwa bei
+[MDN web docs - CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy).
+
+
+## XSS
+
+Um unser Sinn für Sicherheit zu schärfen, wollen wir uns noch eine bekannte
+Gefahren anschauen, die unsere Webseite unsicher machen können.
+
+XSS steht für [Cross-site Scripting](https://owasp.org/www-community/attacks/xss/)
+und bezieht sich allgemein auf Szenarien, wo ein bösartiger Angreifer JavaScript
+erstellt und auf unserer Webseite ausführt.
+
+Schafft der Angreifer das, kann dieser per JavaScript auf alle Informationen
+auf der aktuellen Webseite zugreifen. Gerade heutzutage, wo viele Webseiten
+clientseitige UI-Frameworks einsetzen und somit große Teile der Logik und
+Daten im Browser sind, stellt das ein Sicherheitsrisiko dar.
+
+Neben dem HTML selber kann der Angreifer per JavaScript auch zugreifen auf
+beispielsweise [Cookies](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies),
+[Local und Session Storage](https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API)
+oder [Indexed DB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API).
+Oder der Angreifer könnte per [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+HTTP-Requests innerhalb unserer Shopping-Webseite stellen und Bestellungen 
+auszulösen. Der oben besprochen CORS-Schutz ist hier nicht mehr wirksam,
+da das JavaScript im Kontext unserer Webseite ausgeführt wird.
+
+### Szenario
+
+Wie könnte es nun passieren, dass ein Angreifer JavaScript in unsere Webseite
+injizieren und ausführen kann? Es gibt hier sehr viele Möglichkeiten, die
+wir unmöglich alle auflisten können. Teilweise sind diese auch spezifisch für
+den konkreten Anwendungsfall der Webseite. Allgemein können wir aber sagen,
+dass XSS-Angriff nicht selten dadurch entstehen, dass wir als Programmierer
+unachtsam waren oder eingegebenen Daten vertraut haben, ohne diese zu validieren.
+
+Nehmen wir beispielsweise an, wir haben eine Webseite erstellt, wo die Überschrift
+über einen URL-Parameter geändert werden kann:
+
+```js
+// Script für eine Webseite, wo es ein <h1>-Element gibt.
+const url = new URL(location.href);
+const heading = document.querySelector("h1");
+heading.innerHTML = url.searchParams.get("title");
+```
+
+Dann können wir etwa mit dem Aufruf `https://example.com?title=Hallo%20Welt`
+den Text der Überschrift auf `Hallo Welt` ändern.
+
+Wir können sogar die Schriftfarbe ändern, wenn wir die Seite aufrufen mit
+
+```
+# title = <span style='color:green'>Hallo Welt</span>
+https://example.com?title=%3Cspan%20style%3D'color%3Agreen'%3EHallo%20Welt%3C%2Fspan%3E
+```
+
+Erkennt jemand schon das Problem? Wir wollten nicht nur reinen Text erlauben, sondern
+den Text auch formatierbar machen. Daher haben wir `heading.innerHTML = ...`
+verwendet, damit per HTML der Text formatiert werden kann. Leider haben wir
+damit aber Angreifer Türen und Angeln für XSS geöffnet. Der Angreifer braucht
+lediglich ein `<script>alert('hacked')</script>` einzufügen, um JavaScript
+ausführen zu können. Sendet der Link einer anderen Person einen entsprechenden
+Link und klickt diese Person auf den Link, kann der Angriff damit potentiell
+das Konto dieser Person übernehmen.
+
+Um dieses Angriffszenario zu verhindern, könnten wir etwa `<script>`-Elemente
+aus dem Wert des `title`-Parameters herausfiltern. Dieses Vorgehen nennt
+sich [Sanitization](https://en.wikipedia.org/wiki/HTML_sanitization). Zwar
+ist das prinzipiell möglich, aber schwer richtig zu machen. HTML bietet
+noch viele weitere Möglichkeiten, JavaScript auszuführen, z.B. Attribute
+wie [onclick](https://developer.mozilla.org/en-US/docs/Web/API/Element/click_event).
+Selbst ein Bild kann ein GET-Request auslösen:
+
+```html
+<span style="background-image: url(...)"></span>
+```
+
+Besser wäre es, die Business-Anforderung zu prüfen. Is es wirklich notwendig
+ist, dass beim Aufruf der Webseite über URL-Parameter formatierten Text zu übergeben?
+Falls nicht, können wir statt `heading.innerHTML` die Eigenschaft `heading.textContent`
+verwenden, um dieses Problem gänzlich zu umgehen.
+
+
+### Nonce
+
+Eine weitere Möglichkeit, um die Fähigkeit eines Angreifers einzuschränken, JavaScript
+auszuführen, stellt der sogenannte [Nonce-Mechanismus](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/nonce) dar.
+
+Vereinfacht gesprochen handelt es sich damit um eine vom Server generierte ID für JavaScript.
+Nur JavaScript, welches die korrekte ID hat, wird vom Browser ausgeführt.
+
+Konkret ist der Ablauf wie folgt. Der Server generiert bei jedem Aufruf unserer
+Webseite eine zufällige ID und sendet diese in der HTTP-Response zurück:
+
+```
+HTTP 1.1 200 OK
+Content-Security-Policy: script-src 'nonce-8IBTHwOdqNKAWeKl7plt8g=='
+Content-Type: text/html
+<!DOCTYPE html>
+<html>
+  <head>
+    <script nonce="8IBTHwOdqNKAWeKl7plt8g==">...</script>
+  </head>
+  <body>
+    ...
+  </body>
+</html>
+```
+
+Jedes `<script>`-Element muss dann diese Nonce enthalten, damit der Browser
+die Ausführung erlaubt. Damit lässt sich auch unser obiges Szenario verhindern.
+Der Angreifer kann in der URL `https://example.com?title=...` zwar immer noch
+ein `<script>` einfügen, dieses wird aber vom Browser aufgrund der fehlenden
+Nonce nicht mehr ausgeführt. Da der Server bei jedem Aufruf eine neue Nonce
+zufällig generiert, ist es für den Angreifer nicht möglich, die Nonce
+herauszufinden.
+
+### HTTP-Only-Cookies
+
+Wir sollten natürlich immer verhindern, dass ein Angreifer JavaScript ausführen kann.
+Zusätzlich können wir aber auch noch Maßnahmen ergreifen, um den Impakt eines
+XSS-Angriffs zu verringern. Markieren wir sicherheitsrelevante Cookie wie
+Session-Cookies als [HttpOnly](https://developer.mozilla.org/en-US/docs/Web/Security/Practical_implementation_guides/Cookies#httponly),
+erlaubt der Browser nicht mehr den Zugriff per JavaScript.
+
