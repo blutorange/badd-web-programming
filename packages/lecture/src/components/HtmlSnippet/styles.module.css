@@ -45,3 +45,15 @@
 .codeBlock {
   margin-bottom: 0 !important;
 }
+
+[data-theme='dark'] {
+  .headerButton {
+    color: #ccc;
+  }
+}
+
+[data-theme='dark'] {
+  .summary {
+    background-color: #282a36;
+  }
+}

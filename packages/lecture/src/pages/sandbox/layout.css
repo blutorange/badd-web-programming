@@ -71,12 +71,12 @@
 }
 
 .sandbox__console {
-    max-height: 100px;
-    overflow: auto;
+  max-height: 100px;
+  overflow: auto;
 }
 
 .sandbox__result {
-    font-family: monospace;
+  font-family: monospace;
 }
 
 .sandbox__result-console-debug {
@@ -107,5 +107,19 @@
   .p-tabview::before,
   .sandbox__iframe-container {
     pointer-events: none;
+  }
+}
+
+[data-theme="dark"] {
+  .sandbox__code .p-tabview .p-tabview-nav,
+  .sandbox__code .p-tabview .p-tabview-nav a {
+    background-color: #282a36;
+  }
+  .sandbox__code .p-tabview .p-tabview-nav a {
+    color: white;
+  }
+
+  .p-tabview-nav {
+    margin-bottom: 3px;
   }
 }

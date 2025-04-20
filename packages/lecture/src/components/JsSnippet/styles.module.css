@@ -3,9 +3,6 @@
   position: relative;
 }
 
-.jsSnippet {
-}
-
 .summary {
   font-size: 15.2px;
   font-weight: 500;
@@ -87,4 +84,16 @@
 
 .resultLine-result {
   color: rgb(24, 107, 8);
+}
+
+[data-theme='dark'] {
+  .headerButton {
+    color: #ccc;
+  }
+}
+
+[data-theme='dark'] {
+  .summary {
+    background-color: #282a36;
+  }
 }

@@ -13,3 +13,16 @@
     margin: 0;
   }
 }
+
+[data-theme='dark'] {
+  .html-snippet__tab-view.p-tabview .p-tabview-nav,
+  .html-snippet__tab-view.p-tabview .p-tabview-nav a {
+    background-color: #282a36;
+  }
+  .html-snippet__tab-view.p-tabview .p-tabview-nav a {
+    color: white;
+  }
+  .html-snippet__tab-view pre {
+    border-radius: 0;
+  }
+}
