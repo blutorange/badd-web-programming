@@ -7,7 +7,15 @@ description: Weiteres Browser-APIs für die Webentwicklung
 
 import HtmlSnippet from "@site/src/components/HtmlSnippet";
 
-# Abschnitt 1 - Browser-APIs
+# Abschnitt 1 - Web-APIs
+
+Mittlerweile stellen Browser umfangreiche APIs bereit, die wir verwenden
+können, um verschiedenste Dinge zu tun, wie etwa auf die Webcam des Rechners
+zuzugreifen. In diesem Abschnitt wollen wir nicht alle APIs erlernen, sondern
+uns beispielshaft einige davon anschauen, um eine Vorstellung von den
+Möglichkeiten zu kriegen.
+
+Eine Auflistung vieler Web-APIs finden wir bei [MDN web docs - Web APIs](https://developer.mozilla.org/en-US/docs/Web/API).
 
 ## Web Storage API
 
@@ -103,6 +111,22 @@ oder mittels [ImageCapture](https://developer.mozilla.org/en-US/docs/Web/API/Ima
 ein Bild machen. Dies wird im folgenden Beispiel illustriert:
 
 <HtmlSnippet path="media-devices" type="js" tabs="html,css,js" toggleable />
+
+## Notification API
+
+Mit der Notification API können wir dem Nutzer Benachrichtigungen anzeigen. Etwa
+könnte ein Chat-App Notifications verwenden, um den Nutzer über neue Nachrichten
+zu informieren.
+
+Mit der Funktion [Notification.requestPermission()](https://developer.mozilla.org/en-US/docs/Web/API/Notification/requestPermission_static)
+bitten wir um Erlaubnis, dem Nutzer Benachrichtigungen senden zu dürfen. Mit
+[Notification.permission](https://developer.mozilla.org/en-US/docs/Web/API/Notification/permission_static)
+können wir prüfen, ob der Nutzer uns bereits die Erlaubnis erteilt hat (in dem
+Fall brauchen wir nicht noch einmal zu fragen). Haben wir die Erlaubnis, können
+wir mittels [new Notification("Nachricht")](https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification)
+eine neue Benachrichtigungen anzeigen. Das wird in dem folgenden Beispiel illustriert:
+
+<HtmlSnippet path="notifications" type="js" tabs="html,css,js" toggleable />
 
 ## Browser-Support
 

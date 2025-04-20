@@ -5,10 +5,143 @@ sidebar_position: 2
 description: Weitere Dev-Tools-Funktionen für die Webentwicklung
 ---
 
-Performance
+import Link from "@docusaurus/Link";
 
-Print-Simulation
+# Abschnitt 2 - Weitere Dev-Tools-Funktionen
 
-Dev Tools Events und DOM breakpoint
+In diesem Abschnitt betrachten wir noch einige weitere nützliche Tools, die
+uns bei der Entwicklung unterstützen können. Dev-Tools stellen inzwischen
+viele Funktionen für uns Entwickler bereit, wir stellen hier nur einige
+ausgewählte vor. 
 
-Dev Tools Responsiveness
+## Print-Simulation
+
+Wir hatten im Kapitel zu CSS kennengelernt, dass wir mittels [Media Queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries)
+CSS erstellen konnten, was nur beim Drucken einer Seite angewandt wird. Um etwa
+den Text beim Drucken schwarz zu machen:
+
+```css
+@media print {
+  * {
+    color: black !important;
+  }
+}
+```
+
+Ausprobieren können wir das, in dem wir unsere Webseite öffnen und den
+Druckdialog des Browsers öffnen. Bei komplexen CSS kann es aber schwierig sein,
+Fehler zu finden. Dev-Tools stellen uns eine einfach Möglichkeit bereit, den
+Media-Type testweise auf `print` zu stellen.
+
+Wo genau diese Funktion zu finden ist, hängt vom Browser ab. Bei Chromium-basierten
+Browser [finden wir diese Funktion im Tab Rendering](https://developer.chrome.com/docs/devtools/rendering/emulate-css#emulate_css_media_type_enable_print_preview).
+Bei Firefox gibt es einen Button zum Aktivieren der Print-Vorschau im Elements-Tab.
+
+![Rendering-Tab der Dev-Tools mit aufgeklappten Auswahlmenü zur Emulation des Media-Types](/img/web/dev-tools-print.png)
+
+![Button im Elements-Tab der Firefox-Dev-Tools zur Emulation des Media-Types](/img/web/dev-tools-print-ff.png)
+
+## Responsiveness
+
+Mit der Verbreitung von Smartphones, Tablets und anderen Geräten müssen wir
+bei der Webentwicklung beachten, dass unserer Webseite auch auf Bildschirmen
+mit verschiedener Auflösung und Größe verwendbar ist. 
+
+Wir sollten immer die Webseite auf verschiedenen Geräten testen und prüfen. Während
+der Entwicklung kann das aber umständlich sein. Dev-Tools stellen uns Möglichkeiten
+bereit, schnell einen Überblick darüber zu erhalten, wie unsere Webseite auf mobilen
+Geräte in etwa aussehen wird. In Chromium-basierten Browsern finden wir links oben einen
+Umschalter, um den [Device-Emulations-Modus](https://developer.chrome.com/docs/devtools/device-mode)
+zu aktivieren.
+
+![Dev-Tools mit aktivierten Device-Modus](/img/web/dev-tools-devices.png)
+
+Ist der Device-Modus aktiviert, können wir dynamisch die Bildschirmgröße ändern
+und beobachten, wie sich die Webseite verhält. Zudem ändert sich der Maus-Cursor
+zu einem kleine Kreis. Technisch werden jetzt [Pointer Events](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events)
+statt Mouse Events ausgelöst. Hiermit  können wir schnell feststellen, ob wir alle
+entsprechenden Event Listener richtig registriert haben. 
+
+## Performance
+
+Stellen wir Performance-Probleme auf unserer Webseite fest, bietet der Performance-Tab
+uns Möglichkeiten, um die Ursache dieser Probleme herauszufinden.
+
+![Performance-Tab der Dev-Tools](/img/web/dev-tools-perf-1.png)
+
+Wir sehen im Performance-Tab bereits einige relevante Informationen zu unserer
+Webseite, etwa den [Largest Contentful Paint](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint)
+(die Zeit, bis der Hauptteil der Webseite geladen und dem Nutzer angezeigt wurde).
+
+Um das Verhalten auf Geräten mit eingeschränkter Leistung oder Netzwerk zu beobachten,
+stehen uns (oben rechts) auch Möglichkeiten zur Verfügung, um die CPU und
+das Netzwerk zu limitieren.
+
+Schränken wir die CPU ein, benötigt JavaScript länger zu Ausführung. Interagieren
+wir jetzt mit unserer Webseite, können wir überprüfen, ob die Webseite immer noch
+angenehm zu bedienen ist.
+
+Schränken wir das Netzwerk ein, simulieren wir das Verhalten bei schlechter
+Internetverbindung. Das ist besonders dann nützlich, wenn unsere Webseite großen
+Gebrauch von HTTP-Requests zum Nachladen von Inhalten macht. Hiermit können Wir
+etwa prüfen, ob der Nutzer etwa mit Ladeanimation oder ähnlichen Feedback versorgt
+wird, um ein angenehmes Erlebnis auf der Webseite zu haben. 
+
+Weiterhin erlauben uns die Dev-Tools noch, aufzuzeichnen, was während der
+Interaktion mit der Webseite passiert, also z.B. welches JavaScript ausgeführt
+oder welche Netzwerk-Requests ausgelöst werden. Über den `Record`-Buttons links
+oben können wir die Aufzeichnung starten, dann mit der Webseite interagieren und
+schließlich die Aufzeichnung wieder beenden.
+
+Im folgenden Beispiel haben wir auf [MDN web docs](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
+aufgezeichnet, was während der Eingabe eines Suchtexts in die Suchbox oben
+rechts passiert. Das Ergebnis: 
+
+![Dev-Tools mit aktivierten Device-Modus](/img/web/dev-tools-perf-2.png)
+
+Wir sehen an der Timeline, was zu welchem Zeitpunkt passiert ist. In dem Fall
+wurde zuerst JavaScript ausgeführt. Dieses hat dann ein HTTP-Request für die Suche
+gestartet. Nach Ende des HTTP-Requests wurde wieder JavaScript zur Anzeige
+der Suchergebnisse ausgeführt.
+
+Klicken wir auf eine JavaScript-Funktion mit der Maus, können wir im unteren
+Teil zudem auch sehen, wie lange die JavaScript-Funktion benötigte. Per Klick
+können wir auch direkt zum Quellcode der Funktion für die weitere Analyse navigieren.
+
+## Events
+
+Im Elements-Tab der Dev-Tools gibt es rechts auch den Punkt `Event Listeners`:
+
+![Dev-Tools mit aktivierten Device-Modus](/img/web/dev-tools-events.png)
+
+Hier können wir einsehen, für welche Events per JavaScript ein Event-Listener
+registriert wurde. Zudem wird auch angezeigt, welche JavaScript-Funktion als
+Callback registriert wurde und ausgeführt werden wird, wenn das Event eintritt.
+Klicken wir auf den Link, können wir auch direkt zu der entsprechenden im Quellcode
+navigieren. In dem konkreten Fallen sehen wir, dass ein Event-Listener auf das
+`click`-Event registriert ist, also wenn der Nutzer auf den Button klickt.
+
+## DOM-Breakpoints
+
+Der Elements-Tab hat auch noch eine weitere nützliche Funktion. Mit einem
+Rechtsklick können wir einen sogenannten [DOM-Breakpoint](https://developer.chrome.com/docs/devtools/javascript/breakpoints#dom)
+am Element aktivieren.
+
+In dem <Link to="/sandbox?snippet=media-devices&tab=js" target="_blank" rel="noopener noreferrer">Sandbox-Beispiel für Media-Devices</Link>
+hatten wir einen Button, um die Anzeige der Videodaten der Webcam wieder zu stoppen.
+Technisch war die Anzeige über ein `<video>`-Element umgesetzt. Beim Klick auf
+den Stop-Button wird das `<video>` aus dem DOM entfernt.
+
+Wenn wir nicht wissen, warum oder durch welches JavaScript sich der DOM verändert,
+können wir einen DOM-Breakpoint verwenden. Im folgenden Beispiel setzen wir
+einen DOM-Breakpoint auf das `<video>` für den Fall, wenn das Element entfernt wird:
+
+![Dev-Tools mit aktivierten Device-Modus](/img/web/dev-tools-dom-breakpoints-1.png)
+
+Sobald wir jetzt auf den Button klicken, unterbricht der Browser die Ausführung
+des JavaScript in dem Moment, wo das Element aus dem DOM entfernt wird. Im 
+Sources-Tab sehen wir dann die genaue Stelle im JavaScript, wo das passiert ist
+und können weitere Untersuchungen anstellen.
+
+![Dev-Tools mit aktivierten Device-Modus](/img/web/dev-tools-dom-breakpoints-2.png)
+
