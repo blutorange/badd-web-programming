@@ -16,7 +16,7 @@ und wir haben Fehler vom Browser erhalten.
 
 Wäre es nicht aber schön, wenn die IDE oder ein Checker schon vor Ausführung
 des Codes auf potentielle Fehler prüfen könnte? Auch wenn dabei nicht alle
-Fehler und Bugs auffalen, ist es hilfreich, die Menge an Fehlern zu reduzieren.
+Fehler und Bugs auffallen, ist es hilfreich, die Menge an Fehlern zu reduzieren.
 Zudem besteht die Gefahr, dass wir beim Ausführen von Code Fehler übersehen,
 die in Code-Teilen stecken, die nur selten  ausgeführt werden (Fehlerbehandlung,
 Edge Cases).
@@ -84,7 +84,7 @@ Historisch besitzt TypeScript einige Features, welche diesem Design-Goal
 widersprechen. Im Wesentlichen sind dies [Enum](https://www.typescriptlang.org/docs/handbook/enums.html),
 [Namespace](https://www.typescriptlang.org/docs/handbook/namespaces.html) und
 [Parameter Properties](https://www.typescriptlang.org/docs/handbook/2/classes.html#parameter-properties).
-Zur Wahrung der Abwärtskompatibilität werden diese Features noc hunterstützt.
+Zur Wahrung der Abwärtskompatibilität werden diese Features noch unterstützt.
 Falls möglich, würde ich aber empfehlen, diese nicht mehr zu verwenden. Inzwischen
 gibt es in den [Compiler-Options](https://www.typescriptlang.org/tsconfig) auch
 das Flag [erasableSyntaxOnly](https://www.typescriptlang.org/tsconfig/#erasableSyntaxOnly),
@@ -99,14 +99,14 @@ keine Fehler aufgrund falscher Typen auftreten können).
 
 Nun ist JavaScript eine [sehr dynamische Sprache](https://github.com/microsoft/TypeScript/issues/9825#issuecomment-306272034).
 Ein Typen-System, was diese Garantie liefern kann, würde auch schwerwiegende
-Einschränkungen mit sich zienen, welchen Code wir schreiben können. Damit die
+Einschränkungen mit sich ziehen, welchen Code wir schreiben können. Damit die
 Typenprüfung erfolgreich ist müssten wir unseren Code länger und weniger elegant
 schreiben, was die Benutzbarkeit der Sprache für uns Programmierer reduziert.
 
 Aus diesem Grund hat sich TypeScript als Ziel gesetzt, eine Balance zu finden
 zwischen Korrektheit der Typen und Bedienbarkeit der Sprache für Programmierer.
 
-Ein Beispiel, wo der Type-Checker keinen Fehler erkannt, zur Lauftzeit aber
+Ein Beispiel, wo der Type-Checker keinen Fehler erkannt, zur Laufzeit aber
 ein Typenfehler auftritt:
 
 <TsSnippet path="unsound-opt-prop" toggleable />
@@ -122,7 +122,7 @@ erhöhen, beispielsweise:
   - Davon ausgehen, dass beim Zugriff auf den Index eines Arrays (`array[4]`) 
     immer `undefined` erhalten werden könnte, wenn das Array nicht so lang ist.
 - [useUnknownInCatchVariables](https://www.typescriptlang.org/tsconfig/#useUnknownInCatchVariables)
-  - Bei `try { ... } catch (e) {}` davn ausgehen, dass `e` jeder beliebige
+  - Bei `try { ... } catch (e) {}` davon ausgehen, dass `e` jeder beliebige
     Wert sein könnte.
 
 :::note
@@ -183,7 +183,7 @@ Raum für Typen-Annotationen in der Syntax von JavaScript zu schaffen:
 [Type Annotations](https://github.com/tc39/proposal-type-annotations). Diese müssen
 als Art Kommentar verstanden werden -- JavaScript selber prüft diese nicht. Dafür
 wären immer noch 3rd-Party-Tools notwendig. Vorteil wäre aber eine einheitliche
-Sytnax und die Möglichkeit, typenannotiertes JavaScript ohne Transformationschritt
+Syntax und die Möglichkeit, typenannotiertes JavaScript ohne einen Transformationsschritt
 direkt auszuführen.
 :::
 
@@ -202,7 +202,7 @@ beim Debugging den ursprünglichen Code anzeigen zu können. Dennoch sorgt die N
 für Source-Maps für erhöhte Komplexität beim Einrichten der Programmierumgebung.
 
 Zur Illustration sieht eine Source-Map etwa wie folgt aus. Ein
-[tieferes Verstänis](https://tc39.es/ecma426/2024/) dafür ist aber in der Regel
+[tieferes Verständnis](https://tc39.es/ecma426/2024/) dafür ist aber in der Regel
 nicht notwendig, erforderlich ist nur, dafür zu sorgen, dass solche Source-Maps
 entsprechend erzeugt werden.
 

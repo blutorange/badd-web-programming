@@ -55,7 +55,7 @@ false, true;
 // Zahlen (technisch: immer 64-bit Float)
 2, -5, 9.42, 123_456;
 
-// Präsize, beliebig große Ganzzahlen (bigint)
+// Präzise, beliebig große Ganzzahlen (bigint)
 900_719_925_474_099_132n;
 
 // Vergleiche auch das Ergebnis von
@@ -135,7 +135,7 @@ Zugriff mittels Punkt müssen wir dann mit eckigen Klammer zugreifen:
 
 <JsSnippet path="object-property-special-chars.js" toggleable />
 
-Wie wir gesehent hatten, sind Array auch nur Objekte. Diese haben die speziellen
+Wie wir gesehen hatten, sind Array auch nur Objekte. Diese haben die speziellen
 Eigenschaften `0`, `1`, `2` etc. für das 1., 2. und 3. Elemente. Auch hier greifen
 wir mittels eckigen Klammern zu:
 
@@ -277,7 +277,7 @@ nicht. Im Folgenden einige Beispiele für seltsame Eigenschaften von `==`:
 
 ## Kontrollstrukturen
 
-Kontrollstrukturen ermöglichen es, zu beinflussen, welcher Code in welcher
+Kontrollstrukturen ermöglichen es, zu beeinflussen, welcher Code in welcher
 Reihenfolge ausgeführt wird.
 
 __Bedingung__
@@ -322,14 +322,14 @@ egal ob Erfolg oder Fehler. Das ist etwa nützlich, um aufzuräumen.
 :::note
 Eine neue Funktionalität wird das [using-Statement](https://github.com/tc39/proposal-explicit-resource-management) sein,
 womit sich JavaScript um das Aufräumen von Ressourcen kümmert. Dazu muss ein
-Objekt eine Funktion unter dem `Symbol.dispose` definiert haben, welche die Aufräum-Logik implementiert.
+Objekt eine Funktion unter dem `Symbol.dispose` definiert haben, welche die Logik zum Aufräumen implementiert.
 [In TypeScript bereits implementiert.](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-2.html#using-declarations-and-explicit-resource-management)
 :::
 
 ## Funktionen
 
 Funktionen sind ein wichtiges Werkzeug, um Code in wiederverwertbare Bestandteile
-zu gruppieren. Eine Funktion kappselt einen bestimmten Code-Teil. Sie hat eine
+zu gruppieren. Eine Funktion kapselt einen bestimmten Code-Teil. Sie hat eine
 beliebige Anzahl an Parametern, die übergeben werden können, und genau einen
 Rückgabewert.
 
@@ -342,7 +342,7 @@ Default-Werte für Parameter können durch `=` angegeben werden.
 <JsSnippet path="function-statement.js" toggleable />
 
 Eine weitere Schreibweise für Funktionen ist die sogenannte Arrow-Funktion-Schreibweise
-(manchmal auch Lambda genannt). Die bezieht sich daauf, dass wir die Zeichen
+(manchmal auch Lambda genannt). Die bezieht sich darauf, dass wir die Zeichen
 `=>` benutzen, die wir ein Pfeil aussehen.
 
 <JsSnippet path="function-arrow.js" toggleable />
@@ -361,7 +361,7 @@ inline sind (top level), hier gibt es aber verschiedene Code-Styles.
 ## Prototypen
 
 JavaScript basiert auf dem Konzept, dass jedes Objekt einen Prototyp hat (welcher
-ebenfalls wieder einene Prototypen haben kann usw.). Die Menge aller Eigenschaften
+ebenfalls wieder einen Prototypen haben kann usw.). Die Menge aller Eigenschaften
 eines Objekts ergibt sich aus der Menge der Eigenschaften aller Prototypen.
 
 Die direkte Verwendung von Prototypen kann schnell dazu führen, unübersichtlichen

@@ -12,9 +12,9 @@ import JsSnippet from "@site/src/components/JsSnippet";
 In diesem Abschnitt wollen wir uns einige hilfreiche Objekte anschauen, die
 von der Programmiersprache JavaScript bereits mitgeliefert werden (Standard-Bibliothek).
 
-Wir werden nur beispielshaft einige Funktionen uns anschauen. Wichtig ist zu verstehen,
+Wir werden nur beispielhaft einige Funktionen uns anschauen. Wichtig ist zu verstehen,
 dass JavaScript diverse Funktionalitäten bereits mitbringt. Bei Bedarf können
-diese immer in der Spezfikation oder Dokumentation angeschaut werden. Die
+diese immer in der Spezifikation oder Dokumentation angeschaut werden. Die
 [MDN web docs](https://developer.mozilla.org/en-US/) sind eine gute Ressource.
 
 ## Number
@@ -63,8 +63,8 @@ Siehe
 :::info
 Das Date-Klasse ähnelt der [gleichnamigen Klasse](https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/util/Date.html)
 in Java und weist die gleichen Probleme auf. Zeitzonen werden nicht ausreichend
-beachtet, Zeitpunkte und Darstelung von Zeitpunkten in verschiedenen Ländern und
-Kulturen werden miteinande vermischt. In Java wurde mittlerweile eine neue
+beachtet, Zeitpunkte und Darstellung von Zeitpunkten in verschiedenen Ländern und
+Kulturen werden miteinander vermischt. In Java wurde mittlerweile eine neue
 [Time-API](https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html)
 eingeführt, welche diese und andere Probleme adressiert. 
 
@@ -83,7 +83,7 @@ als reine Zahl zu beschreiben. Ein UNIX-Zeitstempel für einen Zeitpunkt `T` ist
 definiert als die Zeitdifferenz zum Bezugszeitpunkt `01. Januar 1970, 00:00 Uhr`.
 
 Ein UNIX-Zeitstempel wird oft in Sekunden oder Millisekunden angegeben.
-Mittels `Date.now()` können wir direkt auf die Anzahl der Millsekunden zugreifen:
+Mittels `Date.now()` können wir direkt auf die Anzahl der Millisekunden zugreifen:
 
 <JsSnippet path="date-now.js" nonDeterministic />
 
@@ -118,7 +118,7 @@ muss möglicherweise nach Ausführung geschlossen werden, um das Script abzubrec
 :::
 
 Vereinfacht gesagt ist eine RegExp eine Muster, das gegen eine Zeichenkette (String)
-getestet werden kann. Fals wir etwa wissen wollen, ob ein String nur aus den Ziffern
+getestet werden kann. Falls wir etwa wissen wollen, ob ein String nur aus den Ziffern
 0-9 besteht, können wir diese wie folgt tun:
 
 <JsSnippet path="regexp-test.js" />
@@ -127,7 +127,7 @@ getestet werden kann. Fals wir etwa wissen wollen, ob ein String nur aus den Zif
 Es gibt 2 Möglichkeiten, um RegExp zu erzeugen. Entweder durch Erstellen einer
 neuen Instanz der Klasse `new RegExp("^\\d+$")` oder durch die spezielle
 Schreibweise `/^\d+$/`. Letztere ist vorteilhaft, da hier kein String verwendet
-werden muss, in dem noch einmal separat Sondernzeichen escaped werden müssen.
+werden muss, in dem noch einmal separat Sonderzeichen escaped werden müssen.
 :::
 
 Mit `^` sagen wir, dass wir am Anfang des Strings anfangen wollen. `[0-9]` sind
@@ -143,7 +143,7 @@ und das Jahr als Zahl erhalten.
 
 Dazu können wir sogenannte  [Capture-Gruppen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Capturing_group)
 verwenden. Wenn wir einen Teil einer RegExp mit runden Klammern `(...)` umgeben,
-können wir später auf die entsprechenden Teie zugreifen:
+können wir später auf die entsprechenden Teile zugreifen:
 
 <JsSnippet path="regexp-capture-group.js" toggleable />
 
@@ -156,9 +156,9 @@ Der Übersichtlichkeit halber können wir Capture-Gruppen auch Namen geben:
 JSON steht für `JavaScript Object Notation`. Inzwischen ist dieser Name nur
 noch historisch sinnvoll, JSON ist ein von JavaScript unabhängiger Standard,
 um Daten zu beschreiben und zwischen Programmen und verschiedenen Rechnern
-auzutauschen.
+auszutauschen.
 
-Siehe [RFC7159](https://datatracker.ietf.org/doc/html/rfc7159) für die Spezfikation,
+Siehe [RFC7159](https://datatracker.ietf.org/doc/html/rfc7159) für die Spezifikation,
 [json.org](https://www.json.org/json-en.html) für eine visuelle Illustration.
 
 JSON wurde bewusst einfach gehalten und hat sich als universelles Datenaustauschformat
@@ -170,7 +170,7 @@ noch nicht übersetzten Artikeln:
 > https://en.wikipedia.org/api/rest_v1/data/recommendation/article/creation/translation/de?count=24
 
 JSON basiert auf der Art und Weise, wie in JavaScript Objekte und Arrays dargestellt
-werden. Im Vergleich zu JavaScript sind Anführungszeichen aber Pflich. Es gibt
+werden. Im Vergleich zu JavaScript sind Anführungszeichen aber Pflicht. Es gibt
 bei JSON 6 verschiedene Datentypen:
 
 - `null`

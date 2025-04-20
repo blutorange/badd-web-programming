@@ -55,7 +55,7 @@ die wir bei der Verwendung von Bibliotheken bedenken sollten:
   aus privaten Gründen ein, müssen wir einen Ersatz hierfür finden. Das wird
   sehr gut illustriert im Web-Comic [XKCD 2347](https://xkcd.com/2347/)
 - Sicherheit &mdash; Code von Drittanbietern, den wir nicht kontrollieren, stellt ein potentielles Sicherheitsproblem
-  dar. Bei sogenannten Supply-Chain-Angriffen [wird Schadcode in einer Bibliothek inijiziert](https://thehackernews.com/2021/10/popular-npm-package-hijacked-to-publish.html),
+  dar. Bei sogenannten Supply-Chain-Angriffen [wird Schadcode in einer Bibliothek injiziert](https://thehackernews.com/2021/10/popular-npm-package-hijacked-to-publish.html),
   die von vielen eingesetzt wird.
 - Bugs &mdash; Fehler in Software sind nahezu unvermeidbar. Fehler, die wir
   selber durch unseren Code behoben haben, können wir schnell und einfach beheben.
@@ -91,7 +91,7 @@ cdn.jsdelivr.net ist ein sogenanntes Content Distribution Network (CDN).
 
 CDN vereinfachen die Einbettung von Ressourcen und erhöhen die Ladegeschwindigkeit durch
 Server in verschiedenen Ländern. Um die Ressource zu laden, muss der Browser
-aber zwingendermaßen ein HTTP-Request an das CDN stellen. Gesetze wie die
+aber gezwungenermaßen ein HTTP-Request an das CDN stellen. Gesetze wie die
 [Datenschutz-Grundverordnung](https://dsgvo-gesetz.de/) erfordern, dass das
 CDN den entsprechenden datenschutzrechtlichen Anforderungen gerecht wird. Ob
 und in welcher Weise etwa die Übertragung der IP-Adresse durch bloßes Laden einer
@@ -487,7 +487,7 @@ module.export[Math.random()] = "Hallo";
 ```
 
 Seit 2015 gibt es mit EcmaScript2015 ein offizielles Modulsystem namens
-ESM &mdash; EcamScript Modules. ESM wird inzwischen sowohl vom Browser
+ESM &mdash; EcmaScript Modules. ESM wird inzwischen sowohl vom Browser
 als auch von Node.js unterstützt. Unser Beispiel von eben sieht mit ESM
 wie folgt aus:
 

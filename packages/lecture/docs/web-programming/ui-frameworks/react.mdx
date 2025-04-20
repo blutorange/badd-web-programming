@@ -52,7 +52,7 @@ mit sich bringen kann, die wir als Programmierer nicht vorhergesehen haben.
 es ist gut, mehrere Checks zu haben, welche die Qualität des Code verbessern.
 
 React bietet hier eine Lösung. Zudem gestaltet es React auch einfacher,
-kleine, gekappselte, wiederverwendbare Komponenten zu schreiben, wie wir in diesem
+kleine, gekapselte, wiederverwendbare Komponenten zu schreiben, wie wir in diesem
 Abschnitt sehen werden. 
 
 ## Grundkonzept von React
@@ -252,9 +252,9 @@ Was macht React, wenn sich Daten (der Zähler) ändert? Die entsprechenden
 HTML-Elemente müssen aktualisiert werden. Theoretisch könnte React die gesamte
 Seite nehmen, alle Komponenten neu rendern und das gesamte HTML austauschen.
 
-Das wäre aber sehr inperformant, hätte also hohen CPU-Bedarf und würde länger
-dauern. Zudem müsste alle Event-Listener neu registriert werden, was die Performance
-weiter senkt.
+Das wäre aber sehr schlecht für die Performance, hätte also hohen CPU-Bedarf und
+würde länger dauern. Zudem müsste alle Event-Listener neu registriert werden, was
+die Performance weiter senkt.
 
 Stattdessen ist der Ansatz von React, nur die Teile des DOM zu aktualisieren,
 bei denen es wirklich Änderungen gab. Um das zu tun, erzeugt React aus den

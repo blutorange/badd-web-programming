@@ -24,7 +24,7 @@ auf Ihrer Webseite verschiedene Informationen bereit, darunter etwa:
 - https://owasp.org/www-project-top-ten/
   - Top 10 Web Application Security Risks
 - https://owasp.org/www-community/attacks/
-  - Liste bekannter Angriffszenarien
+  - Liste bekannter Angriffsszenarien
 - https://cheatsheetseries.owasp.org/index.html
   - Informationen und Anleitungen zum Vermeiden bekannter Sicherheitsprobleme.
 
@@ -90,7 +90,7 @@ nicht die Adressen im Browser aufrufen!
 
 __Session-Cookie__
 
-Damit der Nutzer sich nicht jedesmal neu anmelden muss, können wir einen
+Damit der Nutzer sich nicht bei jedem Mal neu anmelden muss, können wir einen
 Session-Cookie verwenden. Diesen sendet der Browser bei jedem Aufruf an die
 Webseite automatisch mit.
 
@@ -116,7 +116,7 @@ zum Produkt suchen.
 Nun besucht der Nutzer aus Versehen die bösartige Webseite `https://check48.de/`.
 check48 könnte nun per JavaScript ein HTTP-Request an `suppazon.de` stellen
 und damit eine Bestellung im Namen des Nutzers auslösen, potentiell mit geänderter
-Lieferaddresse. Das funktioniert, weil der Browser automatisch das Session-Cookie mitsendet.
+Lieferadresse. Das funktioniert, weil der Browser automatisch das Session-Cookie mitsendet.
 
 Da JavaScript im Hintergrund läuft, würde der Nutzer in dem Moment das nicht einmal bemerken.
 
@@ -182,7 +182,7 @@ Content-Security-Policy: frame-ancestors 'none';
 Wir verbieten damit, dass unsere Webseite über
 [`<iframe>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe)
 in andere Webseiten eingebunden wird. Damit verhindern wir zum Beispiel ein
-Angriffszenario bekannt als
+Angriffsszenario bekannt als
 [Clickjacking](https://owasp.org/www-community/attacks/Clickjacking).
 
 Beispielsweise könnte eine bösartige Webseite unseren Webshop als IFrame einbinden,
@@ -260,7 +260,7 @@ ausführen zu können. Sendet der Link einer anderen Person einen entsprechenden
 Link und klickt diese Person auf den Link, kann der Angriff damit potentiell
 das Konto dieser Person übernehmen.
 
-Um dieses Angriffszenario zu verhindern, könnten wir etwa `<script>`-Elemente
+Um dieses Angriffsszenario zu verhindern, könnten wir etwa `<script>`-Elemente
 aus dem Wert des `title`-Parameters herausfiltern. Dieses Vorgehen nennt
 sich [Sanitization](https://en.wikipedia.org/wiki/HTML_sanitization). Zwar
 ist das prinzipiell möglich, aber schwer richtig zu machen. HTML bietet

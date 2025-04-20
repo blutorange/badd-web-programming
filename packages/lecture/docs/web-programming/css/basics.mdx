@@ -54,7 +54,7 @@ selektieren. Dies erreichen wir, indem wir Selektoren kombinieren:
 | label ~ input     | Ein `input`, der sich nach einem Label `label` befindet |
 | fieldset, input   | ODER-Kombination. Alle `fieldset` und alle `input` Elemente (unabhängig von deren Beziehung) |
 
-Damit wir uns das besser vorstellen können, hier noch beispielshaft HTML-Schnippsel
+Damit wir uns das besser vorstellen können, hier noch beispielhaft HTML-Schnipsel
 für die jeweiligen Selektoren:
 
 ```html
@@ -248,7 +248,7 @@ Kinderelemente?
 Im CSS gibt es einige Eigenschaften,
 [die vererbt werden](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascade/Inheritance).
 
-Um das zu illustrieren, schauen wir uns folgendes Beipsiel an:
+Um das zu illustrieren, schauen wir uns folgendes Beispiel an:
 
 <HtmlSnippet path="css-inheritance" type="css" />
 
@@ -298,8 +298,8 @@ oder in [CSS Cascading and Inheritance Level 4, § 6. Cascading](https://drafts.
 Im Wesentlichen besteht die Konfliktlösung aus 3 Schritten:
 
 1. Es gewinnt die CSS-Regel, die aus dem Ursprung mit höchster Priorität stammt.
-2. Bei gleichen Ursprung: Es gewinnt die CSS-Regel mit der höchsten Spezifizität.
-3. Bei gleicher Spezifizität: Es gewinnt die CSS-Regel, die in der CSS-Datei zuletzt steht. 
+2. Bei gleichen Ursprung: Es gewinnt die CSS-Regel mit der höchsten Spezifität.
+3. Bei gleicher Spezifität: Es gewinnt die CSS-Regel, die in der CSS-Datei zuletzt steht. 
 
 __Ursprung__
 
@@ -341,53 +341,53 @@ Regeln) mehr Gewicht zu verleihen:
 :::info
 In einigen Fällen kann die Verwendung von `!important` durchaus sinnvoll sein,
 um andere CSS-Regeln zu überschreiben. Meistens sollten  wir aber darauf
-verzichten, unser CSS reviewen und ein bessere Lösung finden. Kurzfristig könen
+verzichten, unser CSS noch einmal anschauen und ein bessere Lösung finden. Kurzfristig können
 wir mit `!important` zwar dafür sorgen, dass unsere CSS-Regeln angewandt wird,
 langfristig stoßen wir aber erneut auf Konflikte, wenn viele CSS-Regeln
 `!important` verwenden.  Ein `!very-important` gibt es nicht.
 :::
 
-__Spezifizität__
+__Spezifität__
 
-Weisen 2 CSS-Regeln den gleichen Ursprung auf, wird die Spezifizität der Selektoren
+Weisen 2 CSS-Regeln den gleichen Ursprung auf, wird die Spezifität der Selektoren
 miteinander verglichen.
 
-Die Spezifizität eines Selektors ist ein Tripel von positiven Ganzzahlen und ergibt
+Die Spezifität eines Selektors ist ein Tripel von positiven Ganzzahlen und ergibt
 sich aus den darin verwendeten Bestandteilen.
 
-Der Vergleich 2er Spezifizitäten geschieht von links nach rechts. Sind `(x1, x2, x3)`
-und `(y1, y2, y3)` 2 Spezifizitäten, wird zuerst `x1` und `y1` verglichen. Es gewinnt
-die Spezifizität mit dem höchsten Werte. Sind beide Werte gleich, wird `x2` mit
+Der Vergleich von 2 Spezifität-Werten geschieht von links nach rechts. Sind `(x1, x2, x3)`
+und `(y1, y2, y3)` 2 Spezifität-Werte, wird zuerst `x1` und `y1` verglichen. Es gewinnt
+die Spezifität mit dem höchsten Werte. Sind beide Werte gleich, wird `x2` mit
 `y2` verglichen und es gewinnt der höchsten Wert. Sind diese ebenfalls gleich, wird
 `x3` mit `y3` verglichen. Beispiel:
 
 - `(1, 1000, 20)` < `(2, 0, 0)`, weil `1 < 2`
 - `(9, 7, 3)` > `(9, 7, 2)`, weil `3 > 2`
 
-Die 3 Werte `(x1, x2, x3)` des Spezifizitäten-Tripel ergeben sich wie folgt:
+Die 3 Werte `(x1, x2, x3)` des Spezifität-Tripel ergeben sich wie folgt:
 
 - `x1` - Anzahl der ID-Selektoren, z.B. `#blue-sky`
 - `x2` - Anzahl der Klassenselektoren (`.green-tea`) und Attributsselektoren (`[type="input"]`).
 - `x3` - Anzahl der Elementselektoren, z.B. `p` oder `input`
 
-Es gibt bei der Berechnung der Spezifizität noch einige Details zu beachten, auf
+Es gibt bei der Berechnung der Spezifität noch einige Details zu beachten, auf
 die wir hier verzichten und die bei [MDN web docs - Specificity](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascade/Specificity)
 nachgelesen werden können.
 
 Kehren wir noch einmal zurück zu unseren anfänglichen Beispiel:
 
 ```css
-/* Spezifizität (1, 0, 0) */
+/* Spezifität (1, 0, 0) */
 #blue-sky {
   color: blue;
 }
 
-/* Spezifizität (0, 1, 0) */
+/* Spezifität (0, 1, 0) */
 .green-tea {
   color: green;
 }
 
-/* Spezifizität (0, 0, 1) */
+/* Spezifität (0, 0, 1) */
 p {
   color: red;
 }
@@ -424,7 +424,7 @@ oder `stylish-dropdown__option-container--hover`.
 
 Auf dieser Art und Weise entstehen eindeutige Klassennamen, die in keine Konflikte
 mit anderen Selektoren geraten. Da es sich nur um eine einzelne Klasse handelt, wird
-auch die Spezifizität gering gehalten.
+auch die Spezifität gering gehalten.
 
 Weitere Ansätze zur Konfliktlösung sind etwa verschiedene
 [CSS-in-JS-Lösungen](https://css-tricks.com/a-thorough-analysis-of-css-in-js/),
@@ -474,7 +474,7 @@ Einige wichtige sind:
 - `%` - Relativ zu einem Bezugsmaß, das von der konkreten Verwendung abhängt.
   Beispielsweise bedeutet `width: 50%` halb so breit wie das Elternelement.
 - `vw` - Steht für `Viewport Width`. `100vw` ist die Breite des Browser-Fensters.
-  Kann z.B. nützlich sein, um die Maximalbreite enes Overlay-Dialogs zu setzen.
+  Kann z.B. nützlich sein, um die Maximalbreite eines Overlay-Dialogs zu setzen.
 - `vh` - `Viewport Height`, `100vh` ist die Höhe des Browser-Fensters.
 - `mm` / `cm` - Steht für Millimeter und Centimeter, __ist aber nicht zwangsläufig__
   auch eine Millimeter oder Zentimeter. Auf Computerbildschirmen kann die Größe

@@ -45,7 +45,7 @@ zum [&lt;label&gt;-Element](https://html.spec.whatwg.org/multipage/forms.html#th
 >
 > Phrasing content, but with no descendant labelable elements unless it is the element's labeled control, and no descendant label elements.
 
-Es ist also erstmal nur "Phrasing Content" erlaubt. Das bedeutet beispielsweise, wir dürfen
+Es ist also zuerst einmal nur "Phrasing Content" erlaubt. Das bedeutet beispielsweise, wir dürfen
 keine `<div>`-Elemente (Flow Content) oder `<article>`-Elemente (Sectioning Content)
 verwenden. Das folgende HTML ist also invalid:
 
@@ -55,7 +55,7 @@ verwenden. Das folgende HTML ist also invalid:
 ```
 
 Die meisten Browser werden solches invalides HTML trotzdem darstellen und in der
-Regel nicht einmal eine Warnungsmeldung uns Entwicklern anzeigen. Es kann uns
+Regel nicht einmal eine Warnmeldung uns Entwicklern anzeigen. Es kann uns
 daher schnell passieren, dass wir unbewusst HTML schreiben, welches streng
 genommen nicht dem Standard entspricht. Wir sollten immer darauf achten,
 gültiges HTML zu schreiben, damit jede Art von Software mit unserer Webseite
@@ -98,8 +98,8 @@ verwendet.
 
 Weiterhin können wir noch das Attribut `rel` (relationship) setzen, also die
 Beziehung zur verlinkten Seite, etwa `privacy-policy` (Datenschutz) oder `search`
-(Seite für Suche im Inhalt der Webseite). Oft wird aus Sicherheits und Performance-Gründen
-`noreferrer noopener` gesezt. Weitere erlaubte Werte sind bei
+(Seite für Suche im Inhalt der Webseite). Oft wird aus Sicherheits- und Performance-Gründen
+`noreferrer noopener` gesetzt. Weitere erlaubte Werte sind bei
 [MDN web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel) 
 
 :::info
@@ -120,7 +120,7 @@ Beispielsweise steht `<h1>` für eine Hauptüberschrift. Unabhängig davon, wie
 die Überschrift per CSS dargestellt wird, kann Software wie Screenreader erkennen,
 dass es sich um eine Überschrift handelt.
 
-Folgende beide HTML-Schnippsel erzeugen ein ähnliches Aussehen. Variante 1
+Folgende beide HTML-Schnipsel erzeugen ein ähnliches Aussehen. Variante 1
 mit `<h1>` sollten wir aber bevorzugen, da es für Software besser verständlich ist.
 
 <HtmlSnippet path="h1-span" />
@@ -148,7 +148,7 @@ Um eine Navigationsleiste als solche deutlich zu machen, steht uns
 <HtmlSnippet path="nav" />
 
 `<aside>` zeichnet einen Teil aus, der einen Zusatz zum Hauptinhalt darstellt
-und oft links oder rechts daneben angenordnet ist.
+und oft links oder rechts daneben angeordnet ist.
 
 <HtmlSnippet path="aside" />
 
@@ -297,12 +297,12 @@ Key und `<dd>` (definition description) für die Erklärung.
 Tabellen dienen, wie der Name sagt, für tabellarische Daten. Wir sollten Tabellen
 auch nur dafür verwenden, nicht als Hilfsmitteln zum Layout. Früher wurde dies oft
 getan, da es kaum bessere Möglichkeiten gab. Inzwischen gibt CSS uns wesentlich
-bessere Möglichkeiten, das Layout unserer Seite gemäßt unseren Wünschen zu gestalten.
+bessere Möglichkeiten, das Layout unserer Seite gemäß unseren Wünschen zu gestalten.
 
 :::note
 Tatsächlich ist es aus Entwicklersicht eher schwieriger, Tabellen schön und gut
-darzustellen und zu gestalten. Auch aus Sicht der Responiveness (Darstellung auf
-Geräten mit kleiner Bildschirmbreite) müsen wir bei Tabellen entsprechend Testen
+darzustellen und zu gestalten. Auch aus Sicht der Responsiveness (Darstellung auf
+Geräten mit kleiner Bildschirmbreite) müssen wir bei Tabellen entsprechend Testen
 und Vorkehrungen treffen.
 :::
 
@@ -379,7 +379,7 @@ auch auf das Label klicken, um das Eingabe-Element zu fokussieren.
 
 __input__
 
-`<input>` ist ein einzeiliges Eingabfeld und das wohl am meisten verwendete Formularelement.
+`<input>` ist ein einzeiliges Eingabefeld und das wohl am meisten verwendete Formularelement.
 
 Mit dem Attribut `type` können wir auch verschiedene Arten von Eingaben ermöglichen,
 beispielsweise `type="color"` für einen Farbwähler oder `type="date"` für
@@ -393,7 +393,7 @@ Der Browser verbietet dann das Absenden, wenn kein Wert eingetragen wurde.
 :::warning
 Die Validierung durch den Browser ist __KEINE GARANTIE__ dafür, dass die abgesendeten
 Daten auch den festgelegten Regeln entsprechen! Der Nutzer könnte etwa einfach über
-die Dev-Tools die Validationsregeln entfernen. Falls erforderlich, muss der Server,
+die Dev-Tools die Validierungsregeln entfernen. Falls erforderlich, muss der Server,
 der die Daten entgegennimmt, entsprechende Validierungen durchführen!
 :::
 
@@ -444,7 +444,7 @@ schachteln wir ein `<option>`-Element im `<select>`. Das Attribut `value` jeder
 Um mehrere Optionen gleichzeitig zu erlauben, können wir das Attribut `multiple`
 am `<select>` setzen.
 
-Weitehrin können wir auch einzelne `<option>` in einem `<optgroup>`-Element schachteln,
+Weiterhin können wir auch einzelne `<option>` in einem `<optgroup>`-Element schachteln,
 um Optionen zu gruppieren. Der Browser zeigt diese dann gruppiert an.
 
 __checkbox / radio select__
@@ -464,7 +464,7 @@ __hidden__
 Schließlich gibt es noch `<input>` vom `type="hidden"`. Solche Eingabefelder
 sind nicht für den Nutzer sichtbar und können in der Regel nicht durch diesen
 bearbeitet werden. Hidden-Inputs werden gerne in Kombination mit JavaScript genutzt,
-um berechnete oder andersweitig abgeleitete Daten beim Absenden mit zu übertragen.
+um berechnete oder anderweitig abgeleitete Daten beim Absenden mit zu übertragen.
 
 Ein anderer Anwendungsfall sind Widgets, also per JavaScript geschriebene
 Elemente, die mehr Funktionalität bieten als Elemente, die der Browser bereitstellt.
@@ -532,8 +532,8 @@ Webseite einbinden.
 ```
 
 Der Vorteil von einem `<iframe>` ist, dass dessen Inhalt vollständig vom Rest
-der Webseite abgekappselt ist. Das betrifft sowohl das Design und Layout (CSS)
-als auch JavaScript-Logik. Somit ist sichergestelt, dass die beiden verschiedenen
+der Webseite abgekapselt ist. Das betrifft sowohl das Design und Layout (CSS)
+als auch JavaScript-Logik. Somit ist sichergestellt, dass die beiden verschiedenen
 Seiten sich nicht gegenseitig beeinflussen.
 
 Etwa verwendet unsere Sandbox einen `<iframe>`, um das eingegebene HTML darzustellen.

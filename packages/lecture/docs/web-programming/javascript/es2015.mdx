@@ -14,7 +14,7 @@ Mitte 2015 wurde die [6. Version von EcmaScript](https://262.ecma-international.
 veröffentlicht, welche daher auch als ES2015 oder ES6 bezeichnet wird.
 
 Die Revision hat der Programmiersprache wesentliche neue Möglichkeiten hinzugefügt,
-die den Programmieralltag erleichtern (wenn man sie denn erstmal gelernt hat!)
+die den Programmieralltag erleichtern (wenn man sie denn erst einmal gelernt hat!)
 
 Im Folgenden wollen wir uns die wesentlichen Neuerungen anschauen. Anmerkung:
 Einige Teile der Neuerungen wurden erst in den nachfolgenden Jahren veröffentlicht,
@@ -44,7 +44,7 @@ wäre vielleicht folgende:
 const city = findCityForZipCode("01309");
 ```
 
-Was ist aber das Problem dabei? Im Allgeminen wird der Dienst eine Weile benötigen,
+Was ist aber das Problem dabei? Im Allgemeinen wird der Dienst eine Weile benötigen,
 bis der Ort gefunden ist. Damit die Funktion den Ort direkt als Rückgabewert
 zurückliefern kann, muss das Programm warten, bis die Suche abgeschlossen ist.
 
@@ -53,7 +53,7 @@ Im Bezug auf Webseiten würde das dazu führen, dass die Webseite in dieser Zeit
 eingefroren wirkt nicht mehr benutzt werden kann.
 
 Besser wäre es daher, der Funktion nur zu sagen, was getan werden soll, sobald
-der Ort gefunden wurde. Das können wir mit einer sogenanten Callback-Funktion
+der Ort gefunden wurde. Das können wir mit einer sogenannten Callback-Funktion
 erreichen:
 
 ```js
@@ -104,7 +104,7 @@ heißt es [Task](https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-pr
 in Java [CompletionStage](https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/util/concurrent/class-use/CompletionStage.html).
 :::
 
-Ein Promise ("Versprechen") kappselt einen Wert, der ist in Zukunft zur Verfügung
+Ein Promise ("Versprechen") kapselt einen Wert, der ist in Zukunft zur Verfügung
 stehen wird. Konkret kann ein Promise in 3 verschiedenen Zuständen sein:
 
 - `pending` - Der Wert wird noch ermittelt.
@@ -181,7 +181,7 @@ Dies hatten wir auch im oberen Beispiel zur Simulation der Suchfunktionen verwen
 
 Mittels `new Promise()` können wir ein komplett eigenes Promise erstellen. Im
 Konstruktor erhalten wir 2 Funktion `resolve` und `reject`, mit denen wir das Promise
-asynchron beenden können, sobad wir ein Resultat haben. Ein typisches Demo-Beispiel
+asynchron beenden können, sobald wir ein Resultat haben. Ein typisches Demo-Beispiel
 ist ein Timeout-Promise, welches einige Sekunden wartet:
 
 <JsSnippet path="promise-timeout.js" toggleable />
@@ -246,7 +246,7 @@ Dieses Verhalten hat sich als problematisch und Quelle für Fehler herausgestell
 da wir als Programmierer nie sicher sein können, wir unserer Funktion von Code
 aufgerufen wird, der vielleicht sogar von anderen Programmierern geschrieben wurde.
 
-Wie im vorigen Abschnitt erwähnt, wuden Arrow-Funktionen später in die
+Wie im vorigen Abschnitt erwähnt, wurden Arrow-Funktionen später in die
 Programmiersprache eingefügt und beheben dieses Problem. Innerhalb einer
 Arrow-Funktion bedeutet `this` immer genau das Gleich, was es auch außerhalb
 der Arrow-Funktion bedeutet hatte.
@@ -295,7 +295,7 @@ wenn `a` einen Wert hat.
 
 <JsSnippet path="optional-chaining.js" toggleable />
 
-Der Operator kann auch für Funktinsaufrufe verwendet werden. `a?.()` ruft die
+Der Operator kann auch für Funktionsaufrufe verwendet werden. `a?.()` ruft die
 Funktion `a` auf, aber nur, wenn `a` einen Wert hat.
 
 <JsSnippet path="optional-chaining-fn.js" toggleable />
@@ -306,7 +306,7 @@ In JavaScript verwenden wir häufig Objekte und Array und müssen hierbei auf
 deren Eigenschaft zugreifen. Um später einfach darauf zuzugreifen, können wir
 die Eigenschaften lokalen Variablen zuweisen.
 
-Wenn ein Objekt mehrer Eigenschaften hat, gibt es eine Schreibweise, um einfacher
+Wenn ein Objekt mehrere Eigenschaften hat, gibt es eine Schreibweise, um einfacher
 mehrere Variablen den Eigenschaften des Objekts zuzuweisen ("Destrukturierung"):
 
 <JsSnippet path="destruct-object.js" />
@@ -345,7 +345,7 @@ In der Praxis ist es selten, dass ein konkreter Einzelfall behandelt werden muss
 Meist muss ein Programm mit einer Menge von Eingabewerten zurechtkommen
 
 * Webshop mit Warenkorb mit n Artikeln
-* MMORPG-Videospiel mit n Spieler und m Gegnern
+* MMORPG-Videospiel mit n Spielern und m Gegnern
 * Formularanwendung mit n Eingabefeldern
 
 Wir kennen bereits Arrays, um Elemente in einer bestimmten Reihenfolge zu speichern.
@@ -390,7 +390,7 @@ Noch mag die Sinnhaftigkeit uns noch nicht klar werden. Bevor wir uns dem widmen
 schauen wir uns noch an, wie wir selber Objekte erstellen können, über die
 iteriert werden kann. Dies ist möglich mit sogenannten
 [Generator-Funktionen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*),
-welche einene Stern `*` am Anfang haben:
+welche einen Stern `*` am Anfang haben:
 
 <JsSnippet path="generator-fn-basic.js" toggleable />
 
@@ -431,7 +431,7 @@ Datei verwenden kann.
 Hierzu stellt die Programmiersprache ESM (EcmaScript-Module) bereit.
 
 Jede Datei ist ein _Modul_ mit einem eigenen Scope. Das bedeutet, alle Variablen
-und Funktionen sind erstmal nur in dieser Datei und nirgends anders verfügbar.
+und Funktionen sind erst einmal nur in dieser Datei und nirgends anders verfügbar.
 
 Falls das Modul nun bestimmte Funktionalitäten anderen Modulen bereitstellen
 möchte, muss es dies explizit durch ein `export`-Statement tun. Das folgende
@@ -482,8 +482,8 @@ Typ eines eingebundenen Scripts auf `module` gesetzt werden:
 Vorteile sind etwa
 
 - Einzelne Dateien sind individuell cachebar
-- Es müssen nur die Dateien geladen werden, die wirlich benötigt werden
+- Es müssen nur die Dateien geladen werden, die wirklich benötigt werden
 
 Ein wesentlicher Nachteil ist, dass für jede Datei eine separate Anfrage an
-den Server gestellt werden musss. Die Verwendung von HTTP/2 bzw HTTP/3 kann
+den Server gestellt werden muss. Die Verwendung von HTTP/2 bzw HTTP/3 kann
 diesen Nachteil aber abmildern.

@@ -13,7 +13,7 @@ In diesem Abschnitt schauen wir uns kurz die `display` und `position`-Eigenschaf
 an. Diese Eigenschaften steuern, wie ein Element durch den Browser dargestellt
 wird.
 
-Genauer steueren sie, in welcher Weise der Browser das Layout der
+Genauer steuern sie, in welcher Weise der Browser das Layout der
 Elemente berechnet, also wie groß ein Element ist und wie es relativ zu anderen
 Elementen positioniert wird.
 
@@ -138,7 +138,7 @@ den Platz gleichmäßig links und rechts verteilen, was einer Zentrierung entspr
 
 Falls der Platz nicht ausreicht, können wir dem Flex-Layout auch sagen, die
 Elemente umzubrechen. Zwischen Zeilen und Spalten können wir schließlich auch
-noch einen Abstand defineren.
+noch einen Abstand definieren.
 
 ```css
 .flex {
@@ -166,7 +166,7 @@ Die Idee dabei ist ähnlich zu Flexbox, aber die Kinder werden in 2 Richtungen,
 horizontal und vertikal, also in einem Grid angeordnet.
 
 Die grundlegende Idee ist dabei, dass wir die Anzahl der Zeilen und Spalten
-defineren sowie deren Größe, dadurch entsteht ein Grid. Jedem Kind ordnen wir
+definieren sowie deren Größe, dadurch entsteht ein Grid. Jedem Kind ordnen wir
 dann eine Position in diesem Grid durch Angabe der Spalte und Zeile zu.
 
 Falls wir einem Element keine explizite Position mitgeben, ermittelt das
@@ -187,7 +187,7 @@ Ein guter visueller Guid für Flexbox findet sich ebenfalls bei css-tricks:
 
 Es gibt noch einen anderen Unterschied zwischen `display: block` und
 `display: inline`. Bei Block werden die Kinderelemente innerhalb des Blocks
-enstprechend angeordnet. Der Block ist immer so groß, wie die Kinderelemente
+entsprechend angeordnet. Der Block ist immer so groß, wie die Kinderelemente
 es erfordern. Anders bei Inline: Die Höhe hängt von der Zeilenhöhe (`line-height`)
 ab, sodass Inhalt auch über die Grenzen herausgehen kann.
 
@@ -220,7 +220,7 @@ volle Breite ein.
 Der zweite Wert gibt an, wie sich das Element nach innen verhält und die Kinderelemente
 anordnet. `flex` und `grid` erzeugen entsprechend ein Flex- oder Grid-Layout.
 `flow` ordnet die Kinder fließend an, `flow-root` erzeugt einen neuen Block,
-der so groß ist, wie die Kinder inklusive Padding und Margin es erfodern.
+der so groß ist, wie die Kinder inklusive Padding und Margin es erfordern.
 
 Zur Illustration hier noch ein Beispiel mit verschiedenen Display-Arten:
 
@@ -268,7 +268,7 @@ Elemente, die überhalb von anderen Elementen erscheinen. Mit dem bisher
 besprochenen Layout ist das nicht möglich.
 
 Die Eigenschaft `position` erlaubt es, Elemente aus dem normalen Layout zu trennen
-und andersweitig zu positionieren. Im Folgenden schauen wir uns eine gängige
+und anderweitig zu positionieren. Im Folgenden schauen wir uns eine gängige
 Wert für `position`.
 
 ### fixed
@@ -276,7 +276,7 @@ Wert für `position`.
 `position: fixed` bedeutet, das Element wird relativ zum Browser fest angeordnet,
 unabhängig der Anordnung seiner Eltern- oder Kinderelemente.
 
-Mittels der Eigenschaften `top`, `right`, `bottom` und `left` können wir defineren,
+Mittels der Eigenschaften `top`, `right`, `bottom` und `left` können wir definieren,
 wo das Element relativ zum Browser-Fenster positioniert sein soll.
 
 Um etwa einen Dialog anzuzeigen, der über allen anderen Elementen liegt:

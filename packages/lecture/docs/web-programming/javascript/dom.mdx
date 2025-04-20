@@ -16,7 +16,7 @@ Ausgeschrieben steht `DOM API` für
 > Document Object Model Application Programming Interface
 
 Vermutlich wird diese Aneinanderreihung von Worten nicht jedem etwas sagen.
-Vereinfach gesprochen ist die DOM API eine Menge von Funktionen, die im JavaScript
+Vereinfacht gesprochen ist die DOM API eine Menge von Funktionen, die im JavaScript
 benutzt werden können, um mit dem DOM (also dem HTML einer Webseite) zu interagieren.
 
 Die Spezifikation ist bei [WhatWG](https://dom.spec.whatwg.org/) zu finden
@@ -71,14 +71,14 @@ werden. `Element` ist eine Subklasse von `Node`, wovon es weiter die Subklasse
 auch noch die Subklasse `SVGElement`, welche verwendet wird, wenn Vektor-Grafiken
 in einer Webseite eingebunden sind.
 
-Für jedes Element aus dem HTML gibt es desweiteren noch eine spezielle Subklasse
+Für jedes Element aus dem HTML gibt es des Weiteren noch eine spezielle Subklasse
 von `HTMLElement`. Für `<div>` die Klasse `HTMLDivElement`, für `<form>` die
 Subklasse `HTMLFormElement`, usw.
 
 Zwei spezielle Eigenschaften, die jedem Element zur Verfügung steht, sind 
 [innerHTML](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML) und
 [textContent](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent).
-Mit der ersten können wir den Inhalt des Elements auf ein beliebiges HTML-Schnippsel
+Mit der ersten können wir den Inhalt des Elements auf ein beliebiges HTML-Schnipsel
 setzen, mit der zweiten können wir den Textinhalt auf einen beliebigen Wert setzen.
 
 Der Unterschied besteht darin, wie HTML-Tags im Wert behandelt werden und wird
@@ -133,10 +133,10 @@ __dataset__
 
 Jedes HTML-Element kann data-Attribute mit Werten haben, beispielsweise
 `<input data-hidden-if="tf2 == 0" />`. Die Namen der data-Attribute sind durch
-uns Programmier frei vergebbar. Im JavaScript können wir auf diese Attribute
+uns Programmierer frei vergebbar. Im JavaScript können wir auf diese Attribute
 mittels der Eigenschaft `dataset` zugreifen.
 
-Hier ist noch zu beachten, dass wir die Attributsnamen beim Zugriff über JavaScript
+Hier ist noch zu beachten, dass wir die Attributnamen beim Zugriff über JavaScript
 [Kebab case](https://developer.mozilla.org/en-US/docs/Glossary/Kebab_case) in den
 [Camel case](https://developer.mozilla.org/en-US/docs/Glossary/Camel_case)
 konvertieren müssen. Aus `hidden-if` wird also `hiddenIf`:
@@ -169,8 +169,8 @@ element.removeAttribute("type");
 
 __outerHTML / innerHTML__
 
-Mittels `outerHTML` können wir das HTML des Elements inklusive seiner Kindelemente
-erhalten, mittels `innerHTML` das HTML von nur den Kindelementen:
+Mittels `outerHTML` können wir das HTML des Elements inklusive seiner Kinderelemente
+erhalten, mittels `innerHTML` das HTML von nur den Kinderelementen:
 
 ```js
 // <div><input /></div>
@@ -245,7 +245,7 @@ document.querySelectorAll("article img");
 ```
 
 Bisher haben wir immer im gesamten Subbaum eines Elements (Kinder, Kinder der Kinder etc.)
-gesucht. Um direkt nur auf die Kindelemente eines Elements zuzugreifen, gibt
+gesucht. Um direkt nur auf die Kinderelemente eines Elements zuzugreifen, gibt
 es eine entsprechende Methode:
 
 ```js
@@ -293,7 +293,7 @@ Zuerst müssen wir ein neues Element erstellen. Dies ist möglich per
 Kinderelemente hinzuzufügen:
 
 ```js
-// Eregbnis:
+// Ergebnis:
 // <fieldset><input /><input /></fieldset>
 const input1 = document.createElement("input");
 const input2 = document.createElement("input");
@@ -374,7 +374,7 @@ gesagt verhält es sich aber so, dass es für nahezu alle Interaktionen, die der
 mit einer Webseite durchführt, entsprechende Ereignisse gibt.
 
 In Chromium-basierten Browser gibt es in den Dev-Tools die Hilfsfunktion
-`monitorEvents(element)`, womit wir uns in der Konsole alle Ereignissse ausgegeben
+`monitorEvents(element)`, womit wir uns in der Konsole alle Ereignisse ausgegeben
 lassen können, die auf einem Element eintreten. Das kann helfen, herauszufinden,
 ob und wann welches Event ausgelöst wird.
 
@@ -405,7 +405,7 @@ und alle Event-Listener ausgeführt.
 
 In der zweiten Bubble-Phase wird wieder von der `Textarea` zum `Document` gegangen
 und ebenfalls alle Event-Listener ausgeführt. Man sagt umgangssprachlich auch,
-"das Event bubbele nach oben."
+"das Event bubbled nach oben."
 
 Ob wir einen Event-Listener in der Bubble- oder Capture-Phase registrieren,
 hängt davon ab, wie wir `addEventListener` aufrufen:

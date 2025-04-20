@@ -67,7 +67,7 @@ sein, ein Bundle zu erstellen.
 - Browser-Support für ESM erfordert die Angabe einer konkreten URL, von wo
   die Abhängigkeit geladen wird und funktioniert daher nicht mit Abhängigkeiten von NPM.
   Dort schreiben wir `import {} from "axios"`, der Browser weiß aber nicht, woher
-  er `axios` beziehen soll. Mittlerweise gibt es hier Abhilfe für in Form einer
+  er `axios` beziehen soll. Mittlerweile gibt es hier Abhilfe für in Form einer
   sogenannten [Import-Map](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/script/type/importmap).
   Aber auch das erstellen einer Import-Map erfordert einen Build-Step. Alternativ
   gibt es auch Online-Services wie  [esm.sh](https://esm.sh/), die mit ESM-kompatible
@@ -100,7 +100,7 @@ kurze Anmerkungen zu diesen Tools aber noch:
   [Tony Cabaye - JavaScript bundlers comparison](https://tonai.github.io/blog/posts/bundlers-comparison/#performance-comparison-1)
   oder [DataStation - Benchmarking](https://datastation.multiprocess.io/blog/2021-11-13-benchmarking-esbuild-swc-typescript-babel.html).  
 
-Um beispielsweise eine Datei mit esbuid zu bundeln, die Abhängigkeiten per `import` verwendet,
+Um beispielsweise eine Datei mit esbuild zu bundeln, die Abhängigkeiten per `import` verwendet,
 können wir wie folgt vorgehen. Nehmen wir diese Datei als Beispiel:
 
 ```js
@@ -321,13 +321,13 @@ Code und bringt uns viele Vorteile. Software ist aber selten fehlerfrei. Manchma
 sind Fehler kaum bemerkbar oder sorgen nur für Unannehmlichkeiten bei unseren
 Nutzern. Es kann aber auch passieren, dass Fehler in einer Software ein Sicherheitsproblem
 darstellen und im schlimmsten Fall etwa dazu führen können, dass die privaten
-Daten unserer Nutzer gestollen werden können oder ein Angreifer Passwörter abfangen kann.
+Daten unserer Nutzer gestohlen werden können oder ein Angreifer Passwörter abfangen kann.
 
 Ein Dependency Check hat zur Aufgabe, Abhängigkeiten automatisch nach bekannten
 Schwachstellen zu scannen und uns rechtzeitig davon in Kenntnis zu setzen, damit
 wir entsprechende Maßnahmen ergreifen können.
 
-NPM bringt bereits einen solchen Dependency Checker mit. Instalieren wir absichtlich
+NPM bringt bereits einen solchen Dependency Checker mit. Installieren wir absichtlich
 eine ältere Version einer Abhängigkeit, können wie den Dependency Checker dann wie folgt
 ausführen:
 
@@ -360,12 +360,12 @@ schreibt Code auf eine etwas andere Weise. Um die Einheitlichkeit des Codes
 sicherzustellen, sodass jeder den Code gleich gut lesen kann, können wir einen
 automatischen Code-Formatierer einsetzen.
 
-Beide unter Linter genannten Tools (pretter und biome) unterstützen auch die
+Beide unter Linter genannten Tools (`prettier` und `biome`) unterstützen auch die
 Formatierung von Code. Nehmen wir beispielsweise folgende unformatierte
 Datei:
 
 ```js
-const m = document.getElementById("gardun").getContext("2d");
+const m = document.getElementById("canvas-output").getContext("2d");
   const atom = function(x,y,c){m.fillStyle=c; m.fillRect(x,y,3,3)}
   for(let y=1;y<1000; y++){for(let x=1;x<1000;x++){
       const dx = (x-500)/100000-0.233;const dy = (y-500)/100000-0.655
@@ -388,7 +388,7 @@ Die Datei sieht nach der Formatierung wie folgt aus:
 
 <details>
 ```js
-const m = document.getElementById("gardun").getContext("2d");
+const m = document.getElementById("canvas-output").getContext("2d");
 const atom = function (x, y, c) {
   m.fillStyle = c;
   m.fillRect(x, y, 3, 3);
@@ -461,7 +461,7 @@ Kapitel anschauen werden, arbeiten mit Erweiterungen, um die Erstellung
 von UIs zu vereinfachen.
 
 Beispielsweise arbeitet React mit Dateien mit der Endung `*.jsx` statt `.js`.
-Diese Dateien können direkt direkt HTML-Schnippsel enthalten:
+Diese Dateien können direkt direkt HTML-Schnipsel enthalten:
 
 ```jsx
 function Header() {
@@ -470,7 +470,7 @@ function Header() {
 ```
 
 Abhängig von der Erweiterung werden diese von mehr oder weniger vielen Tools
-unterstüzt. JSX ist beispielsweise recht weit verbreitet und wir inzwischen
+unterstützt. JSX ist beispielsweise recht weit verbreitet und wir inzwischen
 von fast allen Tools unterstützt.
 
 ### postcss
@@ -490,7 +490,7 @@ einige nennenswerte Transformationen sind etwa:
   die meisten CSS-Features unterstützen und nur noch sehr wenige solche Präfixe
   notwendig sind.
 - [postcss-nesting](https://www.npmjs.com/package/postcss-nesting) transformiert
-  geschachtelte CSS-Regeln in ungeschachtelte. Das erlaubt uns bereits, geschachtelte
+  geschachtelte CSS-Regeln in unverschachtelte. Das erlaubt uns bereits, geschachtelte
   Regeln im CSS zu verwenden, obwohl die [Browser-Unterstützung](https://caniuse.com/css-nesting)
   noch nicht optimal ist.
 - [postcss-german-stylesheets](https://github.com/timche/postcss-german-stylesheets)

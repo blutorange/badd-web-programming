@@ -55,7 +55,7 @@ Alle verfügbaren Möglichkeiten finden sich [in der Spezifikation](https://html
 Hier einige der wichtigsten kurz zusammengefasst:
 
 - constructor &mdash; Wenn eine neue Instanz des Elements erstellt werden soll,
-  also z.B. jedesmal, wenn das Element im HTML verwendet wird. Hier können
+  also z.B. bei jedem Mal, wenn das Element im HTML verwendet wird. Hier können
   wir Instanzfelder befüllen oder eine Shadow Root (weiter unten erklärt) erzeugen.
 - connectedCallback &mdash; Wenn das Element zum DOM hinzugefügt wurde. Hier
   können wir etwa [Event Listener registrieren](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener).
@@ -143,9 +143,9 @@ zu `<hello-world>` hinzufügen und das Attribut `slot="before"` setzen.
 
 __Part__
 
-Der Shadow-DOM kappselt den Inhalt unseres Custom Element von der darumliegenden
+Der Shadow-DOM kapselt den Inhalt unseres Custom Element von der umgebenden
 Webseite ab. Dazu gehört auch, dass kein CSS der Webseite auf unser Custom Element
-Einfluß hat.
+Einfluss hat.
 
 Nun kann es aber sein, dass wir wollen, dass Nutzer bestimmte Teile unseres
 Custom Element per CSS stylen können. Mittels dem HTML-Attribut
@@ -166,8 +166,8 @@ Genauer gesagt verhält es sich so, dass CSS-Selektoren keine Elemente innerhalb
 des Shadow-DOM selektieren können.
 [Vererbbare CSS-Attribute](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascade/Inheritance)
 finden aber weiterhin Anwendung, auch über Shadow-DOM-Grenzen hinaus. Setzt die
-Webseite beispielsweise die Schriftgröße auf 20 und die Schriftarbe auf Rot, dann
-hat auch der Inhalt unseres Custom Element diese Schriftgröße und Schriftarbe, sofern
+Webseite beispielsweise die Schriftgröße auf 20 und die Schriftfarbe auf Rot, dann
+hat auch der Inhalt unseres Custom Element diese Schriftgröße und Schriftfarbe, sofern
 wie diese nicht per CSS überschreiben.
 :::
 
@@ -205,7 +205,7 @@ gehalten. Ziel ist, alle Möglichkeiten bereit, die wir brauchen, um Funktionen
 theoretisch umzusetzen. Aber kein Ziel ist, es uns so einfach wie möglich zu machen.
 
 Auch Reaktivität besteht kaum bis gar nicht. Wir können höchstens (per `attributeChangedCallback`)
-auf Änderungen der Attribute reagieren. Aber wenn wir etwa intern ein Datemodell
+auf Änderungen der Attribute reagieren. Aber wenn wir etwa intern ein Datenmodell
 wie ein Array von TODO-Items haben, stellen uns Web Components keine Möglichkeiten
 zur Verfügung, bei Änderungen die UI zu aktualisieren. Falls wir reaktive Funktionen
 brauchen, müssen wir diese entweder selber implementieren oder eine Bibliothek
@@ -273,8 +273,8 @@ Bei der Auswahl der Bibliothek oder des UI-Frameworks können auch andere Faktor
 eine Rolle spielen, wie etwa:
 
 - Kenntnisstand der Beteiligten mit der Bibliothek oder dem UI-Framework
-- Kompatiblität der Lizenz mit dem Projekt
-- Zuverlässlichkeit der Bibliothek (Von dem wird die Bibliothek betreut? Wie bekannt ist diese?)
+- Kompatibilität der Lizenz mit dem Projekt
+- Zuverlässigkeit der Bibliothek (Von dem wird die Bibliothek betreut? Wie bekannt ist diese?)
 - Verfügbarkeit von Drittanbieter- Plugins für die Bibliothek (z.B. [Component Libraries](https://ossinsight.io/collections/javascript-framework/))
 - Qualität der Dokumentation
 

@@ -84,7 +84,7 @@ und Methoden, die wir für die HTML-View brauchen. `SurveyViewModel` ist unser
 
 In `SurveyViewModel` finden wir nun die Eigenschaft `answers`, eine Array mit
 den Antwortmöglichkeiten. Auf HTML-Seite wird nun auf die Antwortmöglichkeiten
-zugegrifen:
+zugegriffen:
 
 ```html
 <tbody data-bind="foreach: answers">
@@ -133,7 +133,7 @@ this.points = ko.observable(1);
 ```
 
 `ko.observable` ist eine spezielle Funktion von Knockout, die den eigentlichen
-Wert (eine Zahl) kappselt. Wenn wir nun, wie oben im HTML, diesen gekappselten
+Wert (eine Zahl) kapselt. Wenn wir nun, wie oben im HTML, diesen gekapselten
 Wert an `value: points` _binden_, haben wir ein `2-Way Data Binding` geschaffen.
 
 Das bedeutet:
@@ -173,7 +173,7 @@ alle HTML-Elemente selektieren und entsprechend aktualisieren. Ist das nicht
 fehleranfällig?
 
 Als Übung empfehle ich, in dem Beispiel einen Button einzubauen, der beim Klicken
-die Punkte aller Antwortmöglichkeiten um 1 hochzählt. Dabei wird man feststellen:
+die Punkte aller Antwortmöglichkeiten um 1 erhöht. Dabei wird man feststellen:
 Nur durch Änderung im View Model werden automatisch alle abhängigen Werte im
 HTML aktualisiert.
 

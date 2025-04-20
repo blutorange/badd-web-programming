@@ -25,7 +25,7 @@ Ein ähnliches Problem haben wir, wenn wir das Web-Frontend für eine Chat-App
 schreiben wollen. Woher weiß der Browser, wann eine neue Nachricht eingegangen
 ist?
 
-Eine Möglichkeit, um das zu lösen: Wir könnten kontinuerlich beim Server anfragen,
+Eine Möglichkeit, um das zu lösen: Wir könnten kontinuierlich beim Server anfragen,
 ob neue Nachrichten oder E-Mails vorhanden sind. Dabei laufen wir aber in einen
 Konflikt zwischen 2 Faktoren:
 
@@ -77,7 +77,7 @@ Vereinfacht dargestellt ist der grobe Ablauf wie folgt:
 
 
 ```js
-// Neune Socket öffnen
+// Neuen Socket öffnen
 const socket = new WebSocket("wss://example.com/chat/channel");
 
 // Auf Nachrichten vom Server reagieren

@@ -2,12 +2,12 @@
 id: welcome
 slug: /welcome
 sidebar_position: 1
-description: Wilkommen in der Webprogrammierung
+description: Willkommen in der Webprogrammierung
 ---
 
-# Wilkommen
+# Willkommen
 
-Wilkommen bei der Webprogrammierung. Wir werden zusammen die Grundlagen
+Willkommen bei der Webprogrammierung. Wir werden zusammen die Grundlagen
 des Webs kennen lernen.
 
-Die Vorlesung ist teilweise fertig, die Übungen folgen noch :/
+Die Vorlesung ist fertig, die Übungen folgen noch :/

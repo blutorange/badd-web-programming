@@ -72,7 +72,7 @@ worker.addEventListener("message", event => {
 ```
 
 Hier findet sich noch ein Beispiel in der Sandbox, wo ein Worker verwendet
-wird, um Primzahlen zu berechnen. Durch den Worker bleibt die Seite responsiv:
+wird, um Primzahlen zu berechnen. Durch den Worker bleibt die Seite responsive:
 
 <p>
   <Link to="/sandbox?snippet=worker" target="_blank" rel="noopener noreferrer">Worker-Beispiel mit Primzahlenberechnung</Link>
@@ -81,7 +81,7 @@ wird, um Primzahlen zu berechnen. Durch den Worker bleibt die Seite responsiv:
 :::info
 Beim Senden von `Message` wird der sogenannte
 [strukturelle Klon-Mechanismus](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm)
-auf das gesendete Objekte angewandt. Vereinfach gesagt bedeutet das, dass
+auf das gesendete Objekte angewandt. Vereinfacht gesagt bedeutet das, dass
 eine Kopie von dem Objekt erstellt wird, sodass die beiden Seiten getrennte
 Kopien des Objekts besitzen.
 

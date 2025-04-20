@@ -50,7 +50,7 @@ oder `mailto` für E-Mails.
 ### userinfo
 
 In den User Info stehen Angaben zum Nutzer. Dies wird vor allem verwendet
-bei E-Mail-Addressen, wo hier der Name des Nutzers steht.
+bei E-Mail-Adressen, wo hier der Name des Nutzers steht.
 
 Historisch war es möglich, nach dem Nutzername einen Doppelpunkt zu setzen und
 danach das Passwort anzugeben. Aus Sicherheitsgründen wird dies aber kaum noch
@@ -61,22 +61,22 @@ unterstützt.
 Der Host ist der Name des Servers, an den bei HTTP die Anfrage gestellt wird.
 
 Technisch gesehen hat jeder Server eine eindeutige Nummer, die sogenannte
-[IP-Addresse](https://en.wikipedia.org/wiki/IPv4). Eine IP-Addresse ist eine
+[IP-Adresse](https://en.wikipedia.org/wiki/IPv4). Eine IP-Adresse ist eine
 Nummer, die aus 4 Byte besteht.
 
 Beispielsweise hat die Duale Hochschule Sachsen die IP 194.95.197.225. Statt
 `https://www.dhsn.de/dresden` könnten wir auch `https://194.95.197.225/dresden`
 in den Browser eingeben. Da sich das schwer merken lässt, wurde ein System
-eingeführt, um sprechende Namen auf IP-Addressen zuzuweisen, das sogenannte
+eingeführt, um sprechende Namen auf IP-Adressen zuzuweisen, das sogenannte
 [Domain Name System (DNS)](https://developer.mozilla.org/en-US/docs/Glossary/DNS).
 
 Eine IP aus 4 Byte erlaubt maximal `2^(4*8) = 2^32`, also 4294967296 oder
-rund 4 Milliarden verschiedene Addressen. Aufgrund des Wachstums des Internets
+rund 4 Milliarden verschiedene Adressen. Aufgrund des Wachstums des Internets
 reicht dies nicht mehr aus. Aus diesem Grund wurden sogenannte
 [IPv6](https://en.wikipedia.org/wiki/IPv6) eingeführt.
 
 Eine IPv6 ist ebenfalls eine Nummer, besteht aber aus 16 Bytes. Damit sind
-bis zu `2^128`, also etwa 340 Sextillionen (`10^38`) verschiedene Addressen
+bis zu `2^128`, also etwa 340 Sextillionen (`10^38`) verschiedene Adressen
 möglich.
 
 Üblicherweise werden IPv6 als [Hex-Zahlen](https://en.wikipedia.org/wiki/Hexadecimal)
@@ -86,7 +86,7 @@ URL zu verwenden, müssen wir eckige Klammern verwenden:
 > `https://[2a02:ec80:300:ed1a::1]` (`https://www.wikiepdia.org`)
 
 Ein bekannter Host, den wir oft brauchen, ist der sogenannte `localhost`.
-`localhost` ist einfach die Addresse von unserem eigenen Rechner. Bei der Webentwicklung
+`localhost` ist einfach die Adresse von unserem eigenen Rechner. Bei der Webentwicklung
 kommt es nicht selten vor, dass wir zu Testzwecken einen lokalen HTTP-Server starten
 müssen. Mittels `localhost` können wir diesen dann im Browser aufrufen, z.B.
 `http://localhost:8080/index.html` (wenn der Server auf Port 8080) läuft.
@@ -94,7 +94,7 @@ müssen. Mittels `localhost` können wir diesen dann im Browser aufrufen, z.B.
 Die IP von `localhost` ist immer `127.0.0.1` bzw. `::1` (IPv6). 
 
 :::note
-Der Aufruf von https-URLs mit IP-Addressen schlägt nicht fehlt, weil die
+Der Aufruf von https-URLs mit IP-Adressen schlägt nicht fehlt, weil die
 Seite nicht gefunden wird, sondern weil das [Zertifikat](https://developer.mozilla.org/en-US/docs/Glossary/Digital_certificate)
 nur für den Domain-Name, aber nicht die IP gültig ist.
 :::
@@ -113,7 +113,7 @@ werden, da Ports 0-1023 in einigen Betriebssystemen Beschränkungen haben.
 Jedes Protokoll hat einen Standardport. Wird dieser verwendet, kann der Port
 auch weggelassen werden. Der Standardport von HTTP ist 80, von HTTPS 443.
 Webseiten, die wir täglich verwenden, laufen auf dem Standardport, sodass
-Webaddressen oft keinen expliziten Port haben.
+Webadressen oft keinen expliziten Port haben.
 
 Wenn wir zu Testzwecken einen lokalen HTTP-Server starten,  läuft dieser meist
 auf einem anderen Port. Für HTTP-Server ist etwa Port 8080 üblich. Wir würden
@@ -172,7 +172,7 @@ Jeder Parameter besteht aus einem Namen und einem Wert, diese Werten mit einem
 `=` voneinander getrennt. Mehrere Parameter werden mit einem `&` getrennt.
 
 Zum Beispiel könnten wir eine Seite haben, welche eine Liste von Produkten
-enthält. Über URL-Parameter erlaubt die Seite, anzugeben, welche und wieviele
+enthält. Über URL-Parameter erlaubt die Seite, anzugeben, welche und wie viele
 Produkte angezeigt werden sollen:
 
 ```
@@ -248,7 +248,7 @@ Nach dem gleichen Prinzip lautet die korrekte URL für unser Beispiel:
 
 > `https://example.com/quadratic-equation-solver?equation=x%5E2%2B2x%2B1%3D0`
 
-Während wir das zwar jedesmal manuell tun könnten, ist das doch eine sehr anstrengende
+Während wir das zwar bei jedem Mal manuell tun könnten, ist das doch eine sehr anstrengende
 Aufgabe. JavaScript bietet 2 Hilfsfunktionen hierzu:
 
 ```js

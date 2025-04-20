@@ -23,7 +23,7 @@ oder Videos zurückliefern (Response).
 
 ## Request und Response
 
-HTTP basiert auf dem zustandlosen Austausch von Nachrichten. Was bedeutet das?
+HTTP basiert auf dem zustandslosen Austausch von Nachrichten. Was bedeutet das?
 
 Stateless bedeutet zustandslos. Fragen wir eine Videodatei beim Server an,
 gibt er uns diese zurück. Fragen wir nun erneut nach der Videodatei an, weiß
@@ -62,7 +62,7 @@ GET https://example.com/ HTTP/1.1
 
 In der Statuszeile stehen 3 Informationen. Als erstes kommt das sogenannte
 HTTP-Verb, welches angibt, um welche Art von Anfrage es sich handelt. Danach
-steht die URL mit der Addresse, an welche die Anfrage gesendet wird. Als letztes
+steht die URL mit der Adresse, an welche die Anfrage gesendet wird. Als letztes
 steht die Version des HTTP-Protokolls. Mittlerweile gibt es auch HTTP 2/3, dies
 werden wir uns später kurz anschauen.
 
@@ -73,9 +73,9 @@ Aktionen oder Arten von Anfragen mit verschiedener Bedeutung, zum Beispiel:
  ausgeführt wird, wenn wir im Browser eine Webseite aufrufen.
 * POST - Sende Daten an den Server. Oft verwendet bei Formularen, um die Formulardaten
   abzusenden.
-* PUT - Ersetze die Zieladdresse mit dem gesendeten Inhalt. Oft verwendet, um
+* PUT - Ersetze die Zieladresse mit dem gesendeten Inhalt. Oft verwendet, um
   etwa eine Datei hochzuladen.
-* DELETE - Lösche die Datei an der Zieladdresse.
+* DELETE - Lösche die Datei an der Zieladresse.
 * HEAD - Erhalte Meta-Informationen zur Seite, mache sonst aber nicht weiter.
 
 Die Bedeutung dieser HTTP-Verben ist nur schwach definiert. Theoretisch
@@ -108,7 +108,7 @@ Der Body enthält die eigentlichen Daten der Anfrage.
 Rufen wir eine Webseite nur auf, ist der Body leer. Senden wir ein Formular
 ab , stehen im Body die Werte der einzelnen Formularfelder.
 
-Der HTTP-Standard selber erlaubt im Body beliebge binäre Daten. Über den Header
+Der HTTP-Standard selber erlaubt im Body beliebige binäre Daten. Über den Header
 `Content-Type` wird angegeben, welches Format die Daten im Body haben.
 
 Ein typisches Format ist `application/json`, wenn also im Body ein JSON-Wert
@@ -142,7 +142,7 @@ des Formular-Elements und `value` dessen Wert.
 :::info
 Falls Sonderzeichen im Namen oder Wert auftauchen, werden diese
 [URL-kodiert](https://developer.mozilla.org/en-US/docs/Glossary/Percent-encoding).
-Das URL-Enkoding schauen wir uns im nächsten Abschnitt genauer an.
+Das URL-Encoding schauen wir uns im nächsten Abschnitt genauer an.
 :::
 
 Klicken wir nun auf den Submit-Button, sendet der Browser etwa folgendes Request
@@ -234,7 +234,7 @@ Header: [Accept](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Hea
 
 Gibt beim Request an, mit welche Arten von Dateien der Client umgehen kann.
 Ein typischer Wert beim Aufruf einer Webseite könnte etwa sein:
-`text/html,application/xhtml+xml,application/xml,image/avif,image/webp,image/apng`.
+`text/html,application/xhtml+xml,application/xml,image/avif,image/webp,image/png`.
 Dieser Client kann also HTML, XML und Bilder verarbeiten. Bei REST-API
 wird der Accept-Header zudem verwendet, um die Art von Inhalt zu beeinflussen (
 z.B. JSON oder XML).
@@ -388,7 +388,7 @@ dass die Daten über eine [verschlüsselte Verbindung](https://en.wikipedia.org/
 übertragen werden. Der Client verschlüsselt die Daten und der Server entschlüsselt
 die Daten. Niemand dazwischen kann die Daten lesen.
 
-In anderen Worten, die Daten sind beim Übetragen über die (Internet-)verbindung
+In anderen Worten, die Daten sind beim Übertragen über die Internetverbindung
 verschlüsselt, daher nennt man dies auch Verbindungsverschlüsselung.
 
 Über HTTPS hinausgehend gibt es noch das Konzept der sogenannten End-To-End-Verschlüsselung.

@@ -43,7 +43,7 @@ Um dies abzubilden, schachteln wir Elemente in XML:
 ```xml
 <university id="dhdd" name="Duale Hochschule Dresden">
   <courses>
-    <course id="mi" name="Medientinformatik">
+    <course id="mi" name="Medieninformatik">
       <lecture id="impp" name="Imperative Programmierung">Einführung in die Programmierung.</lecture>
       <lecture id="webp" name="Webprogrammierung">Vermittelt Grundlagen der Webprogrammierung.</lecture>
     </course>
@@ -58,7 +58,7 @@ Um dies abzubilden, schachteln wir Elemente in XML:
 :::info
 Der Vollständigkeit halber sei noch erwähnt, dass in vielen Bereichen, wo XML
 verwendet wird, noch sogenannte [Namespaces](https://www.w3.org/TR/xml-names/)
-eine Rolle spielen. Damit können wir Elemente klassifzieren, wie im unteren
+eine Rolle spielen. Damit können wir Elemente klassifizieren, wie im unteren
 Beispiel illustriert. Das Namespaces aber für HTML im wesentlichen irrelevant
 sind, werden wir auf diese hier nicht weiter eingehen. 
 
@@ -117,7 +117,7 @@ Leerzeichen sind  wichtig   in    einem Text - Dokument
 ```
 
 Im HTML werden alle Leerzeichen im Textinhalt von Elementen zusammengefasst. Es spielt
-also keine Rolle, wieviele Leerzeichen wir verwenden, der Nutzer sieht immer
+also keine Rolle, wie viele Leerzeichen wir verwenden, der Nutzer sieht immer
 nur ein Leerzeichen. Folgende vier Absätze sehen gleich aus:
 
 <HtmlSnippet path="whitespace" />
@@ -155,13 +155,13 @@ Analog zu XML ist es erlaubt, einen Slash am Ende zu haben `<input />`, aber
 im Unterschied zu XML ist dieser nicht erforderlich.
 :::
 
-## Tag-Omisssion
+## Tag-Omission
 
 Ein weiterer Unterschied zu XML besteht darin, dass HTML es uns für einige Elemente
 erlaubt, den schließenden Tag auszulassen, obwohl diese Elemente Inhalt (Kinder)
 haben können.
 
-Der technische Name hierfür ist [Tag Omisssion](https://html.spec.whatwg.org/multipage/syntax.html#syntax-tag-omission).
+Der technische Name hierfür ist [Tag Omission](https://html.spec.whatwg.org/multipage/syntax.html#syntax-tag-omission).
 Beispielsweise können wir ungeordnete Listen mit Anführungspunkten über das Element
 `<ul></ul>` darstellen. Jeder Anführungspunkt ist ein `<li></li>`-Kindelement.
 HTML erlaubt es, bei `li` den schließenden Tag auszulassen. Damit können wir
@@ -245,7 +245,7 @@ es, als Wert den Namen des Attributs zu verwenden:
 ## Sonderzeichen
 
 Zeichen wie `<` oder `>` haben im HTML eine spezielle Bedeutung. Wenn wir solche
-Zeichen als Text verwenden wollen, müssen wir diese umschreiben (escapen). Für die
+Zeichen als Text verwenden wollen, müssen wir diese umschreiben (`escapen`). Für die
 meisten üblichen Sonderzeichen stellt HTML Abkürzungen bereit, z.B.:
 
 <HtmlSnippet path="html-escape" />
@@ -295,4 +295,4 @@ Inzwischen ist es auch für uns als Autoren von Webseiten möglich, den Shadow-D
 zu verwenden. Ein typischer Anwendungsfall dafür sind Web Components -- eigene
 HTML-Elemente (Widgets), die wir uns in einem späteren Kapitel kurz anschauen
 werden. Ein anderer Anwendungsfall ist die Isolierung von CSS -- alle CSS/Stylesheets
-innerhalb des Shadow-DOM beeinflussen nicht die darumliegende Webseite.
+innerhalb des Shadow-DOM beeinflussen nicht die umgebende Webseite.

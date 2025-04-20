@@ -116,8 +116,8 @@ Weiterhin können wir auch für verschiedene Größen verschiedenes CSS anwenden
 }
 ```
 
-Wie im Beispiel oben zu sehen, wird das oft verwendet, um Webseiten responsiv
-zu gestalten, sodass diese auff allen Geräten bedienbar sind.
+Wie im Beispiel oben zu sehen, wird das oft verwendet, um Webseiten responsive
+zu gestalten, sodass diese auf allen Geräten bedienbar sind.
 
 Zudem können wir auch noch verschiedene Eigenschaften des Anzeigegeräts abfragen,
 z.B., ob der Nutzer ein Dark-Theme oder ein Light-Theme möchte:
@@ -208,10 +208,10 @@ abhängig von der Bildschirmbreite anwenden können.
 
 Manchmal ist es aber nicht die Bildschirmbreite, welche entscheiden ist, sondern
 der Container, in dem sich ein Element befindet. Nehmen wir beispielsweise an,
-wir haben eine Tabellenkomponente entwickelt, die andere in ihre Webesite einbinden
+wir haben eine Tabellenkomponente entwickelt, die andere in ihre Website einbinden
 können. Wo die Tabelle eingebunden wird, können wir nicht vorhersagen. Die Tabelle
 könnte etwa im rechten unteren Teil der Webseite eingebunden sein. Wir würden nun
-gerne abhängig davon, wieviel Platz unserer Tabelle zur Verfügung steht, das
+gerne abhängig davon, wie viel Platz unserer Tabelle zur Verfügung steht, das
 Layout der Tabelle beeinflussen.
 
 Dies ist uns möglich via der
@@ -235,7 +235,7 @@ Statt `container: inline-size` könnten wir auch `container: size` verwenden.
 `container: size` auch auf Änderungen der Höhen.
 
 :::info
-Bei vertikalen Schreibsrichtung reagiert `container: inline-size` nur auf die
+Bei vertikalen Schreibrichtung reagiert `container: inline-size` nur auf die
 Höhe und `container: size` auf Höhe und Breite.
 :::
 
@@ -257,7 +257,7 @@ __Scope__
 
 [@scope](https://developer.mozilla.org/en-US/docs/Web/CSS/@scope) ermöglicht uns,
 alle Regeln nur auf einen Teil des HTML anzuwenden. Das vermeidet, dass unser
-CSS unabsichtich anderes CSS augrund der Kaskadierung überschreibt. Im folgenden
+CSS unbeabsichtigt anderes CSS aufgrund der Kaskadierung überschreibt. Im folgenden
 Beispiel werden die Regeln nur auf eine Card-Komponente angewandt. Im Container
 mit der Klasse `card-content` könnte Inhalt stehen, den der Nutzer unserer
 Komponente bereitgestellt hat. Durch die Limitierung über den Scope können wir
@@ -270,7 +270,7 @@ __Layer__
 [@layer](https://developer.mozilla.org/en-US/docs/Web/CSS/@layer) ermöglicht uns,
 eine ganze neue Prioritätsstufe in die CSS-Kaskade einzufügen. Jeder Layer stellt
 eine separate Stufe dar, der letzte deklarierte Layer hat die höchste Priorität.
-Da bei der CSS-Kaskade zuerst nach Layern geschaut wird, spielt die Spezifizität
+Da bei der CSS-Kaskade zuerst nach Layern geschaut wird, spielt die Spezifität
 der CSS-Selektoren keine Rolle mehr, wie das folgende Beispiel illustriert:
 
 <HtmlSnippet path="css-layer" type="css" toggleable/>
