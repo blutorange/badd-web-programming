@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[7805],{47805:(e,a,l)=>{l.r(a),l.d(a,{default:()=>r});const r='<form>\n  <label for="work-email">Arbeits-E-Mail</label>\n  <input id="work-email" type="email" required>\n</form>'}}]);

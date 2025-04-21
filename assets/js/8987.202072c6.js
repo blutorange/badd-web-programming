@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[8987],{38987:(e,t,a)=>{a.r(t),a.d(t,{default:()=>c});const c="textarea {\n  field-sizing: content;\n  width: 100%;\n}"}}]);

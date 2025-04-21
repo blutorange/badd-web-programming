@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[7105],{97105:(e,a,c)=>{c.r(a),c.d(a,{default:()=>s});const s="const array = [1, 2, 3];\narray[1];\n"}}]);

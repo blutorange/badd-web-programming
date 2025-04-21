@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[8452],{8452:(e,s,t)=>{t.r(s),t.d(s,{default:()=>c});const c='<h1>\xdcberschrift</h1>\n\n<span style="font-weight: bold; font-size: 32px;">\xdcberschrift</span>\n'}}]);

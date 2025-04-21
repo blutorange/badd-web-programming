@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[559],{20559:(e,n,r)=>{r.r(n),r.d(n,{default:()=>c});const c="img {\n  width: 100%;\n  cursor: help;\n}\n\n.callout {\n  margin: 2rem 0;\n  font-weight: bold;\n  background-color: #eee;\n  padding: 2rem;\n  border-radius: 10px;\n  color: #333;\n}\n"}}]);

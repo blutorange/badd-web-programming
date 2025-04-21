@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[3755],{3755:(e,c,a)=>{a.r(c),a.d(c,{default:()=>s});const s='const object = { "a.b.c": "d" };\nobject["a.b.c"];\n'}}]);

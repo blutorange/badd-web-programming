@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[6674],{86674:(e,s,n)=>{n.r(s),n.d(s,{default:()=>a});const a="body {\n  font-size: 24px;\n  font-family: sans-serif;\n  line-height: 130%;\n}"}}]);

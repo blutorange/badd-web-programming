@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[5229],{5229:(t,e,u)=>{u.r(e),u.d(e,{default:()=>o});const o='<button id="cors-good" type="button">CORS (allowed)</button>\n<button id="cors-bad" type="button">CORS (forbidden)</button>\n\n<pre id="output"></pre>'}}]);

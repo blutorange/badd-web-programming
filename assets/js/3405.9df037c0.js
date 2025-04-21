@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[3405],{73405:(e,n,t)=>{t.r(n),t.d(n,{default:()=>a});const a='<h1>Notizbuch</h1>\n\n<p>Notizen werden im localStorage gespeichert und gehen beim Neuladen nicht verloren.</p>\n\n<textarea placeholder="Notizen schreiben..." class="note-book"></textarea>'}}]);

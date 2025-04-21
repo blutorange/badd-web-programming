@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[3033],{3033:(e,t,u)=>{u.r(t),u.d(t,{default:()=>a});const a='<button type=""button>Fahre \xfcber mich dr\xfcber f\xfcr eine Animation</button>'}}]);

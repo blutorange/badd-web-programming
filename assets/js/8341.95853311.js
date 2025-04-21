@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[8341],{18341:(e,t,n)=>{n.r(t),n.d(t,{default:()=>a});const a='<form>\n  <p>\n    <label for="comments">Kommentare</label>\n    <textarea id="comments" name="user-comments" required maxlength="1000"></textarea>\n  </p>\n  <button type="submit">Absenden</button>\n</form>'}}]);

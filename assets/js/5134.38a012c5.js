@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[5134],{95134:(e,n,s)=>{s.r(n),s.d(n,{default:()=>l});const l="<h2>Einkaufsliste</h2>\n<ul>\n  <li>Bananen\n  <li>K\xe4se\n  <li>Waln\xfcsse\n</ul>"}}]);

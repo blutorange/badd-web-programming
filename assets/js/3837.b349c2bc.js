@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[3837],{3837:(e,t,n)=>{n.r(t),n.d(t,{default:()=>a});const a="const nowTimestamp = Date.now();\nconst nowFormatted = new Date().toLocaleString();\n[nowTimestamp, nowFormatted];\n"}}]);

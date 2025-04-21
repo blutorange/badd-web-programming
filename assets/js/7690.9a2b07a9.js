@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[7690],{7690:(t,e,c)=>{c.r(e),c.d(e,{default:()=>n});const n='<button class="fancy-button">Ich bin ein fancy-button</button>'}}]);

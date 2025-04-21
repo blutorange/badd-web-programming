@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[4178],{4178:(e,n,c)=>{c.r(n),c.d(n,{default:()=>s});const s="const a = 10;\nconst b = 20;\nif ( b > a ) {\n  const c = a * b;\n}\n// c ist hier nicht mehr g\xfcltig.\n// Das folgende resultiert in einem Fehler.\nconsole.log(c);\n"}}]);

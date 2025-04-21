@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[9213],{9213:(n,e,a)=>{a.r(e),a.d(e,{default:()=>s});const s='const values = [\n  undefined,\n  false,\n  3,\n  1000n,\n  "Welt",\n  Symbol.iterator,\n  function foo() {},\n  { name: "Mary" },\n];\n\nfor (const value of values) {\n  console.log(`Typ ist ${typeof value}`);\n}\n'}}]);

@@ -1,0 +1,41 @@
+.inline {
+  display: inline flow-root;
+}
+
+counter-widget {
+  padding: 0.5em;
+  border: 2px solid #ccc;
+}
+
+counter-widget::part(counter) {
+  text-align: center;
+  color: rgb(34, 84, 199);
+  font-size: 1.5em;
+  padding: 1em 0;
+}
+
+counter-widget::part(decrement),
+counter-widget::part(increment),
+counter-widget button {
+  border: none;
+  border-radius: 6px;
+  padding: 0.5em 2em;
+  color: white;
+}
+
+counter-widget::part(decrement),
+counter-widget::part(increment) {
+  background-color: rgb(34, 84, 199);
+}
+
+counter-widget::part(decrement):hover,
+counter-widget::part(increment):hover {
+  background-color: rgb(16, 48, 124);
+}
+
+counter-widget button {
+  background-color: rgb(199, 116, 34);
+}
+counter-widget button:hover {
+  background-color: rgb(148, 83, 17);
+}

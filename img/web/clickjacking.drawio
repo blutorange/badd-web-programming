@@ -1,0 +1,49 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36" version="26.2.12">
+  <diagram name="ページ1" id="PVdKIQruZL2l4GMCVqwb">
+    <mxGraphModel dx="1679" dy="491" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="SRGA2Oh3WXVZg2VJ1H0C-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="-140" y="260" width="620" height="370" as="geometry" />
+        </mxCell>
+        <mxCell id="SRGA2Oh3WXVZg2VJ1H0C-4" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;Heading&lt;/h1&gt;&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&lt;/p&gt;" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="60" y="280" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="SRGA2Oh3WXVZg2VJ1H0C-17" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="-40" y="440" width="300" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="SRGA2Oh3WXVZg2VJ1H0C-3" value="" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="SRGA2Oh3WXVZg2VJ1H0C-17">
+          <mxGeometry width="250" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="SRGA2Oh3WXVZg2VJ1H0C-5" value="&lt;b&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;suppazon&lt;/font&gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="SRGA2Oh3WXVZg2VJ1H0C-17">
+          <mxGeometry x="21" y="10" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SRGA2Oh3WXVZg2VJ1H0C-6" value="Mein Konto" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="SRGA2Oh3WXVZg2VJ1H0C-17">
+          <mxGeometry x="98" y="10" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SRGA2Oh3WXVZg2VJ1H0C-8" value="Löschen" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="SRGA2Oh3WXVZg2VJ1H0C-17">
+          <mxGeometry x="172" y="10" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SRGA2Oh3WXVZg2VJ1H0C-10" value="Produkt 1" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="SRGA2Oh3WXVZg2VJ1H0C-17">
+          <mxGeometry x="20" y="70" width="90" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="SRGA2Oh3WXVZg2VJ1H0C-11" value="Produkt 2" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="SRGA2Oh3WXVZg2VJ1H0C-17">
+          <mxGeometry x="20" y="110" width="90" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="SRGA2Oh3WXVZg2VJ1H0C-12" value="Produkt 3&lt;span style=&quot;color: rgba(0, 0, 0, 0); font-family: monospace; font-size: 0px; text-align: start; text-wrap-mode: nowrap;&quot;&gt;%3CmxGraphModel%3E%3Croot%3E%3CmxCell%20id%3D%220%22%2F%3E%3CmxCell%20id%3D%221%22%20parent%3D%220%22%2F%3E%3CmxCell%20id%3D%222%22%20value%3D%22Produkt%201%22%20style%3D%22shape%3Dhexagon%3Bperimeter%3DhexagonPerimeter2%3BwhiteSpace%3Dwrap%3Bhtml%3D1%3BfixedSize%3D1%3B%22%20vertex%3D%221%22%20parent%3D%221%22%3E%3CmxGeometry%20x%3D%22530%22%20y%3D%22510%22%20width%3D%2290%22%20height%3D%2220%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3C%2Froot%3E%3C%2FmxGraphModel%3E&lt;/span&gt;" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="SRGA2Oh3WXVZg2VJ1H0C-17">
+          <mxGeometry x="130" y="70" width="90" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="SRGA2Oh3WXVZg2VJ1H0C-13" value="Produkt 4" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="SRGA2Oh3WXVZg2VJ1H0C-17">
+          <mxGeometry x="130" y="110" width="90" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="SRGA2Oh3WXVZg2VJ1H0C-2" value="&lt;b&gt;&lt;font&gt;Gratis Handy!!!&lt;/font&gt;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;opacity=40;" vertex="1" parent="1">
+          <mxGeometry x="130" y="450" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SRGA2Oh3WXVZg2VJ1H0C-19" value="unsichtbarer IFrame, mit Konto-Löschen-Button unter dem Gratis-Handy-Button" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="210" y="585" width="250" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

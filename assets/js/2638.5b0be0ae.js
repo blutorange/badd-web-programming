@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[2638],{2638:(e,n,c)=>{c.r(n),c.d(n,{default:()=>s});const s="const a = undefined;\nconst b = null;\nconst c = { age: 42 };\n\nconsole.log(a?.age ?? 18);\nconsole.log(b?.age ?? 18);\nconsole.log(c?.age ?? 18);\n"}}]);

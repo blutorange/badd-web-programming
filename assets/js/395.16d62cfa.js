@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[395],{395:(e,a,l)=>{l.r(a),l.d(a,{default:()=>i});const i='$("div").append(`<label for="email">E-Mail</label><input id="email" name="email" type="email">`);'}}]);

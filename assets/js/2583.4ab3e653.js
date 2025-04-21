@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[2583],{32583:(e,a,n)=>{n.r(a),n.d(a,{default:()=>r});const r="<body>\n  <header>Header</header>\n  <nav>Navigation</nav>\n  <main>Main area</main>\n  <footer>Footer</footer>\n</body>"}}]);

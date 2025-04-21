@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[7962],{7962:(e,n,a)=>{a.r(n),a.d(n,{default:()=>c});const c="input {\n  display: block;\n  width: 100%;\n}\n\n* {\n  margin: 1em;\n}"}}]);

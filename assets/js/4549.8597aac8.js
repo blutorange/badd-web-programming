@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[4549],{94549:(e,a,t)=>{t.r(a),t.d(a,{default:()=>l});const l='<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a" target="_blank">\n  a-Element bei MDN web docs\n</a>'}}]);

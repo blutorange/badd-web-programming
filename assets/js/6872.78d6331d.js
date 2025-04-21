@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[6872],{6872:(n,e,t)=>{t.r(e),t.d(e,{default:()=>l});const l="p {\n  font-family: serif;\n}\n\np::first-letter {\n  font-size: 3em;\n  font-weight: bold;\n}\n\np::first-line {\n  letter-spacing: 1px;\n}\n\ninput::placeholder {\n  color: darkorange;\n}"}}]);

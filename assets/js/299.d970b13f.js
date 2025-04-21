@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[299],{80299:(e,c,s)=>{s.r(c),s.d(c,{default:()=>a});const a='const items = [["foo"], ["bar"], ["baz"], ["qux"]]\n[1,2,3].forEach(i => console.log(i))\n'}}]);

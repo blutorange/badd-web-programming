@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[9262],{79262:(t,e,u)=>{u.r(e),u.d(e,{default:()=>n});const n='<button type="button">Button mit Eye Connection</button>'}}]);

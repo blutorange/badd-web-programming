@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[275],{275:(e,n,s)=>{s.r(n),s.d(n,{default:()=>o});const o='const user = { name: "Paula", age: 26, hobby: "Schwimmen" };\n\nconst anotherUser = {...user};\nconst yetAnotherUser = {...user, age: 29};\n\nconsole.log(anotherUser);\nconsole.log(yetAnotherUser);'}}]);

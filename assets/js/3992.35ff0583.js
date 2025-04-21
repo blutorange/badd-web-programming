@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[3992],{53992:(e,s,a)=>{a.r(s),a.d(s,{default:()=>c});const c='<p id="blue-sky" class="green-tea" >\n  Ich bin eine Ampel. Darfst du fahren?\n</p>'}}]);

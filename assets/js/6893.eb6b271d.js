@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[6893],{66893:(e,l,s)=>{s.r(l),s.d(l,{default:()=>c});const c="<h1>Basic Custom Element</h1>\n\n<hello-world></hello-world>"}}]);

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[1471],{41471:(d,n,s)=>{s.r(n),s.d(n,{default:()=>a});const a='<div class="box-container">\n  <div class="margin">Margin</div>\n  <div class="box">\n    <div class="padding">Padding</div>\n    <div class="border">Border</div>\n    <div class="content">Content</div>\n  </div>\n</div>'}}]);

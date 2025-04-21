@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[3673],{3673:(e,l,s)=>{s.r(l),s.d(l,{default:()=>c});const c='<ul id="list" class="list">\n  <li>Asterix\n  <li>Obelix\n</ul>'}}]);

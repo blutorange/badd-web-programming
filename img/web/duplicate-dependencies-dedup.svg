@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="631pt" height="260pt" viewBox="0.00 0.00 631.09 260.00">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 256)">
+<title>G</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-256 627.09,-256 627.09,4 -4,4"/>
+<!-- webapp -->
+<g id="node1" class="node">
+<title>webapp</title>
+<polygon fill="none" stroke="black" points="384.4,-252 324.86,-252 324.86,-216 384.4,-216 384.4,-252"/>
+<text text-anchor="middle" x="354.63" y="-229.8" font-family="Times,serif" font-size="14.00">webapp</text>
+</g>
+<!-- axios@1.2.0 -->
+<g id="node2" class="node">
+<title>axios@1.2.0</title>
+<ellipse fill="none" stroke="black" cx="59.63" cy="-162" rx="59.63" ry="18"/>
+<text text-anchor="middle" x="59.63" y="-157.8" font-family="Times,serif" font-size="14.00">axios@1.2.0</text>
+</g>
+<!-- webapp&#45;&gt;axios@1.2.0 -->
+<g id="edge1" class="edge">
+<title>webapp-&gt;axios@1.2.0</title>
+<path fill="none" stroke="black" d="M324.48,-226.12C280.97,-216.15 198.04,-197.02 127.63,-180 123.61,-179.03 119.45,-178.01 115.28,-176.99"/>
+<polygon fill="black" stroke="black" points="116.25,-173.62 105.7,-174.62 114.57,-180.42 116.25,-173.62"/>
+</g>
+<!-- btoa@2.5.0 -->
+<g id="node3" class="node">
+<title>btoa@2.5.0</title>
+<ellipse fill="lightgreen" stroke="lightgreen" cx="436.63" cy="-18" rx="55.87" ry="18"/>
+<text text-anchor="middle" x="436.63" y="-13.8" font-family="Times,serif" font-size="14.00">btoa@2.5.0</text>
+</g>
+<!-- webapp&#45;&gt;btoa@2.5.0 -->
+<g id="edge2" class="edge">
+<title>webapp-&gt;btoa@2.5.0</title>
+<path fill="none" stroke="black" d="M383.81,-215.64C396.32,-206.63 409.83,-194.47 417.63,-180 440.23,-138.08 441.25,-81.23 439.35,-47.51"/>
+<polygon fill="black" stroke="black" points="442.85,-47.44 438.66,-37.71 435.87,-47.93 442.85,-47.44"/>
+</g>
+<!-- m&#45;qr&#45;code@3.1.2 -->
+<g id="node4" class="node">
+<title>m-qr-code@3.1.2</title>
+<ellipse fill="none" stroke="black" cx="543.63" cy="-162" rx="79.46" ry="18"/>
+<text text-anchor="middle" x="543.63" y="-157.8" font-family="Times,serif" font-size="14.00">m-qr-code@3.1.2</text>
+</g>
+<!-- webapp&#45;&gt;m&#45;qr&#45;code@3.1.2 -->
+<g id="edge3" class="edge">
+<title>webapp-&gt;m-qr-code@3.1.2</title>
+<path fill="none" stroke="black" d="M384.58,-221.91C413.63,-211.15 458.28,-194.61 492.88,-181.8"/>
+<polygon fill="black" stroke="black" points="493.69,-185.23 501.85,-178.47 491.25,-178.67 493.69,-185.23"/>
+</g>
+<!-- paper&#45;paypal&#45;component@4.0.0 -->
+<g id="node5" class="node">
+<title>paper-paypal-component@4.0.0</title>
+<ellipse fill="none" stroke="black" cx="272.63" cy="-162" rx="135.77" ry="18"/>
+<text text-anchor="middle" x="272.63" y="-157.8" font-family="Times,serif" font-size="14.00">paper-paypal-component@4.0.0</text>
+</g>
+<!-- webapp&#45;&gt;paper&#45;paypal&#45;component@4.0.0 -->
+<g id="edge4" class="edge">
+<title>webapp-&gt;paper-paypal-component@4.0.0</title>
+<path fill="none" stroke="black" d="M334.36,-215.7C324.33,-207.14 312.05,-196.66 301.1,-187.3"/>
+<polygon fill="black" stroke="black" points="303.69,-184.92 293.82,-181.09 299.15,-190.24 303.69,-184.92"/>
+</g>
+<!-- form&#45;data@2.3.0 -->
+<g id="node6" class="node">
+<title>form-data@2.3.0</title>
+<ellipse fill="orange" stroke="orange" cx="99.63" cy="-90" rx="77.31" ry="18"/>
+<text text-anchor="middle" x="99.63" y="-85.8" font-family="Times,serif" font-size="14.00">form-data@2.3.0</text>
+</g>
+<!-- axios@1.2.0&#45;&gt;form&#45;data@2.3.0 -->
+<g id="edge5" class="edge">
+<title>axios@1.2.0-&gt;form-data@2.3.0</title>
+<path fill="none" stroke="black" d="M69.31,-144.05C73.76,-136.26 79.16,-126.82 84.15,-118.08"/>
+<polygon fill="black" stroke="black" points="87.08,-120.01 89.01,-109.59 81,-116.54 87.08,-120.01"/>
+</g>
+<!-- svg2img@8.1.0 -->
+<g id="node8" class="node">
+<title>svg2img@8.1.0</title>
+<ellipse fill="none" stroke="black" cx="540.63" cy="-90" rx="72.51" ry="18"/>
+<text text-anchor="middle" x="540.63" y="-85.8" font-family="Times,serif" font-size="14.00">svg2img@8.1.0</text>
+</g>
+<!-- m&#45;qr&#45;code@3.1.2&#45;&gt;svg2img@8.1.0 -->
+<g id="edge10" class="edge">
+<title>m-qr-code@3.1.2-&gt;svg2img@8.1.0</title>
+<path fill="none" stroke="black" d="M542.89,-143.7C542.57,-136.41 542.2,-127.73 541.85,-119.54"/>
+<polygon fill="black" stroke="black" points="545.35,-119.46 541.43,-109.62 538.36,-119.76 545.35,-119.46"/>
+</g>
+<!-- paper&#45;paypal&#45;component@4.0.0&#45;&gt;btoa@2.5.0 -->
+<g id="edge8" class="edge">
+<title>paper-paypal-component@4.0.0-&gt;btoa@2.5.0</title>
+<path fill="none" stroke="black" d="M264.53,-143.77C256.74,-124.37 248.21,-92.85 263.63,-72 287.83,-39.27 331.87,-26.09 369.45,-21.06"/>
+<polygon fill="black" stroke="black" points="369.84,-24.54 379.37,-19.92 369.04,-17.59 369.84,-24.54"/>
+</g>
+<!-- paper&#45;paypal&#45;component@4.0.0&#45;&gt;form&#45;data@2.3.0 -->
+<g id="edge6" class="edge">
+<title>paper-paypal-component@4.0.0-&gt;form-data@2.3.0</title>
+<path fill="none" stroke="black" d="M231.63,-144.41C206.43,-134.21 174.02,-121.1 147.62,-110.42"/>
+<polygon fill="black" stroke="black" points="149.07,-107.23 138.49,-106.72 146.44,-113.72 149.07,-107.23"/>
+</g>
+<!-- express@9.1.0 -->
+<g id="node7" class="node">
+<title>express@9.1.0</title>
+<ellipse fill="none" stroke="black" cx="340.63" cy="-90" rx="68.2" ry="18"/>
+<text text-anchor="middle" x="340.63" y="-85.8" font-family="Times,serif" font-size="14.00">express@9.1.0</text>
+</g>
+<!-- paper&#45;paypal&#45;component@4.0.0&#45;&gt;express@9.1.0 -->
+<g id="edge7" class="edge">
+<title>paper-paypal-component@4.0.0-&gt;express@9.1.0</title>
+<path fill="none" stroke="black" d="M289.44,-143.7C297.63,-135.27 307.62,-124.97 316.6,-115.73"/>
+<polygon fill="black" stroke="black" points="318.97,-118.32 323.43,-108.71 313.95,-113.44 318.97,-118.32"/>
+</g>
+<!-- svg2img@8.1.0&#45;&gt;btoa@2.5.0 -->
+<g id="edge9" class="edge">
+<title>svg2img@8.1.0-&gt;btoa@2.5.0</title>
+<path fill="none" stroke="black" d="M516.24,-72.59C502.26,-63.17 484.52,-51.23 469.33,-41.01"/>
+<polygon fill="black" stroke="black" points="471.29,-38.11 461.04,-35.43 467.38,-43.92 471.29,-38.11"/>
+</g>
+</g>
+</svg>

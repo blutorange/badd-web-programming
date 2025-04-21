@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[1269],{71269:(e,a,s)=>{s.r(a),s.d(a,{default:()=>t});const t=".block {\n  position: fixed;\n  transform: translateY(2em);\n  opacity: 0.9;\n}"}}]);

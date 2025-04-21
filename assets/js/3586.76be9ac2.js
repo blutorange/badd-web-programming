@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[3586],{53586:(e,n,t)=>{t.r(n),t.d(n,{default:()=>d});const d='<form>\n  <fieldset id="dyn">\n      <legend>Kinder</legend>\n      <div id="children">\n      </div>\n      <button id="plus" type="button">+ (weiteres Kind hinzuf\xfcgen)</button>\n  </fieldset>\n</form>'}}]);

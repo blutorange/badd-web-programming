@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[8719],{28719:(e,n,h)=>{h.r(n),h.d(n,{default:()=>l});const l='const h1 = $("h1");\nconst h2 = $("h2");\n\nconsole.log("Anzahl h1", h1.length);\nconsole.log("Anzahl h2", h2.length);\n'}}]);

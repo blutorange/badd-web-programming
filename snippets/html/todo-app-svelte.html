@@ -1,0 +1,121 @@
+<!-- ================== -->
+<!-- file: TodoApp.html-->
+<!-- ================== -->
+<section>
+  <TodoHeader onNewTodo={handleItemAdd} />
+  
+  <TodoMain items={items} filter={filter}
+    onToggleAll={handleToggleAll} 
+    onItemCompletionChange={handleItemCompletionChange} 
+    onItemRename={handleItemRename} 
+    onItemRemove={handleItemRemove} />
+  
+  {#if items.length > 0}
+    <TodoFooter activeCount={activeCount} filter={filter}
+      onClearCompleted={handleClearCompleted} onFilterChange={handleFilterChange} />
+  {/if}
+</section>
+
+<!-- ==================== -->
+<!-- file: TodoHeader.html-->
+<!-- ==================== -->
+<header>
+  <h1>TODOs</h1>
+  <div class="input-container">
+    <input
+      id="todo-input"
+      onkeydown={onKeydownNewInput}
+      bind:value={newName}
+      type="text"
+      autoComplete="off"
+      placeholder="Was muss getan werden?"
+    />
+  </div>
+</header>
+
+<!-- ================== -->
+<!-- file: TodoMain.html-->
+<!-- ================== -->
+<main>
+  <TodoToggleAll allCompleted={allCompleted} onToggleAll={onToggleAll} />
+  <TodoList items={items} filter={filter}
+    onItemCompletionChange={onItemCompletionChange} onItemRename={onItemRename} onItemRemove={onItemRemove} />
+</main>
+
+<!-- ======================= -->
+<!-- file: TodoToggleAll.html-->
+<!-- ======================= -->
+<div>
+  <input type="checkbox" id="toggle-all" checked={allCompleted} onchange={onChangeToggleAll} />
+  <label for="toggle-all">Alle als erledigt / unerledigt markieren</label>
+</div>
+
+<!-- ================== -->
+<!-- file: TodoList.html-->
+<!-- ================== -->
+<ul class="todo-list">
+  {#each filteredItems as item (item.id)}
+    <TodoItem item={item} onItemCompletionChange={onItemCompletionChange} onItemRename={onItemRename} onItemRemove={onItemRemove} />
+  {/each}
+</ul>
+
+<!-- ================== -->
+<!-- file: TodoItem.html-->
+<!-- ================== -->
+<li class={`todo-list-item ${item.completed ? "completed" : ""} ${editing ? "editing" : ""}`}>
+  {#if !editing}
+    <div class="view">
+      <input class="toggle" type="checkbox" checked={item.completed} onchange={onChangeItemCompleted} />
+      <label class="todo-list-item-content" ondblclick={onDblclickTodo}>
+        {item.name}
+      </label>
+      <button class="destroy" type="button" onclick={onClickItemRemove} />
+    </div>
+  {/if}
+  {#if editing}
+    <input class="edit" id="todo-edit-input" type="text" autocomplete="off" 
+      use:init bind:value={newName} onkeydown={onKeydownNewName} />
+  {/if}
+</li>
+
+<!-- ==================== -->
+<!-- file: TodoFooter.html-->
+<!-- ==================== -->
+<footer>
+  <span class="todo-count">{activeCount} TODO verbleibend!`</span>
+  <ul class="filters">
+    <li class={filter === "all" ? "selected" : ""}>
+      <a onpointerdown={onPointerdownFilterAll}>Alle</a>
+    </li>
+    <li class={filter === "active" ? "selected" : ""}>
+      <a onpointerdown={onPointerdownFilterActive}>Aktive</a>
+    </li>
+    <li class={filter === "completed" ? "selected" : ""}>
+      <a onpointerdown={onPointerdownFilterCompleted}>Fertige</a>
+    </li>
+  </ul>
+  <button class="clear-completed" type="button" onclick={onClickClearCompleted}>
+    Fertige TODOs löschen
+  </button>
+</footer>
+
+<!-- ==================== -->
+<!-- file: PageFooter.html-->
+<!-- ==================== -->
+<footer>
+  <p>Doppelklick, um ein TODO zu bearbeiten</p>
+  <p>
+    TODOs werden im <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API">localStorage</a> gespeichert
+  </p>
+  <p>
+    Basierend auf <a href="http://todomvc.com">TodoMVC</a>
+  </p>
+</footer>
+
+<!-- ============= -->
+<!-- file: App.html-->
+<!-- ============= -->
+<div>
+  <TodoApp />
+  <PageFooter />
+</div>
