@@ -7,7 +7,7 @@ description: Übungsaufgaben zur Interaktion mit dem DOM mittels JavaScript
 
 import Link from "@docusaurus/Link";
 
-# Übungsaufgaben zur DOM-API
+# Aufgaben zur DOM-API
 
 Die folgenden Aufgaben betreffen die Anprogrammierung von Webseiten mittels JavaScript,
 insbesondere zur DOM-API. 
@@ -131,15 +131,21 @@ URL als JSON:
 
 > https://dummyjson.com/posts
 
+Alternativ können Sie etwa per [typicode/json-server](https://github.com/typicode/json-server)
+auch lokale eine Dummy-REST-API starten, wo Sie auch Daten ändern und löschen können.
+Ein Projekt mit Beispielsdaten ist in unserem github zu finden:
+
+> https://github.com/blutorange/badd-web-programming/tree/main/packages/rest-api
+
 ## Aufgabe 12 - HTTP-Requests 2
 
 > Erweitern Sie die HTML-Seite aus Aufgabe 11 so, dass bei Klick auf einen Post
 > in der Liste sich eine Detailansicht mit den Details des Posts öffnet (ID, Beschreibung).
 
-Die Details eines Posts erhalten Sie bei JSON-Placeholder über folgende URL, wobei
+Die Details eines Posts erhalten Sie bei Dummy-JSON über folgende URL, wobei
 Sie natürlich die entsprechende ID des Posts eintragen müssen
 
-> https://jsonplaceholder.typicode.com/posts/ID
+> https://dummyjson.com/posts/ID
 
 Tip: Verwenden Sie zum Beispiel CSS, um die Post-Liste bzw. Details ein- und auszublenden.
 
@@ -151,7 +157,7 @@ Tip: Verwenden Sie zum Beispiel CSS, um die Post-Liste bzw. Details ein- und aus
 
 Die Kommentare zu einem Post erhalten Sie folgende URL:
 
-> https://jsonplaceholder.typicode.com/posts/ID/comments
+> https://dummyjson.com/posts/ID/comments
 
 ## Aufgabe 14 - HTTP-Requests 4
 
@@ -159,8 +165,19 @@ Die Kommentare zu einem Post erhalten Sie folgende URL:
 
 Um einen Post zu löschen, müssen Sie eine `DELETE`-Request an folgende URL stellen:
 
-> https://jsonplaceholder.typicode.com/posts/ID
+> https://dummyjson.com/posts/ID
 
-Hinweis: Das es sich nur um eine Demo-API handelt, wird der Post nicht wirklich
-vom Server gelöscht. Falls beim DELETE der Status-Code 200 zurückkommt, entfernen
-Sie den Post per JavaScript aus der Liste. 
+Hinweis: Bei Dummy JSON wird der Post nicht wirklich vom Server gelöscht. Falls
+beim DELETE der Status-Code 200 zurückkommt, entfernen Sie den Post per JavaScript
+aus der Liste. 
+
+Falls Sie lokal die REST-API gestartet haben, wird der POST wirklich gelöscht.
+In dem Fall können Sie die Daten neu laden und das HTML damit aktualisieren. 
+
+## Aufgabe 15 - HTTP-Requests 5
+
+> Falls Sie die REST-API lokal gestartet haben: Bauen Sie die HTML-Seite weiter
+> aus, indem Sie z.B. das Anlegen neuer Posts und Kommentare implementieren;
+> oder das Editieren bestehender Posts und Kommentare.
+
+Per CSS können Sie auch die Seite schöner gestalten.
