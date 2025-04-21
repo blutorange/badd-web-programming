@@ -1,0 +1,17 @@
+#children {
+  counter-set: child 0;
+}
+
+#children > div {
+  margin: 1em;
+  display: flex;
+  column-gap: 0.5em;
+  counter-increment: child;
+  label::after {
+      content: " " counter(child);
+  }
+  input {
+      flex-grow: 1;
+  }
+}
+

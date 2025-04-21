@@ -1,0 +1,175 @@
+---
+id: exercise-js
+slug: /exercise/js
+sidebar_position: 3
+description: Übungsaufgaben zur Programmierung mit JavaScript
+---
+
+import Link from "@docusaurus/Link";
+
+# Übungsaufgaben zu JavaScript
+
+Die folgenden Aufgaben betreffen die Programmiersprache JavaScript allgemein,
+unabhängig von der Anprogrammierung von Webseiten.
+
+Sie können das JavaScript auf verschiedene Weise schreiben, z.B. in der Sandbox,
+als Script in einer Webseite, in den Browser-Dev-Tools oder über Node.js. 
+
+## Aufgabe 1 - Hallo Welt
+
+> Schreiben Sie ein Programm, welches den Text "Hallo Welt" ausgibt!
+
+## Aufgabe 2 - Template-Literale
+
+> Erstellen Sie 2 neuen Variablen `givenName` und `familyName`. Nutzen Sie dann
+> ein Template-Literal, um den Text `Hallo Welt, givenName familyName!` auszugeben!
+
+`givenName` und `familyName` sollen natürlich durch den Wert der entsprechenden
+Variablen ersetzt werden.
+
+## Aufgabe 3 - Funktionen 1
+
+> Schreiben Sie eine Funktion, welche 2 nummerische Werte `x` und `y` entgegennimmt
+> und das Ergebnis der Formel `√(x²+y²)` zurückgibt! Lassen Sie sich das Ergebnis
+> ausgeben für die Eingabewerte `(3,4)`, `(12,35)` und `(105,208)`. 
+
+## Aufgabe 4 - Funktionen 2
+
+> Schreiben Sie eine Funktion, welche 3 nummerische Wert entgegennimmt und
+> deren Summe zurückgibt. Wird kein Wert für einen Parameter übergeben, soll
+> für den 1. Parameter `1`, für den 2. Parameter `2` und für den 3. Parameter `3`
+> als Default verwendet werden.
+
+## Aufgabe 5 - Funktionen 3
+
+> Schreiben Sie eine Funktion, welche einen nummerischen Wert `x` entgegennimmt
+> und die Fakultät `x!` dieser Zahl zurückgibt!
+
+## Aufgabe 6 - Dokumentation
+
+> Schreiben Sie eine Funktion, welche 2 nummerische Werte `n` und `k` entgegennimmt
+> und den Binomialkoeffizienten `(n, k)!` zurückgibt! Beachten Sie dabei alle möglichen
+> Werte, die eine Zahl im JavaScript annehmen kann. Schreiben Sie einen
+> Doc-Kommentar, welcher im Prosa-Text diese Fälle auflistet und beschreibt,
+> wie sich die Funktion in diesen Fällen verhält.
+
+Tip: Der Binomialkoeffizient `(n, k)` ist definiert als `n! / (k! * (n-k)!)`
+
+## Aufgabe 7 - Schleifen
+
+> Schreiben Sie eine Funktion, welche eine Liste von Strings entgegennimmt und
+> die Summe der Länge aller Strings zurückliefert! Nutzen Sie dazu eine for-of-Schleife.
+
+## Aufgabe 8 - Objekte
+
+> Schreiben Sie eine Funktion, welche den 2. Parameter entgegennimmt, den Namen und
+> das Alter einer Person. Geben Sie ein Objekt zurück, welches 2 Eigenschaften
+> für Name und Alter besitzt!
+
+## Aufgabe 9 - Destrukturierung
+
+> Schreiben Sie eine Funktion, welche ein Personen-Objekt wie aus Aufgabe 6 entgegennimmt
+> und den Namen und das Alter der Person ausgibt via `console.log`! Greifen Sie
+> dabei nicht direkt auf die Eigenschaften des Objekt zu, sondern nutzen Sie dazu
+> Destrukturierung!
+
+## Aufgabe 10 - Promise
+
+> Untenstehende ist eine Funktion, welche die n.te Fibonacci-Zahl berechnet.
+> Das es sich um eine alte Funktion handelt, wird noch ein Callback verwendet,
+> das aufgerufen wird, wenn die Berechnung fertig ist.
+> 
+> Wir möchten gerne Promises verwenden. Schreiben Sie eine Funktion namens
+> `fibonacciPromise`, welche nur den 1 Parameter `n` hat und ein Promise für die
+> n.te Fibonacci-Zahl zurückgibt! Delegieren Sie die eigentliche Berechnung
+> an die untenstehende Funktion. Beachten Sie auch den Fehlerfall!
+
+Testen Sie Ihre Funktion mit den Argumenten `600` und `-5`!
+
+<details>
+```js
+/**
+ * Computes the n-th Fibonacci number, asynchronously.
+ * 
+ * Invokes the given callback when the result is available. The callback
+ * receives two values: The first value is the n-th Fibonacci number. The
+ * second value is the error in case the computation failed.
+ * 
+ * @param {number} n The index of the Fibonacci number to compute.
+ * @param {(fn: number | undefined, error: Error | undefined) => void} A callback
+ * to invoke when the computation is done. The first argument contains the result
+ * when successful, the second argument the error when not successful.
+ */
+function fibonacci(n, callback) {
+    if (n < 0 || n > Number.MAX_SAFE_INTEGER || Number.isNaN(n)) {
+        callback(undefined, new Error("Number out of range: " + n));
+    }
+    n = BigInt(n);
+    let a = 0n, b = 1n, c;
+    const run = () => {
+      let i = 0n;
+      while (n-->0n && i++ < 100n) {
+          c = b;
+          b += a;
+          a = c;
+      }
+      n <= 0n ? callback(a) : setTimeout(run, 1000);
+    };
+    run();
+}
+```
+</details>
+
+## Aufgabe 11 - Async / Await
+
+> Schreiben Sie eine Async-Funktion, welche `fibonacciPromise` aus Aufgabe 8
+> verwendet und der Reihe nach alle Fibonacci-Zahlen von 1 bis 100 ausgibt!
+> Zum Schluss soll zudem noch die Summe aller Fibonacci-Zahlen von 1 bis 100
+> ausgegeben werden.
+
+Tip: Nutzen Sie `await` und eine Schleife.
+
+## Aufgabe 12 - Set
+
+> Schreiben Sie eine Funktion, welche 1 Parameter mit einem Array von Zahlen
+> entgegennimmt und ein neues Array mit den gleichen Zahlen zurückliefert, aber
+> keine Duplikate mehr enthält! Verwenden Sie dazu ein `Set`!
+
+Hier ist zum Test ein Array mit 100 Zahlen, wovon einige doppelt sind. Insgesamt
+sind es 62 verschiedene Zahlen:
+
+```json
+[82, 13, 33, 73, 41, 75, 32, 9, 82, 36, 78, 100, 81, 32, 21, 85, 4, 52, 89, 43, 52, 75, 97, 30, 7, 65, 62, 44, 61, 48, 74, 36, 29, 59, 24, 32, 21, 17, 15, 72, 72, 68, 25, 20, 20, 71, 18, 30, 72, 62, 20, 13, 81, 34, 76, 51, 15, 50, 87, 10, 58, 59, 57, 54, 94, 42, 19, 69, 30, 19, 93, 20, 69, 6, 93, 86, 67, 87, 62, 25, 35, 56, 10, 31, 94, 78, 24, 81, 78, 65, 20, 40, 33, 61, 72, 77, 97, 1, 41, 95]
+```
+
+## Aufgabe 13 - Map
+
+> Schreiben Sie eine Funktion, welche ein Array mit Personen-Objekten wie aus Aufgabe 6
+> entgegennimmt und einem `Map` zurückliefert, wobei der Name der Person der `key`
+> und das Personen-Objekt die `value` der Map ist.
+
+
+## Aufgabe 14 - Generator-Funktionen
+
+> Schreiben Sie eine Generator-Funktion, welche die Fibonacci-Zahlen generiert!
+> Nutzen Sie diese Funktion, um die ersten 100 Fibonacci-Zahlen auszugeben!
+
+Die n.te Fibonacci-Zahl ist die Summer der vorigen beiden Fibonacci-Zahlen.
+Die ersten beiden Fibonacci-Zahlen sind 0 und 1. Siehe auch
+[Wolfram Math World - Fibonacci Number](https://mathworld.wolfram.com/FibonacciNumber.html)
+
+> 0, 1, 1, 2, 3, 5, 8, 13, 21, ...
+
+## Aufgabe 15 - Try-Catch
+
+> Schreiben Sie eine Funktion, welche eine andere Funktion `f` als einzigen Parameter
+> entgegennimmt. `f` selber erfordert keinen Parameter beim Aufruf. Rufen
+> Sie die Funktion `f` und geben Sie ein Objekt `{status: "success", value: ...}` mit dem
+> Rückgabewert von `f` zurück. Falls der Aufruf der Funktion fehlschlug, geben Sie
+> ein Objekt `{status: "failure", reason: ...}` zurück.
+
+Testen Sie ihre Funktion auch mit folgenden Parametern:
+
+- `() => 42`
+- `() => undefined`
+- `() => "".startsWith.call()`

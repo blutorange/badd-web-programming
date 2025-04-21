@@ -62,18 +62,20 @@ function HtmlSnippetContent(props: HtmlSnippetProps): ReactNode {
   const [cssCode, setCssCode] = useState<Pending<string>>({ loading: true });
   const [jsCode, setJsCode] = useState<Pending<string>>({ loading: true });
 
+  const type = props.type ?? "html";
+
   const code =
-    props.type === "js" ? jsCode : props.type === "css" ? cssCode : htmlCode;
+    type === "js" ? jsCode : type === "css" ? cssCode : htmlCode;
 
   useEffect(() => {
     const tabs = props.tabs?.split(",") ?? [];
-    if (htmlCode.loading && (props.type === "html" || tabs.includes("html"))) {
+    if (htmlCode.loading && (type === "html" || tabs.includes("html"))) {
       loadAndSetCode(setHtmlCode, "html", props.path);
     }
-    if (cssCode.loading && (props.type === "css" || tabs.includes("css"))) {
+    if (cssCode.loading && (type === "css" || tabs.includes("css"))) {
       loadAndSetCode(setCssCode, "css", props.path);
     }
-    if (jsCode.loading && (props.type === "js" || tabs.includes("js"))) {
+    if (jsCode.loading && (type === "js" || tabs.includes("js"))) {
       loadAndSetCode(setJsCode, "js", props.path);
     }
   }, [
@@ -81,7 +83,7 @@ function HtmlSnippetContent(props: HtmlSnippetProps): ReactNode {
     cssCode.loading,
     jsCode.loading,
     props.tabs,
-    props.type,
+    type,
     props.path,
   ]);
 
@@ -91,9 +93,9 @@ function HtmlSnippetContent(props: HtmlSnippetProps): ReactNode {
       {props.tabs ? (
         <TabView
           className="html-snippet__tab-view"
-          activeIndex={props.type === "html" ? 0 : props.type === "css" ? 1 : 2}
+          activeIndex={type === "html" ? 0 : type === "css" ? 1 : 2}
         >
-          {props.type === "html" || tabs.includes("html") ? (
+          {type === "html" || tabs.includes("html") ? (
             <TabPanel header="HTML">
               <CodeBlock
                 className={styles.codeBlock}
@@ -105,7 +107,7 @@ function HtmlSnippetContent(props: HtmlSnippetProps): ReactNode {
               </CodeBlock>
             </TabPanel>
           ) : undefined}
-          {props.type === "css" || tabs.includes("css") ? (
+          {type === "css" || tabs.includes("css") ? (
             <TabPanel header="CSS">
               <CodeBlock
                 className={styles.codeBlock}
@@ -117,7 +119,7 @@ function HtmlSnippetContent(props: HtmlSnippetProps): ReactNode {
               </CodeBlock>
             </TabPanel>
           ) : undefined}
-          {props.type === "js" || tabs.includes("js") ? (
+          {type === "js" || tabs.includes("js") ? (
             <TabPanel header="JS">
               <CodeBlock
                 className={styles.codeBlock}

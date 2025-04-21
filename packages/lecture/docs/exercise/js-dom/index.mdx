@@ -1,0 +1,166 @@
+---
+id: exercise-js-dom
+slug: /exercise/js-dom
+sidebar_position: 4
+description: Übungsaufgaben zur Interaktion mit dem DOM mittels JavaScript
+---
+
+import Link from "@docusaurus/Link";
+
+# Übungsaufgaben zur DOM-API
+
+Die folgenden Aufgaben betreffen die Anprogrammierung von Webseiten mittels JavaScript,
+insbesondere zur DOM-API. 
+unabhängig von der Anprogrammierung von Webseiten.
+
+Sie können das JavaScript entweder in der Sandbox oder über einen lokal gestarteten
+Webserver schreiben.  
+
+## Aufgabe 1 - Hallo Welt
+
+> Schreiben Sie eine HTML-Seite, welche den Text `Hallo Welt` in der Browser-Konsole
+> ausgibt!
+
+Lagern Sie das JavaScript in eine separate Datei aus und binden Sie die
+JavaScript-Datei mit einem `<script>`-Tag in der Webseite ein.
+
+## Aufgabe 2 - Event Listener
+
+> Schreiben Sie eine HTML-Seite mit einem Button, sodass beim 1. Drücken des Buttons
+> der Text `Druckzahl 1`, beim 2. Drücken der Text `Druckzahl 2`, beim 3. Drücken
+> der Text `Druckzahl 3` usw. ausgegeben wird!
+
+## Aufgabe 3 - Ein- / Ausblenden
+
+> Schreibe Sie eine HTML-Seite mit einer Checkbox und einem Bild. Das Bild
+> soll nur sichtbar sein, wenn die Checkbox angehakt ist!
+
+## Aufgabe 4 - Dynamische Berechnung
+
+> Schreiben Sie eine HTML-Seite mit 3 Eingabefeldern, in denen nur Zahlen eingegeben werden.
+> Unter diesen beiden Feldern soll die Summe der beiden Felder ausgegeben werden.
+> Implementieren Sie dies mittels JavaScript! Bei jeder Änderung des Werts eines
+> Eingabefelds soll die Summe neu berechnet werden!
+
+## Aufgabe 5 - Formularfeld-Validierung
+
+> Schreiben Sie eine HTML-Seite mit 1 Eingabefelder (`<input>`) und einen Submit-Button.
+> Das Eingabefeld soll ein Pflichtfeld sein. Nutzen Sie dazu nicht das HTML-Attribut
+> `required`, sondern implementieren Sie die Validierung selber mittels JavaScript!
+
+Ist das Eingabefeld invalide (hat also keinen Wert), soll eine entsprechende Fehlermeldung
+angezeigt werden. Zudem soll das Absenden nur möglich sein, wenn das Eingabefeld
+valide ist.
+
+## Aufgabe 6 - Dynamisches Erzeugen von Elementen
+
+> Schreiben Sie eine HTML-Seite mit einem Eingabefeld, dessen Anzahl dynamisch
+> durch den Nutzer festlegbar ist. Über einen Plus-Button soll der Nutzer
+> ein neues Eingabefeld hinzufügen können, über einen Minus-Button ein Feld
+> wieder löschen können!
+>
+> <Link to="/sandbox?snippet=exercise/dyn-inputs" target="_blank" rel="noopener noreferrer">(Musterlösung)</Link>
+
+Stellen Sie sicher, dass jedes Eingabefeld ein Label hat und dieses korrekt
+mit dem Input verbunden ist!
+
+![Fieldset mit 6 dynamisch erzeugten Eingabefeldern](/img/exercise/dyn-inputs.png)
+
+## Aufgabe 7 - Local Storage
+
+> Erstellen Sie eine HTML-Seite mit einem Notizfeld (`<textarea>`). Die Höhe
+> der Textarea soll sich ihrem Inhalt anpassen. Verwenden Sie den Local-Storage,
+> um den Inhalt des Notizfelds zu speichern, sodass beim Neuladen der Seite
+> der Inhalt erhalten bleibt.
+
+Tip: Die CSS-Property [field-sizing](https://developer.mozilla.org/en-US/docs/Web/CSS/field-sizing)
+kann hier hilfreich sein.
+
+## Aufgabe 8 - JSON
+
+> Erstellen Sie eine HTML-Seite mit einem Kontaktformular (Name, E-Mail, Notizfeld)
+> und einem dynamischen Eingabefeld (wie in Aufgabe 6). Sorgen Sie mittels JavaScript
+> wie in Aufgabe 7 dafür, dass der Inhalt aller Felder im Local-Storage gespeichert
+> wird und beim Neuladen der Seite erhalten bleibt! Speichern Sie die Daten im Locale-Storage
+> als JSON-Objekt!
+
+Tip: Nutzen Sie [JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
+und [JSON.parse](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse),
+um ein Objekt in einen JSON-String umzuwandeln und umgekehrt.
+
+## Aufgabe 9 - ESM 1
+
+> Scheiben Sie eine HTML-Seite mit 2 Eingabefeldern und einem Button.
+> 
+> Schreiben Sie dann ein JavaScript-Modul (Dateiname: `logic.js`) mit einer Funktion
+> `multiply`, welche 2 Zahlen miteinander multipliziert, und exportieren Sie diese Funktion.
+>
+> Schreiben Sie ein weiteres JavaScript-Modul (Dateiname `main.js`), welches
+> die Funktion `add` importiert und nutzt, um bei Klick auf den Button das
+> Produkt beider Zahlen auf der HTML-Seite auszugeben.
+>
+> Laden Sie schließlich die `main.js` mittels einem `<script>`-Element in die
+> Webseite und überprüfen Sie die Funktionalität.
+
+Tip. Siehe das [type](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/script/type)-Attribut vom `<script>`-Element.
+
+## Aufgabe 10 - ESM 2
+
+> Erstellen Sie eine HTML-Seite mit einem Eingabefeld für eine Geldbetrag und
+> verwenden Sie [autonumeric](https://autonumeric.org/), um den Feldwert
+> formatiert im Format `123.456.789,19 €` anzuzeigen! Importieren Sie autonumeric als ESM.
+
+Hinweise:
+
+- Erstellen Sie analog zu Aufgabe 9 eine Datei `index.js`, in der Sie autonumeric importieren und verwenden.
+- Die ESM-Version von autonumeric finden Sie unter `https://esm.sh/autonumeric@4.10.8`
+- Die für Sie relevante Klasse wird von autonumeric als [Default exportiert](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#default_import).
+- Die Dokumentation zur Verwendung und Konfiguration des Zahlenformats
+  finden Sie unter [https://docs.autonumeric.org/](https://docs.autonumeric.org/).
+
+## Aufgabe 11 - HTTP-Requests 1
+
+> Erstellen Sie eine HTML-Seite mit einem Button. Beim Klick auf den Button
+> soll per HTTP eine Liste von Posts von einer REST-API abgerufen werden und
+> die Posts als ungeordnete Liste ausgegeben werden. In der Liste soll nur
+> der Titel des Posts stehen.
+
+Zum Test können Sie [Dummy JSON](https://dummyjson.com) verwenden,
+welche Demo-Daten bereitstellt. Eine Liste von Posts erhalten Sie über die folgende
+URL als JSON:
+
+> https://dummyjson.com/posts
+
+## Aufgabe 12 - HTTP-Requests 2
+
+> Erweitern Sie die HTML-Seite aus Aufgabe 11 so, dass bei Klick auf einen Post
+> in der Liste sich eine Detailansicht mit den Details des Posts öffnet (ID, Beschreibung).
+
+Die Details eines Posts erhalten Sie bei JSON-Placeholder über folgende URL, wobei
+Sie natürlich die entsprechende ID des Posts eintragen müssen
+
+> https://jsonplaceholder.typicode.com/posts/ID
+
+Tip: Verwenden Sie zum Beispiel CSS, um die Post-Liste bzw. Details ein- und auszublenden.
+
+## Aufgabe 13 - HTTP-Requests 3
+
+> Erweitern Sie die HTML-Seite aus Aufgabe 12 noch um 2 Buttons auf der Detail-Seite.
+> Ein Button soll zurück bei Klick zurück zur Post-Liste führen. Der andere
+> Button soll die Kommentare zum Post ein- und ausblenden.
+
+Die Kommentare zu einem Post erhalten Sie folgende URL:
+
+> https://jsonplaceholder.typicode.com/posts/ID/comments
+
+## Aufgabe 14 - HTTP-Requests 4
+
+> Fügen Sie zu jedem Post aus Aufgabe 11 noch einen Button zum Löschen des Posts hinzu.
+
+Um einen Post zu löschen, müssen Sie eine `DELETE`-Request an folgende URL stellen:
+
+> https://jsonplaceholder.typicode.com/posts/ID
+
+Hinweis: Das es sich nur um eine Demo-API handelt, wird der Post nicht wirklich
+vom Server gelöscht. Falls beim DELETE der Status-Code 200 zurückkommt, entfernen
+Sie den Post per JavaScript aus der Liste. 

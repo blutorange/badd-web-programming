@@ -20,6 +20,29 @@ Im Folgenden wollen wir uns die wesentlichen Neuerungen anschauen. Anmerkung:
 Einige Teile der Neuerungen wurden erst in den nachfolgenden Jahren veröffentlicht,
 wir werden diese ab in diesem Abschnitt mit behandeln.
 
+## Template-Literale
+
+Es ist nicht selten, dass wir Strings erzeugen müssen, deren Inhalt sich teilweise
+dynamisch aus Variablen ergibt. Eine Möglichkeit hierzu ist die Stringverkettung
+mittels dem `+`-Operator:
+
+```js
+function add(x, y) {
+  console.log(x + " plus " + y + " ergibt " + (x+y));
+}
+```
+
+Zum Beispiel gibt ein Aufruf von `add(1, 2)` auf der Konsole `1 plus 2 ergibt 3` aus.
+Mit Template-Literalen können wir solche Strings etwas übersichtlicher erstellen:
+
+```js
+function add(x, y) {
+  console.log(`${x} plus ${y} ergibt ${x+y}`);
+}
+```
+
+Mittels `${...}` können wir also innerhalb des Strings Ausdrücke mit Variablen einfügen.
+
 ## Asynchrone Operationen
 
 Eins der wichtigsten Konzepte für die moderne Webentwicklung sind sogenannte

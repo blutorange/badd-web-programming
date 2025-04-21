@@ -1,0 +1,96 @@
+---
+id: exercise-ts
+slug: /exercise/ts
+sidebar_position: 5
+description: Übungsaufgaben zur Typisierung mittels TypeScript
+---
+
+import Link from "@docusaurus/Link";
+
+# Übungsaufgaben zu TypeScript
+
+Zu TypeScript gibt es hier nur einige wenige einführende Aufgaben. Falls Sie
+sich weiter mit TypeScript beschäftigen wollen: Versuchen Sie, alles JavaScript
+in TypeScript mit Typen-Annotationen zu schreiben!
+
+Diese Übungsaufgaben können Sie auch online im [TypeScript Playground](https://www.typescriptlang.org/play)
+lösen.
+
+## Aufgabe 1 - Hallo Welt
+
+> Schreiben Sie eine TypeScript-Funktion, die den Namen und das Alter eines
+> Nutzers als Parameter entgegennimmt und einen String mit dem Inhalt
+> `Hallo junger <Name>!` (wenn Alter < 50) oder `Hallo weiser <Name>!` (wenn Alter >= 50)
+> zurückgibt!
+
+## Aufgabe 2 - Interface
+
+> Erstellen Sie ein Interface `User` für einen Nutzer mit wenigstens Eigenschaften
+> für ID, Name und Alter! Schreiben Sie eine Funktion, welche ein Array von Nutzern
+> entgegennimmt und die Summe der Alter aller Nutzer zurückgibt!
+
+## Aufgabe 3 - Union-Type
+
+> Schreiben Sie eine Funktion `countName` mit 3 Parametern, welche alle entweder vom Typ
+> `User` sind oder den Wert `undefined` haben. Geben Sie die Gesamtzahl der Zeichen aller
+> Namen zurück! Falls ein Parameter `undefined` ist, soll diese wie ein leerer
+> Name behandelt werden.
+
+Beispiele zur Verwendung:
+
+- `countName({name: "Max"}, {name: "Maria"}, {name: "Joe"})` ergibt `11`, da `Max` 3 Zeichen hat, `Maria` 5 und `Joe` 3.
+- `countName({name: "Max"}, undefined, {name: "Joe"})` ergibt `6`, da `undefined` als leerer Name behandelt wird.
+
+## Aufgabe 4 - Arrays
+
+> Schreiben Sie eine Funktion, welche ein Array von Nutzers entgegennimmt
+> und ein neues Array zurückliefert, welches nur die Nutzer enthält, die älter
+> als 18 sind.
+
+## Aufgabe 5 - Funktionstypen
+
+> Schreiben Sie eine Funktion `createGreeter`, welche einen Parameter mit dem
+> Namen eines Nutzers entgegennimmt. Die Funktion soll eine neue Funktion zurückliefern,
+> welche das Alter des Nutzers als Parameter entgegennimmt und einen Gruß-Text
+> im Format `Hallo <Name>, du bist <Age> alt!` zurückliefert.
+
+Tip: Lesen Sie hierzu [Function Type Expressions](https://www.typescriptlang.org/docs/handbook/2/functions.html#function-type-expressions) im TypeScript Handbook.
+
+Beispiel zur Verwendung:
+
+```js
+const maxGreeter = createGreeter("Max");
+const maryGreeter = createGreeter("Mary");
+
+console.log(maxGreeter(10)); // Hallo Max, du bist 10!
+console.log(maxGreeter(20)); // Hallo Max, du bist 20!
+console.log(maryGreeter(10)); // Hallo Mary, du bist 10!
+console.log(maryGreeter(20)); // Hallo Mary, du bist 20!
+```
+
+## Aufgabe 6 - Typenparameter
+
+> Implementieren Sie selber eine Map-Funktion! D.h., schreiben Sie eine Funktion
+> `map`, welche 2 Parameter `items` und `mapper` entgegennimmt. `items` ist ein
+> Array mit beliebigen Inhalt. `mapper` ist eine Funktion, welche einen Wert
+> aus `items` entgegennimmt und einen anderen Wert zurückliefert. Die Funktion
+> `map` soll nun ein neues Array zurückliefern mit der gleichen Anzahl von Elementen,
+> von `items`, wobei jedes Element mittels `mapper` in ein neues Element überführt wurde.
+
+Tip: Lesen Sie hierzu [Generic Functions](https://www.typescriptlang.org/docs/handbook/2/functions.html#generic-functions) im TypeScript Handbook.
+
+Beispiel zur Verwendung:
+
+```js
+const user1 = {age: 10, name: "Max"};
+const user2 = {age: 20, name: "Mary"};
+
+// [10, 20]
+const ages: number[] = map([user1, user2], user => user.age);
+
+// ["Max", "Mary"]
+const names: string[] = map([user1, user2], user => user.name);
+
+// [1, 4, 9]
+const squares: number[] = map([1, 2, 3], x => x**2);
+```

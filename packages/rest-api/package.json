@@ -1,0 +1,19 @@
+{
+  "name": "packages-rest-api",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "json-server db.json --port 3002"
+  },
+  "dependencies": {
+    "json-server": "1.0.0-beta.3"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "typescript": "~5.7.0"
+  },
+  "browserslist": {},
+  "engines": {
+    "node": ">=18.0"
+  }
+}

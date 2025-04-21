@@ -90,27 +90,39 @@ Für Links nutzen wir das `<a>`-Element (a = anchor).
 
 <HtmlSnippet path="a" />
 
+Das wichtigste Attribute ist `href`. Damit geben wir die Zielseite an, auf die
+verlinkt werden soll. Oft verlinken wir hier entweder eine externe Seite
+wie z.B. `http://example.com` oder eine interne Seite wie `../sub-page.html`.
+
+Eine URL, auf die verlinkt wird, kann entweder absolut oder relativ sein.
+
+Eine absolute URL ist etwa `http://example.com/web/content/index.html` oder
+`http://example.com/web/images/logo.png`.
+
+Eine relative URL ist nur sinnvoll relativ zu einer Basis-URL. Wenn wir uns zum
+Beispiel auf der Webseite `http://example.com/web/content/index.html`
+befinden, könnte diese Webseite den relativen Link `../images/logo.png` enthalten.
+Die 2 Punkte bedeuten: gehe 1 Verzeichnis nach oben. Danach wird in das Verzeichnis
+`images` gegangen und auf die Datei `logo.png` zugegriffen.
+
+Schließlich können wir auch noch ein sogenannten [Fragment](https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment)
+verwenden, um auf einen bestimmten Abschnitt innerhalb eines HTML-Dokuments
+zu verlinken. Das Fragment muss dabei gleich dem `id`-Attribut des HTML-Elements
+sein, auf das verlinkt werden soll. Zum Beispiel:
+
+<HtmlSnippet path="a-fragment" toggleable />
+
 Mit dem `target`-Attribut steuern wir, wo der Link geöffnet werden soll. standardmäßig
 wird der Link im aktuellen Fenster oder Tab geöffnet. Der spezielle Wert `_blank`
 sorgt dafür, dass der Link sich in einem neuen Tab oder Fenster öffnet. Wir können
-auch die ID eines Frames als `target` angeben, dies wird aber in der Praxis selten
-verwendet.
+auch die ID eines Frames als `target` angeben, dies wird aber eher selten verwendet.
 
 Weiterhin können wir noch das Attribut `rel` (relationship) setzen, also die
 Beziehung zur verlinkten Seite, etwa `privacy-policy` (Datenschutz) oder `search`
 (Seite für Suche im Inhalt der Webseite). Oft wird aus Sicherheits- und Performance-Gründen
 `noreferrer noopener` gesetzt. Weitere erlaubte Werte sind bei
-[MDN web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel) 
-
-:::info
-Eine URL, auf die verlinkt wird, kann entweder absolut oder relativ sein. Eine
-absolute URL ist etwa `http://example.com/web/content/index.html` oder
-`http://example.com/web/images/logo.png`. Eine relative URL ist nur sinnvoll relativ
-zu einer Basis-URL. Wenn wir uns zum Beispiel auf der Webseite `http://example.com/web/content/index.html`
-befinden, könnte diese Webseite den relativen Link `../images/logo.png` enthalten.
-Die 2 Punkte bedeuten: gehe 1 Verzeichnis nach oben. Danach wird in das Verzeichnis
-`images` gegangen und auf die Datei `logo.png` zugegriffen.
-:::
+[MDN web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel)
+zu finden.
 
 ## Semantisches HTML
 
@@ -256,10 +268,12 @@ werden unter anderem gerne für Logos und Icons verwendet.
 ### Abbildungen
 
 Wollen wir eine Abbildung mit einem Untertext versehen, steht uns
-das `<figure>`-Element zur Verfügung. Es zeichnet einen Teil aus als Illustration.
-Wir können es etwa für verwenden für Bilder, Diagramme oder illustrative Code-Blöcke.
+das `<figure>`-Element zur Verfügung. Es zeichnet einen Teil aus als Abbildung oder
+Illustration. Wir können es etwa für verwenden für Bilder, Diagramme oder illustrative Code-Blöcke.
 
 <HtmlSnippet path="figure" />
+
+Mit dem Element `<figcaption>` können wir der Abbildung zudem eine Bildunterschrift geben.
 
 ## Video / Audio
 
@@ -277,7 +291,7 @@ Es gibt verschiedene JavaScript-Bibliotheken, welche das Video-Element mit mehr
 UI anreichern und teilweise auch Streaming unterstützen, beispielsweise
 [VideoJS](https://videojs.com/).
 
-### Listen
+## Listen
 
 In Texten kommen öfters auch Listen oder Aufzählungen vor. HTML stellt uns drei
 verschiedene Arten von Listen bereit:
@@ -292,7 +306,7 @@ Key und `<dd>` (definition description) für die Erklärung.
 
 <HtmlSnippet path="lists" />
 
-### Tabellen
+## Tabellen
 
 Tabellen dienen, wie der Name sagt, für tabellarische Daten. Wir sollten Tabellen
 auch nur dafür verwenden, nicht als Hilfsmitteln zum Layout. Früher wurde dies oft

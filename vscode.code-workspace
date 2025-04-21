@@ -9,6 +9,12 @@
 			// Lecture notes
 			"name": "lecture",
 			"path": "./packages/lecture/"
+		},
+		// Demo REST API
+		{
+			// Lecture notes
+			"name": "rest-api",
+			"path": "./packages/rest-api/"
 		}
 	],
   "extensions": {

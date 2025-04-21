@@ -1,0 +1,264 @@
+---
+id: exercise-css
+slug: /exercise/css
+sidebar_position: 2
+description: Übungsaufgaben zum Styling von Webseiten mittels CSS
+---
+
+import Link from "@docusaurus/Link";
+
+# Übungsaufgaben zu CSS
+
+## Aufgabe 1 - Hallo Welt
+
+> Erstellen Sie eine "Hallo Welt"-Seite! Auf der Seite soll der Text
+> "Hallo Welt" in grüner Schriftfarbe zu sehen sein. Verwenden Sie dafür
+> eine separate CSS-Datei, die sie in der HTML-Seite einbinden.
+
+Diese Seite kann Ihnen für andere Aufgaben als Vorlage dienen.
+
+## Aufgabe 2 - CSS-Selektoren
+
+> Schreiben Sie CSS für das untenstehende HTML für folgende Design-Vorgaben!
+> - Alle h2-Überschriften sollen die Schriftgröße `20px` haben.
+> - Alle Buttons sollen die Textauszeichnung fett haben und die Schriftfarbe weiß.
+> - Alle Elemente der Klasse `important-item` sollen rot umrandet werden.
+> - Das Element mit der ID `section-3` soll oben und unten einen Abstand
+>   von `40px` von den darüber und darunter liegenden Elementen haben. 
+> - Der eingegebene Text bei Input-Elementen vom Typ `mail` soll blau sein, bei
+>   Input-Elementen vom Typ `number` Orange.
+> - Alle Links, die innerhalb einer `<section>` stehen, sollen orange sein und
+>   keine Unterstreichung haben.
+> - Buttons, die sich direkt nach einem `<a>` befinden, sollen die Hintergrundfarbe
+>   Grün haben. Buttons, die sich direkt vor einem `<a>` befinden, die Hintergrundfarbe
+>   Rot. Alle anderen Buttons sollen die Hintergrundfarbe Schwarz haben.
+
+<details>
+```html
+<h1>Abschnitt Gemüse</h1>
+
+<a href="https://example.com">example.com</a>
+
+<section class="important-item">
+    <h2>Abschnitt 1</h2>
+    <p>Inhalt des Abschnitts 1</p>
+    <input type="number" name="number-1" value="42">
+    <a href="https://example.com">example.com</a>
+    <button type="button">Nach Link</button>
+</section>
+
+<section>
+    <h2>Abschnitt 2</h2>
+    <p>Inhalt des Abschnitts 2</p>
+    <input type="mail" name="mail-1" value="max@example.com">
+    <a href="https://example.com">example.com</a>
+    <button type="button">Nach Link</button>
+</section>
+
+<section id="section-3">
+    <h2>Abschnitt 3</h2>
+    <button type="button">Button am Anfang</button>
+    <p>Inhalt des Abschnitts 3</p>
+    <input type="mail" name="mail-2" value="maxi@example.com">
+    <a href="https://example.com">example.com</a>
+</section>
+
+<section>
+    <h2>Abschnitt 4</h2>
+    <p>Inhalt des Abschnitts 4</p>
+    <p class="important-item">Wichtiger Inhalt</p>
+    <input type="number" name="number-2" value="42">
+    <button type="button">Vor Link</button>
+    <a href="https://example.com">example.com</a>
+</section>
+```
+
+![Graphische Darstellung der Design-Anforderungen](/img/exercise/css-selectors.png)
+</details>
+
+Für die letzte Anforderung finden Sie möglicherweise bei [MDN web docs - :has](https://developer.mozilla.org/en-US/docs/Web/CSS/:has)
+einen Hinweis.
+
+## Aufgabe 3 - Spezifität
+
+> Ermitteln Sie die Spezifität (a,b,c) der folgenden CSS-Selektoren!
+
+```css
+#mail {}
+
+.primary-button {}
+
+[data-custom="round"] {}
+
+html {}
+
+html #mail + .primary-button {}
+
+html section article .aside-info.minor {}
+
+.primary-button[type=submit] {}
+
+button:not([type="submit"]) {}
+
+button:not([type="submit"],#main-button) {}
+```
+
+Sie können sich bei [MDN web docs - :not](https://developer.mozilla.org/en-US/docs/Web/CSS/:not)
+bezüglich der Ermittlung der Spezifität beim Selektor `:not` informieren.
+
+## Aufgabe 4 - Hover
+
+> Erstellen Sie eine HTML-Seite mit einem oder mehreren Buttons. Beim Überfahren
+> des Buttons mit der Maus soll sich entweder die Hintergrundfarbe oder die Schriftfarbe
+> ändern!
+
+Versuchen Sie auch, die Farbe sich langsam ändern zu lassen.
+
+## Aufgabe 5 - Bildgröße 1
+
+> Erstellen Sie eine HTML-Seite mit einem großen Bild. Das Bild soll 800px breit
+> sein. Falls das Browser-Fenster zu klein ist, soll das Bild sich entsprechend
+> verkleinern. Das Seitenverhältnis des Bilds soll dabei immer bewahrt werden.
+
+Dies ist eine Variante, um Bilder responsive zu gestalten, sodass diese auch auf
+Mobilgeräten ohne Scrolling einsehbar sind.
+
+## Aufgabe 6 - Bildgröße 2
+
+> Erstellen Sie eine HTML-Seite mit einem Bild. Das Bild soll immer 400px hoch
+  und breit sein. Ist das Bild zu groß, soll es entsprechend verkleinert werden.
+
+Tip: Schauen Sie sich die CSS-Eigenschaft [object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) an.
+
+Dieses Verhalten kann bei dekorativen Bildern sinnvoll sein, wo der vollständige
+Inhalt nicht wichtig ist.
+
+## Aufgabe 7 - Flexbox
+
+> Erstellen Sie eine HTML-Seite mit einem Antragsformular. Die Eingabefelder für
+> Name, Vorname und E-Mail sollen dabei nebeneinander platziert werden. Die Felder
+> sollen immer die gesamte zur Verfügung stehende Breite ausfüllen. Das E-Mail-Feld
+> soll doppelt so breit sein die die anderen beiden Felder.
+
+Nutzen Sie zur Umsetzung Flexbox! 
+
+## Aufgabe 8 - Responsiveness
+
+> Passen Sie das Formular aus Aufgabe 6 so an, dass bei geringer Bildschirmbreite
+> die Eingabefelder untereinander angezeigt werden.
+
+Geringe Bildschirmbreite könnte zum eine Breite kleiner 640 Pixel sein.
+
+## Aufgabe 9 - Print
+
+> Erstellen Sie eine HTML-Seite mit dekorativen Bildern. Sorgen Sie dafür, dass beim
+> Druck diese Bilder nicht angezeigt werden!
+
+Experimentieren Sie auch mit weiteren Design-Anpassungen für den Druck.
+
+Prüfen Sie mit Hilfe der Druckvorschau Ihres Browsers, ob der gewünschte
+Effekt erreicht wird. Sie können auch ein PDF über den Druck-Dialog erstellen.
+Drucken Sie nicht tatsächlich etwas aus!
+
+## Aufgabe 10 - Pseudo-Klassen 1
+
+> Erstellen Sie eine HTML-Seite mit Elementen zum Testen der Pseudo-Klassen
+> `:active`, `:focus`, `:checked`, `:enabled` und `:visited`! Schreiben Sie
+> CSS, welches bestimmte Eigenschaften (z.B. Schriftfarbe) anwendet, wenn
+> diese Pseudo-Klassen zutreffen.
+
+## Aufgabe 11 - Pseudo-Klassen 2
+
+> Erstellen Sie eine HTML-Seite mit einer geordneten Liste, wobei die geraden
+> Einträge in der Liste (2,4,6,...) eine andere Schriftfarbe als die ungeraden
+> Einträge haben!
+
+## Aufgabe 12 - Pseudo-Elemente 1
+
+> Erstellen Sie eine HTML-Seite mit mehreren Abschnitten Text. Der erste Buchstabe
+> soll fett und mit erhöhter Schriftgröße dargestellt werden.
+
+## Aufgabe 13 - Position
+
+> Erstellen Sie eine HTML-Seite mit einem Bild, welches sich in einem `<a>`-Element
+> befindet, also klickbar ist. Verwenden Sie CSS, um das Bild abzudunkeln! Das
+> Bild soll dabei klickbar bleiben!
+
+Tip: Nutzen Sie ein Pseudo-Element, welches Sie überhalb des Bilds positionieren.
+Geben Sie dem Pseudo-Element einen schwarzen Hintergrund mit Transparenz.
+
+## Aufgabe 13 - CSS-Variablen
+
+> Erstellen Sie eine Webseite mit z.B. Texten, Links oder Buttons. Geben Sie
+> den Elementen verschiedene Schriftgrößen und Farben. Nutzen Sie dabei 2 CSS-Dateien:
+> In der einen CSS-Datei definieren Sie nur Variablen für die Größen und Farben.
+> In der anderen 1 CSS-Datei verwenden Sie diese Variablen entsprechend.
+
+Durch Austausch der CSS-Datei mit den Variablen könnten somit verschiedene Themes für
+die Webseite erstellt werden.
+
+## Aufgabe 14 - Transform
+
+> Erstellen Sie eine HTML-Seite mit Bild, welche um 1/6π in mathematisch negativer
+Drehrichtung gedreht ist!
+
+## Aufgabe 15 - Animation
+
+> Erstellen Sie eine HTML-Seite mit Bild, welches sich im oder entgegen des
+> Uhrzeigersinns dreht. Das Bild soll nie mit drehen aufhören.
+
+## Aufgabe 16 - Display
+
+> Erstellen Sie eine HTML-Seite mit mehreren direkt aufeinanderfolgenden Bildern,
+> die alle 100 Pixel breit sind. Nutzen Sie die CSS-Eigenschaft `display`, um dafür zu sorgen,
+> dass die Bild unabhängig der Bildschirmbreite immer untereinander angeordnet sind!
+
+## Aufgabe 16 - Overflow
+
+> Erstellen Sie eine HTML-Seite mit einer Überschrift und einem sehr langen
+> Text darunter. Die Überschrift soll immer 100px hoch sein. Der Text darunter
+> soll scrollbar sein; und zwar so, dass die Überschrift immer sichtbar ist.
+
+## Aufgabe 17 - Import
+
+> Passen Sie das Beispiel 13 so an, dass Sie die CSS-Datei mit den Variablen
+> in der anderen CSS-Datei importieren!
+
+## Aufgabe 18 - Font-Face
+
+> Laden Sie sich die Schriftart Libre Franklin von der [github impallari/Libre-Franklin](https://github.com/impallari/Libre-Franklin)
+> herunter und binden Sie diese in eine HTML-Seite per CSS ein. Beachten Sie dabei,
+> dass die Schriftart verschiedene Dateien für verschiedene Schriftstile enthält.
+> Testen Sie diese anhand von Beispielstext in der HTML-Seite.
+
+Beachten Sie die Bedingungen der [SIL Open Font License 1.1](https://github.com/impallari/Libre-Franklin/blob/master/OFL.txt),
+falls Sie planen, die Schriftart auf einer öffentlich einsehbaren Webseite zu verwenden.
+
+## Aufgabe 19 - Counter
+
+> Erstellen Sie eine Webseite mit einem Formular, welches mehrere Fieldsets mit
+> jeweils einer `<legend>` enthält. Verwenden Sie CSS, um die Legendentexte
+> zu nummerieren (z.B. durch Präfix `1.`, `2.`, `3.` etc.) !
+
+Informieren Sie sich bei Bedarf noch einmal über [CSS-Counter](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_counter_styles/Using_CSS_counters).
+
+## Aufgabe 20 - Webseiten-Skeleton
+
+> Erstellen Sie eine Web-Seite mit einer Reihe verlinkter Dokumente:
+> - 1 Startseite
+> - 1 Impressum
+> - 1 Kontaktseite
+> - 1 Galerie
+> - 5 (unterschiedliche) Produkte in der Gallerie
+
+Hinweise:
+
+- Jede Seite soll untenstehendem Gestaltungsmuster entsprechen.
+- Kopfbereich, Fußbereich und Werbung sollen nicht mitscrollen.
+- Im Kopfbereich liegen die Navigationselemente.
+- Im Fußbereich befinden sich Links zum Kontakt und zum Impressum.
+- Kopf- und Fußbereich liegen auf oberster Ebene und überdecken alles
+andere (lassen Sie im Inhaltsbereich genügend Platz, damit kein Inhalt
+durch diese Bereiche überdeckt wird!)
+
+![Layout des Webseiten-Skeleton](/img/exercise/simple-page-layout.png)
