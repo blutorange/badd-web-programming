@@ -1,0 +1,55 @@
+---
+id: exam-basic-memory
+slug: /exam/basic/memory
+description: Memory
+---
+
+# Memory
+
+Es soll eine vereinfachte Version eines Memory-Spiels umgesetzt werden.
+
+## Beschreibung
+
+* 8 Karten mit 4 unterschiedlichen Motiven
+* Zähler mit Anzahl richtig gefundener Paare
+
+## Mindestanforderungen
+
+* Beim Laden der Seite müssen Karten zufällig angeordnet werden.
+* Alle Memory-Karten müssen die gleiche Größe haben.
+* Bei Klick auf eine Karte wird diese aufgedeckt. Nach Enthüllung 2er Karten
+  wird kurz gewartet, damit der Nutzer die Karte sehen kann. Danach wird der Zähler
+  erhöht, falls übereinstimmend. Anschließend werden die Karten wieder verdeckt.
+
+## Hinweise
+
+Frei verfügbare Demobilder finden sich etwa bei [WikiMedia Commons](https://commons.wikimedia.org/wiki/Main_Page)
+
+Zur zufälligen Anordnung der Kinder eines DOM-Elements kann folgende Funktion genutzt werden.
+
+<details>
+```js
+/**
+ * Rearranges all children of a DOM element in a random order.
+ * @param {string} parentSelector Selector for the parent element.
+ */
+function shuffleChildren(parentSelector) {
+    const parent = document.querySelector(parentSelector);
+    if (parent) {
+        const children = [...parent.childNodes]
+        for (let i = 0; i < children.length * 10; i += 1) {
+            const source = Math.floor(Math.random() * children.length);
+            const target = Math.floor(Math.random() * children.length);
+            const swap = children[source];
+            children[source] = children[target];
+            children[target] = swap;
+        }
+        parent.innerHTML = "";
+        parent.append(...children);
+    }
+}
+```
+</details>
+
+<video controls src={require('@site/static/video/exam/basic/memory.mp4').default}></video>
+
