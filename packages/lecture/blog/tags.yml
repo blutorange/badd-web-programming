@@ -1,19 +1,9 @@
-facebook:
-  label: Facebook
-  permalink: /facebook
-  description: Facebook tag description
+update:
+  label: Update
+  permalink: /update
+  description: Blog-Posts für Updates dieser Webseite (Changelog)
 
 hello:
-  label: Hello
+  label: Hallo
   permalink: /hello
-  description: Hello tag description
-
-docusaurus:
-  label: Docusaurus
-  permalink: /docusaurus
-  description: Docusaurus tag description
-
-hola:
-  label: Hola
-  permalink: /hola
-  description: Hola tag description
+  description: Wilkommensnachrichten
