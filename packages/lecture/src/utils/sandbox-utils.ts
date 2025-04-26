@@ -79,6 +79,7 @@ export function prepareHtmlContent(
     meta.content = "dark";
     doc.head.append(meta);
   }
+  doc.documentElement.dataset.theme = colorMode;
 
   if (transpiled.css.length > 0) {
     const styleCustom = document.createElement("style");
