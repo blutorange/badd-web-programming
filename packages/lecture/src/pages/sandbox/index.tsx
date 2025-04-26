@@ -14,6 +14,7 @@ import {
   useState,
   type SetStateAction,
   useMemo,
+  useCallback,
 } from "react";
 
 import { Editor as MonacoEditor } from "@monaco-editor/react";
@@ -28,6 +29,7 @@ import { Slider } from "primereact/slider";
 import {
   BooleanSerializer,
   captureLogEntries,
+  downloadHtml,
   IntegerSerializer,
   prepareHtmlContent,
   useCode,
@@ -90,6 +92,12 @@ function Sandbox(): ReactNode {
     [colorMode],
   );
 
+  const onDownload = useCallback(() => {
+    if (!html.loading && !css.loading && !js.loading) {
+      downloadHtml(html.value, css.value, js.value);
+    }
+  }, [html, css, js]);
+
   const onReset = () => {
     if (contentRef.current !== null) {
       destroyOldIFrame(contentRef.current);
@@ -112,8 +120,13 @@ function Sandbox(): ReactNode {
     if (html.loading || css.loading || js.loading) {
       return;
     }
-    const colorModeChanged = contentRef.current && contentRef.current.dataset.colorMode !== colorMode
-    if (applyImmediately || contentRef.current?.childElementCount === 0 || colorModeChanged) {
+    const colorModeChanged =
+      contentRef.current && contentRef.current.dataset.colorMode !== colorMode;
+    if (
+      applyImmediately ||
+      contentRef.current?.childElementCount === 0 ||
+      colorModeChanged
+    ) {
       applyHtml(
         contentRef,
         html.value,
@@ -179,6 +192,13 @@ function Sandbox(): ReactNode {
                 setLogEntries,
               )
             }
+          />
+        )}
+        {!html.loading && !css.loading && !js.loading && (
+          <Button
+            className="sandbox__button"
+            label="Download"
+            onClick={onDownload}
           />
         )}
       </div>

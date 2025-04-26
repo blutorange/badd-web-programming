@@ -1,0 +1,214 @@
+---
+id: exam
+slug: /exam
+sidebar_position: 4
+description: Prüfungsaufgaben
+---
+
+import Link from "@docusaurus/Link";
+
+# Prüfungsaufgaben
+
+In dieser Sektion finden sich die Aufgabenstellungen für die Prüfung.
+
+Organisatorische Details zur Prüfung wie der Abgabezeitpunkt oder die Art und Weise
+der Einreichung sind bitte den entsprechenden hochschulinternen Portals zu entnehmen.
+
+## Aufgabenstellung
+
+Die Prüfungsaufgabe besteht darin, ein Frontend-Projekt für eine Webseite mit
+einem Package-Manager zu erstellen und mit entsprechendem Inhalt zu füllen.
+
+Zum Einen soll eine einfache Webseite mit HTML und CSS erstellt werden, die einige
+Unterseiten enthält. Zum Zweiten sollen kleine JavaScript-Programmieraufgaben gelöst
+werden, die als Unterseite in die Webseite zu integrieren sind.
+
+### 1. NPM-Projekt
+
+NPM / yarn / pnpm
+
+### 2. Webseiten-Frame
+
+
+### 3. Programmieraufgaben
+
+beliebiges UI-framework und Bibliotheken, oder auch vanilla js
+
+aber: keine NPM abhängigkeit, die die aufgabenstellung bereits löst!
+
+Kleine Aufgaben sind wohl definiert und haben einen geringen Umfang. Diese eignen
+sich besonders, wenn wir noch wenig bis kaum Erfahrung in der Webprogrammierung
+haben. Jede Aufgabe enthält eine genaue Beschreibung, was in welchem Umfang
+umgesetzt werden muss.
+
+Große Aufgaben sind etwas anspruchsvoller und erfordern Mitdenken bzw. eigene
+Recherche zum Thema. Sie eignen sich einerseits, wenn wir bereits Erfahrung
+in der Programmierung haben. Aber auch, wenn wir eine Herausforderung suchen und
+willens sind, Engagement zu zeigen. Bei große Aufgaben sind die Anforderungen grob
+umrissen, bieten aber mehr Freiraum in der Ausgestaltung.
+
+Hat jemand weitere Vorschläge für geeignete Prüfungsaufgaben, darf gerne ein
+[PR bei github](https://github.com/blutorange/badd-web-programming/tree/main/packages/lecture/docs/exam/index.mdx)
+gestellt werden!
+
+## Bewertungskriterien
+
+Die Bewertung erfolgt nach den folgenden Kriterien. Die korrekte Umsetzung der
+Aufgaben geht zur Hälfte in die Bewertung ein. Die andere Hälfte setzt sich
+zusammen aus verschiedenen Kriterien.
+
+### Funktionale Anforderungen
+
+__Teil der Gesamtnote: 50%__
+
+Die funktionalen Mindestanforderungen der entsprechenden Aufgaben müssen erfüllt
+werden. Extrapunkte können vergeben werden, wenn Funktionalitäten umgesetzt
+wurden, die in besonderem Maße über die Anforderung hinausgehen.
+
+Der Schwerpunkt des Moduls Webprogrammierung liegt auf der Programmierung. Bei
+besonders ansprechendem Design per CSS können ebenfalls Extrapunkte vergeben werden.
+
+### Code-Qualität
+
+__Teil der Gesamtnote: 10%__
+
+Die gesamte Code-Base muss den Regeln des eingerichteten Linters genügen und
+entsprechend dem eingerichteten formatiert formatiert sein.
+
+Tipp: Vor Abgabe den Formatierer noch einmal den Code formatieren lassen und
+den Linter noch einmal den Code prüfen lassen.
+
+### Valides HTML und CSS
+
+__Teil der Gesamtnote: 10%__
+
+Das HTML und CSS muss gemäß der W3C-Spezifikation zu
+[HTML](https://html.spec.whatwg.org/multipage/) und [CSS](https://www.w3.org/Style/CSS/current-work.html)
+valide sein. Falls es aus technischen Gründen Teile gibt, wo dies nicht möglich
+ist (z.B. bei Verwendung einer Bibliothek), ist dies zu dokumentieren und zu
+begründen.
+
+Tipp: Die Seite bzw. der Code kann mit geprüft werden mit:
+
+* [W3C Markup Validation Service](https://validator.w3.org/) prüfen lassen.
+* [W3C CSS Validation Service](https://jigsaw.w3.org/css-validator/validator.html)
+
+### Technische Dokumentation
+
+__Teil der Gesamtnote: 10%__
+
+JavaScript muss entsprechend durch Verwendung von
+<Link to="/docs/js/doc-comments" rel="noopener noreferrer">Doc-Kommentaren</Link>
+dokumentiert werden. Um den Zeitaufwand zu begrenzen, ist es zur Erfüllung dieses
+Kriteriums notwendig, __wenigstens 5__ JavaScript-Funktionen zu dokumentieren.
+
+Jedes Doc-Kommentar muss vollständig sein, d.h.
+
+* Prosatext, welcher die Funktion beschreibt, ggf. auf spezielle Fälle eingeht
+  oder Beispiele gibt.
+* Dokumentation jedes Parameters via [@param](https://tsdoc.org/pages/tags/param/)
+* Dokumentation jedes Typen-Parameters via [@typeparam](https://tsdoc.org/pages/tags/typeparam/)
+* Dokumentation des Rückgabewerts via [@returns](https://tsdoc.org/pages/tags/returns/)
+
+Das Doc-Kommentar kann in Deutsch oder Englisch verfasst werden.
+
+Falls JavaScript verwendet wird, ist bei Parametern und Rückgabewerten auch
+der entsprechende [Typ](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html)
+zu definieren.
+
+Beispiele:
+
+<details>
+__Bei Verwendung von JavaScript__
+
+
+```js
+/**
+ * Tests whether a string ends with a given suffix.
+ * 
+ * Always returns true if the suffix is empty.
+ * 
+ * @example
+ * ```js
+ * // true
+ * endsWith("foobar", "bar")
+ * 
+ * // false
+ * endsWith("foobar", "ba")
+ * 
+ * // true
+ * endsWith("foobar", "")
+ * 
+ * // true
+ * endsWith("", "")
+ * ```
+ * 
+ * @param {string} value - A string to check whether it ends with a certain suffix.
+ * @param {string} suffix - The suffix to check.
+ * @returns {string} `true` if the string ends  with the suffix, `false` otherwise.
+ */
+function endsWith(value, suffix) {
+  return value.length >= suffix.length && value.substring(value.length - suffix.length) === suffix;
+}
+```
+
+__Bei Verwendung von TypeScript__
+
+```js
+/**
+ * Takes a list of items and filters it, using the given test function.
+ * Applies the test function to each item and returns a new list with the
+ * items that pass the given test function. Always returns a new array, never
+ * mutates the given array in-place.
+ * 
+ * @example
+ * ```js
+ * // => [2, 4]
+ * filter([1, 2, 3, 4], x => x % 2 === 0);
+ * ```
+ *  
+ * @typeParam T Type of the elements to filter.
+ * @param items - Items to filter.
+ * @param test Test predicate for filtering the items.
+ * It is passed each item and must return true to include the item in the result,
+ * and false to exclude the item from the result.
+ * @returns A new list with the items that satisfy the given test predicate.
+ */
+function filter<T>(items: readonly T[], test: (item: T) => boolean): T[] {
+  const filtered: T[] = [];
+  for (const item of items) if (test(item)) filtered.push(item);
+  return filtered;
+}
+```
+</details>
+
+### Responsiveness
+
+__Teil der Gesamtnote: 10%__
+
+Die Unterseite `Bildergallerie` der erstellten Webseite muss bei einer
+Bildschirmbreite von __600px__ vollständig erkennbar und bedienbar sein.
+
+Die Festlegung auf die Unterseite `Bildergallerie` und die Breite 600px dient dazu,
+den Aufwand in Grenzen zu halten. Gerne können natürlich aber auch andere Unterseiten
+responsive gemacht oder andere Breiten unterstützt werden.
+
+### Behandlung von Fehler- und Grenzfällen
+
+__Teil der Gesamtnote: 10%__
+
+Unabhängig davon, ob es explizit in den Aufgabenstellungen erwähnt ist, müssen
+Fehler- und Grenzfälle beachtet und entsprechend behandelt werden.
+
+Fehler beziehen sich auf unerwartete Zustände. Beispielsweise kann ein HTTP-Request
+fehlschlagen, wenn kein Netzwerk verfügbar oder der Dienst nicht aktiv ist. Dieser
+Fall muss entsprechend behandelt und dem Nutzer Feedback gegeben werden, etwa
+durch Anzeige einer Fehlermeldung.
+
+Grenzfälle beziehen sich auf unerwartete Eingabewerte. Etwa könnte in einem
+Eingabefeld für eine E-Mail ein Wert eingegeben werden, der keine gültige E-Mail
+darstellt; oder in einem Eingabefeld für positive Zahlen eine negative Zahl. Diese
+Fälle müssen beachtet und behandelt werden und dürfen nicht zum Absturz des
+Programms führen. Ein weiteres Beispiel ist einen Texteingabefeld, wo ein bösartiger
+Nutzer HTML eingibt. Gibt das Programm diesen Text an andere Stelle aus, dürfen
+HTML-Tags nicht interpretiert werden ([XSS](https://owasp.org/www-community/attacks/xss/)).

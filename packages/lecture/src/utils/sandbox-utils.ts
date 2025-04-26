@@ -7,6 +7,8 @@ import { compile as svelteCompile } from "svelte/compiler";
 import { getConstructorNames, isPromise } from "./lang-utils";
 import { ImportMap } from "./import-map";
 
+import { TextReader, BlobWriter, ZipWriter } from "@zip.js/zip.js";
+
 export type Pending<T> =
   | { readonly loading: true; readonly value?: undefined }
   | { readonly loading: false; readonly value: T };
@@ -46,6 +48,34 @@ interface TranspileResult {
 export function nonPending<T>(value: T): Pending<T> {
   return { loading: false, value };
 }
+
+/**
+ * Prepares the HTML for download.
+ * Links the JS and CSS with the HTML, i.e. adds a link / script tag.
+ * @param html HTML content.
+ * @returns The prepared HTML content.
+ */
+function prepareHtmlForDownload(html: string): string {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, "text/html");
+
+  const script = document.createElement("script");
+  script.src = "./script.js";
+
+  const link = document.createElement("link");
+  link.href = "./style.css";
+  link.rel = "stylesheet";
+
+  const metaEnc = document.createElement("meta");
+  metaEnc.setAttribute("charset",  "utf-8");
+
+  doc.head.prepend(metaEnc);
+  doc.head.append(link);
+  doc.body.append(script);
+
+  return `<!DOCTYPE html>\n${doc.documentElement.outerHTML}`;
+}
+
 
 export function prepareHtmlContent(
   html: string,
@@ -175,6 +205,41 @@ export function useMappedLocalStorage<T>(
   );
   return [serializer.deserialize(value), setNewValue];
 }
+
+export async function downloadHtml(html: string, css: string, js: string): Promise<void> {
+  try {
+    const linkedHtml = prepareHtmlForDownload(html);
+    const zipWriter = new ZipWriter(new BlobWriter());
+    zipWriter.add("page.html", new TextReader(linkedHtml));
+    zipWriter.add("style.css", new TextReader(css));
+    zipWriter.add("script.js", new TextReader(js));
+    const content = await zipWriter.close();
+    const a = document.createElement("a");
+    const url = URL.createObjectURL(content);
+    try {
+      a.style.display = "none";
+      a.target = "_blank";
+      a.download = "page.zip";
+      a.type = "application/zip";
+      a.href = url;
+      document.body.append(a);
+      a.click();
+      // Hack to cleanup the allocated memory. We can't do it immediately
+      // as that might invalidate the URL before the file has finished downloading.
+      // Unfortunately, there doesn't seem to be an API for downloading files yet...
+      setTimeout(() => {
+        a.remove();
+        URL.revokeObjectURL(url);
+      }, 20000);
+    } catch (e) {
+      a.remove();
+      URL.revokeObjectURL(url);
+      throw e;
+    }
+  } catch (e) {
+    console.error("Unable to create / download ZIP file with contents", e);
+  }
+} 
 
 export function useCode(
   keyPrefix: string,

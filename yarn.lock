@@ -4079,6 +4079,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@zip.js/zip.js@npm:^2.7.60":
+  version: 2.7.60
+  resolution: "@zip.js/zip.js@npm:2.7.60"
+  checksum: 10c0/466ff1729e36d9f500011475e230f2edb9c0e6e10f64d542e6ebc006dc70885bc909d69fd0c7b10126bdf722c761359ad1edfe295b6c7fed3169f0f63012a1cd
+  languageName: node
+  linkType: hard
+
 "abbrev@npm:^3.0.0":
   version: 3.0.0
   resolution: "abbrev@npm:3.0.0"
@@ -7987,7 +7994,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json-server@npm:^1.0.0-beta.3":
+"json-server@npm:1.0.0-beta.3":
   version: 1.0.0-beta.3
   resolution: "json-server@npm:1.0.0-beta.3"
   dependencies:
@@ -9779,6 +9786,7 @@ __metadata:
     "@monaco-editor/react": "npm:^4.7.0"
     "@types/babel__standalone": "npm:^7"
     "@types/react": "npm:^18.3.12"
+    "@zip.js/zip.js": "npm:^2.7.60"
     clsx: "npm:^2.0.0"
     docusaurus-plugin-image-zoom: "npm:^3.0.1"
     lz-string: "npm:^1.5.0"
@@ -9800,7 +9808,7 @@ __metadata:
   resolution: "packages-rest-api@workspace:packages/rest-api"
   dependencies:
     "@biomejs/biome": "npm:1.9.4"
-    json-server: "npm:^1.0.0-beta.3"
+    json-server: "npm:1.0.0-beta.3"
     typescript: "npm:~5.7.0"
   languageName: unknown
   linkType: soft

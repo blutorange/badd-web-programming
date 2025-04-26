@@ -34,3 +34,7 @@
   color: inherit;
   text-decoration: underline;
 }
+
+video {
+  border: 1px solid #ccc;
+}

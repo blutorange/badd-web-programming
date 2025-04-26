@@ -1,0 +1,33 @@
+---
+id: exam-basic-reverse-geosearch
+slug: /exam/basic/reverse-geosearch
+sidebar_position: 2
+description: Reverse Geosearch
+---
+
+# Reverse Geosearch
+
+Anhand einer eingegebenen Adresse sollen die GPS-Koordinaten dieser Adresse
+bestimmt und ausgegeben werden.
+
+## Beschreibung
+
+* Eingabefeld zu Eingabe der Adresse
+* Button zum Starten der Suche
+* Ausgabe der gefundenen GPS-Koordinaten als Text
+
+## Mindestanforderungen
+
+* Das Eingabefeld muss ein zugeordnetes Label haben
+* Die Suche nach GPS-Koordinaten muss über einen Webdienst erfolgen
+* Der Button muss beliebig oft gedrückt werden können
+* Nur die ersten gefunden GPS-Koordinaten müssen ausgegeben werden
+
+## Hinweise
+
+Zur Suche der GPS-Koordinaten kann die API von Nominatim / OpenStreetMap 
+benutzt werden:
+
+> https://nominatim.org/release-docs/latest/api/Search/
+
+<video controls src={require('@site/static/video/exam/basic/reverse-geosearch.mp4').default}></video>
