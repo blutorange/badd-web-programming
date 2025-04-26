@@ -7,20 +7,6 @@ import { compile as svelteCompile } from "svelte/compiler";
 import { getConstructorNames, isPromise } from "./lang-utils";
 import { ImportMap } from "./import-map";
 
-const basicStyleLight = `
-html {
-  color: black;
-}
-`;
-const basicStyleDark = `
-html {
-  color: white;
-}
-a {
-  color: #9898ff;
-}
-`;
-
 export type Pending<T> =
   | { readonly loading: true; readonly value?: undefined }
   | { readonly loading: false; readonly value: T };
@@ -86,11 +72,12 @@ export function prepareHtmlContent(
     doc.head.appendChild(importMap);
   }
 
-  {
-    const styleTheme = document.createElement("style");
-    styleTheme.textContent =
-      colorMode === "dark" ? basicStyleDark : basicStyleLight;
-    doc.head.appendChild(styleTheme);
+  // Tell the browser to use its default user-agent styles for dark mode 
+  if (colorMode === "dark") {
+    const meta = document.createElement("meta");
+    meta.name = "color-scheme";
+    meta.content = "dark";
+    doc.head.append(meta);
   }
 
   if (transpiled.css.length > 0) {

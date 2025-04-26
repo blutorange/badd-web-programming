@@ -112,7 +112,8 @@ function Sandbox(): ReactNode {
     if (html.loading || css.loading || js.loading) {
       return;
     }
-    if (applyImmediately || contentRef.current?.childElementCount === 0) {
+    const colorModeChanged = contentRef.current && contentRef.current.dataset.colorMode !== colorMode
+    if (applyImmediately || contentRef.current?.childElementCount === 0 || colorModeChanged) {
       applyHtml(
         contentRef,
         html.value,
@@ -271,6 +272,7 @@ function applyHtml(
   destroyOldIFrame(container);
   container.innerHTML = "";
   container.appendChild(iframe);
+  container.dataset.colorMode = colorMode;
   const iframeWin = iframe.contentWindow as Window & typeof globalThis;
   const iframeDoc = iframe.contentDocument;
   if (iframeWin && iframeDoc) {
