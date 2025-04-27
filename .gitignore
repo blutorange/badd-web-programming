@@ -4,6 +4,8 @@ node_modules
 *.zip
 .vscode
 
+!exam-basic-solutions.zip
+
 build
 dist
 .docusaurus
