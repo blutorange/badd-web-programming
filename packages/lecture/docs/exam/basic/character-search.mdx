@@ -1,0 +1,51 @@
+---
+id: exam-basic-character-search
+slug: /exam/basic/character-search
+description: Suche nach Charaktern über eine REST-API und Anzeige gefundener Daten
+---
+
+# Online-Charaktersuche 
+
+Über die [<ruby>時間<rp>(</rp><rt>Jikan</rt><rp>)</rp></ruby> REST-API](https://jikan.moe/)
+soll anhand eines eingegebenen Namens nach Charaktern gesucht und bei Treffern
+deren Daten angezeigt werden.
+
+## Beschreibung
+
+* 1 Eingabefeld für den Suchbegriff
+* 1 Button zum Starten der Suche
+* Anzeige der gefundenen Charaktere als Liste 
+
+## Mindestanforderungen
+
+* Bei Klick auf Button soll nach passenden Charaktern gesucht werden. Für jeden
+  gefundenen Treffer soll zudem auch die Liste mit allen Bildern abgerufen werden.
+* Gefundene Charaktere sollen als Liste angezeigt werden. Zu jedem Charakter
+  soll wenigstens Name, Beschreibung und eine Liste mit Bildern angezeigt werden.
+* Liefert eine Suche keine Treffern, soll der Nutzer auf angemessene Weise Feedback
+  hierüber erhalten.
+* Jedes Bild soll anklickbar sein. Bei Klick soll sich das Bild in voller
+  Größe in einem neuen Fenster / Tab öffnen.
+
+## Hinweise
+
+Folgende Endpunkte der Jikan-API werden benötigt:
+
+* [https://docs.api.jikan.moe/#tag/characters/operation/getCharactersSearch](https://docs.api.jikan.moe/#tag/characters/operation/getCharactersSearch)
+  * Suchen von Charaktern anhand eines Suchbegriffs
+* [https://docs.api.jikan.moe/#tag/characters/operation/getCharacterPictures](https://docs.api.jikan.moe/#tag/characters/operation/getCharacterPictures)
+  * Abholen einer Liste aller Bilder zu einer Charakter-ID
+
+Verwenden Sie die [fetch-API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+für HTTP-Requests und das [URL-Objekt](https://developer.mozilla.org/en-US/docs/Web/API/URL)
+zum Erstellen der URL.
+
+Um die Netzwerklast zu minimieren und Beschränkungen der API zu vermeiden,
+sollte die die Liste der Treffer bei der Charaktersuche auf 5 Einträge
+beschränkt werden.
+
+Der Browser-Cache sollte nicht deaktiviert werden und mittels
+`fetch(..., { cache: "force-cache" })` der Cache erzwungen werden.
+
+<video controls src={require('@site/static/video/exam/basic/character-search.webm').default}></video>
+
