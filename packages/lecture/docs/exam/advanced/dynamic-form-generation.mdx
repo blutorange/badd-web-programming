@@ -1,0 +1,213 @@
+---
+id: exam-advanced-dynamic-form-generation
+slug: /exam/basic/dynamic-form-generation
+description: Dynamische Erstellung eines Formulars auf Grundlage eines Datenmodells
+---
+
+# Dynamische Formularerstellung
+
+Anhand von JSON-Daten soll ein Formular erstellt und entsprechend mit Interaktion
+versehen werden.
+
+## Mindestanforderungen
+
+* 1 Eingabefeld für eine JSON-Datenstruktur, welche das Formular darstellt.
+* 1 Button `Formular erzeugen`, der anhand der JSON-Daten ein interaktives Formular
+  erzeugt.
+* Die konkrete Struktur des JSON kann beliebig festgelegt werden. Unten ist ein
+  mögliches Beispiel.
+* Es sind wenigstens alle Features zu unterstützen, welche im Beispiel unten
+  verwendet werden.
+
+<details>
+```json
+{
+  "title": "Antragsformular",
+  "action": "https://example.com/submit",
+  "method": "post",
+  "fieldsets": [
+    {
+      "legend": "Kontaktdaten",
+      "rows": [
+        {
+          "fields": [
+            {
+              "id": "kontakt_vor",
+              "type": "text",
+              "required": true,
+              "label": "Vorname",
+              "datatype": "text"
+            },
+            {
+              "id": "kontakt_nach",
+              "type": "text",
+              "required": true,
+              "label": "Nachname",
+              "datatype": "text"
+            }
+          ]
+        },
+        {
+          "fields": [
+            {
+              "id": "kontakt_name",
+              "type": "computed",
+              "label": "Name",
+              "formula": "stringValue(\"kontakt_nach\") + \", \" + stringValue(\"kontakt_vor\")"
+            }
+          ]
+        },
+        {
+          "fields": [
+            {
+              "id": "kontakt_mail",
+              "type": "text",
+              "required": true,
+              "label": "E-Mail",
+              "datatype": "email"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "legend": "Interessen",
+      "rows": [
+        {
+          "fields": [
+            {
+              "id": "interessen_eier",
+              "type": "single_select",
+              "required": true,
+              "label": "Eierkuchen-Belag",
+              "options": [
+                {"name": "Apfelmus", "value": "am"},
+                {"name": "Honig", "value": "h"},
+                {"name": "Nougat", "value": "ng"}
+              ]
+            }
+          ]
+        },
+        {
+          "fields": [
+            {
+              "id": "interessen_hobbies",
+              "type": "multi_select",
+              "required": true,
+              "label": "Hobbies",
+              "options": [
+                {"name": "Lesen", "value": "l"},
+                {"name": "Schwimmen", "value": "s"},
+                {"name": "Radfahren", "value": "rf"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "legend": "Einkommen",
+      "rows": [
+        {
+          "fields": [
+            {
+              "id": "einkommen_haupt",
+              "type": "text",
+              "required": true,
+              "label": "Haupteinkommen (Euro)",
+              "datatype": "number",
+              "min": 0,
+              "max": 10000
+            }
+          ]
+        },
+        {
+          "fields": [
+            {
+              "id": "einkommen_neben",
+              "type": "text",
+              "required": true,
+              "label": "Nebeneinkommen (Euro)",
+              "datatype": "number",
+              "min": 0,
+              "max": 10000
+            }
+          ]
+        },
+        {
+          "fields": [
+            {
+              "id": "einkommen_gesamt",
+              "type": "computed",
+              "label": "Gesamteinkommen",
+              "formula": "numberValue(\"einkommen_haupt\") + numberValue(\"einkommen_neben\")"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "legend": "Weiteres",
+      "rows": [
+        {
+          "fields": [
+            {
+              "id": "weiteres_anmerkungen",
+              "type": "textarea",
+              "required": false,
+              "label": "Weitere Anmerkungen"
+            }
+          ]
+        },
+        {
+          "fields": [
+            {
+              "id": "weiteres_agb",
+              "type": "checkbox",
+              "required": true,
+              "label": "Ich stimme der Verarbeitung meiner Daten zu"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+</details>
+
+Obiges JSON würde etwa folgendes Formular erzeugen:
+
+![Form rendered from the above JSON data](/img/exam/dynamic-form.png)
+
+Konkret muss das Formular aus mehreren Fieldsets bestehen können, wobei jedes
+Fieldset aus Zeilen besteht. Jede Zeile enthält ein oder mehrere Formularfelder.
+Enthält eine Zeile mehrere Formularfelder, werden diese nebeneinander angeordnet.
+
+Jedes Formularfeld hat eine eindeutig ID, sowie ein Label und ist entweder ein Pflichtfeld oder nicht.
+Folgende Arten von Formularfeldern sollen unterstützt werden. 
+
+* Einzeiliges Eingabefeld, mit Festlegung des Datentyps.
+* Mehrzeiliges Eingabefeld
+* Checkbox, die angehakt oder abgehakt ist
+* Einfache Auswahl, die nur die Auswahl 1 Option erlaubt
+* Mehrfache Auswahl, die die Auswahl mehrere Optionen erlaubt
+* Berechnungsfeld, dessen Wert sich anhand einer vom Nutzer eingegebenen Formel
+  ergibt. Das der Wert berechnet ist, darf der Nutzer den Wert nicht manuell
+  ändern. Die Formel ist eine [JavaScript-Expression](https://en.wikipedia.org/wiki/Expression_(computer_science)),
+  welche in einem Scope ausgewertet wird, wo die Symbole `numberValue` und `stringValue`
+  zur Verfügung stehen. Der Wert ist jeweils eine Funktion, welche die ID eines
+  Formularfelds entgegennimmt und den Wert von diesem Feld zurückliefert, entweder
+  als Zahl oder als String. 
+
+## Hinweise
+
+Zum Ausführen von JavaScript kann ein `<script>`-Element erzeugt werden,
+welches in den `<head>` eingehangen wird und direkt danach wieder entfernt wird.
+Um den Wert der Expression abzugreifen, kann dieser temporär in eine globale
+Variable geschrieben werden. Um Symbole im Scope der Expression verfügbar zu
+machen, kann die Expression in einer [IIFE](https://developer.mozilla.org/en-US/docs/Glossary/IIFE)
+gewrapped werden, welche die Symbole als Funktionsparameter deklariert. 
+
+Vor Beginn dieser Aufgabe sollte man sich die Datenstruktur gut durchdenken
+und damit vertraut machen.
