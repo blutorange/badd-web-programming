@@ -4,10 +4,24 @@
         <title>Webprogrammierung Blog</title>
         <link>https://blutorange.github.io/badd-web-programming/blog/</link>
         <description>Webprogrammierung Blog</description>
-        <lastBuildDate>Sat, 26 Apr 2025 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Sun, 27 Apr 2025 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>de</language>
+        <item>
+            <title><![CDATA[Update 27. April 2025]]></title>
+            <link>https://blutorange.github.io/badd-web-programming/blog/update-2025-04-27/</link>
+            <guid>https://blutorange.github.io/badd-web-programming/blog/update-2025-04-27/</guid>
+            <pubDate>Sun, 27 Apr 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[Update der Seite vom 27. April 2025]]></description>
+            <content:encoded><![CDATA[<p>Update der Seite vom 27. April 2025</p>
+<ul>
+<li>Informationen zur praktischen Programmieraufgabe für die Prüfung ergänzt</li>
+</ul>
+<p>Siehe die Seite <a rel="noopener noreferrer" href="https://blutorange.github.io/badd-web-programming/docs/exam/">Prüfungsaufgaben</a>
+sowie die entsprechenden Unterseiten.</p>]]></content:encoded>
+            <category>Update</category>
+        </item>
         <item>
             <title><![CDATA[Update 26. April 2025]]></title>
             <link>https://blutorange.github.io/badd-web-programming/blog/update-2025-04-26/</link>

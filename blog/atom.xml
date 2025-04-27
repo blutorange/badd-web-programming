@@ -2,11 +2,29 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://blutorange.github.io/badd-web-programming/blog/</id>
     <title>Webprogrammierung Blog</title>
-    <updated>2025-04-26T00:00:00.000Z</updated>
+    <updated>2025-04-27T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://blutorange.github.io/badd-web-programming/blog/"/>
     <subtitle>Webprogrammierung Blog</subtitle>
     <icon>https://blutorange.github.io/badd-web-programming/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[Update 27. April 2025]]></title>
+        <id>https://blutorange.github.io/badd-web-programming/blog/update-2025-04-27/</id>
+        <link href="https://blutorange.github.io/badd-web-programming/blog/update-2025-04-27/"/>
+        <updated>2025-04-27T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Update der Seite vom 27. April 2025]]></summary>
+        <content type="html"><![CDATA[<p>Update der Seite vom 27. April 2025</p>
+<ul>
+<li>Informationen zur praktischen Programmieraufgabe für die Prüfung ergänzt</li>
+</ul>
+<p>Siehe die Seite <a rel="noopener noreferrer" href="https://blutorange.github.io/badd-web-programming/docs/exam/">Prüfungsaufgaben</a>
+sowie die entsprechenden Unterseiten.</p>]]></content>
+        <author>
+            <name>Andre Wachsmuth</name>
+            <uri>https://github.com/blutorange</uri>
+        </author>
+        <category label="Update" term="Update"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Update 26. April 2025]]></title>
         <id>https://blutorange.github.io/badd-web-programming/blog/update-2025-04-26/</id>
