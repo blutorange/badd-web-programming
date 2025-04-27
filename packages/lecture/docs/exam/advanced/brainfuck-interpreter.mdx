@@ -1,0 +1,36 @@
+---
+id: exam-advanced-brainfuck-interpreter
+slug: /exam/basic/brainfuck-interpreter
+description: Interpreter mit Debugger-UI für die Programmiersprache Brainfuck
+---
+
+# Brainfuck-Interpreter
+
+Es soll ein Interpreter für die Programmiersprache [Brainfuck](https://esolangs.org/wiki/Brainfuck)
+(siehe auch [Wikpedia-Artikel](https://en.wikipedia.org/wiki/Brainfuck))
+erstellt werden, der interaktiv über eine UI das Programm Schritt für Schritt ausführt und
+den Stack in jedem Zustand anzeigt.
+
+## Mindestanforderungen
+
+* 1 Eingabefeld, in dem das Programm eingegeben wird.
+* 2 Buttons `Ausführen` und `Debuggen`.
+
+Der Button `Ausführen` führt das Programm bis zu Ende aus und zeigt alle Zeichen
+an, die über die Instruktion `.` ausgegeben wurden.
+
+Der Button `Debuggen` startet den interaktiven Debug-Modus. Hierbei wird das
+Programm Schritt für Schritt ausgeführt. Es wird immer nur jeweils eine Instruktion
+ausgeführt, danach wird die aktuelle Position des `instruction pointer` und `data pointer`
+sowie der Inhalt des Speichers angezeigt. Betätigt der Nutzer den `Weiter`-Button, wird die
+nächste Instruktion ausgeführt und erneut angehalten.
+
+Die Instruktion `,` erfordert das Einlesen einer Nutzereingabe. Das kann beispielsweise
+so umgesetzt werden, dann im Vorfeld in einem Texteingabefeld ein Text eingegeben wird.
+
+## Hinweise
+
+Vor Beginn der Aufgabe sollte man sicherstellen, dass man die Funktionsweise
+der Programmiersprache Brainfuck verstanden hat. Diese besteht auch einem Programm
+mit 8 Instruktionen, einem `instruction pointer` auf die aktuelle Instruktion,
+sowie einem Speicher und `data pointer` auf den Speicher.
