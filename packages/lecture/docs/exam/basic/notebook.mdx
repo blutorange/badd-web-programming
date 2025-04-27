@@ -1,0 +1,34 @@
+---
+id: exam-basic-notebook
+slug: /exam/basic/notebook
+description: Notizbuch, dessen Inhalt im Browser gespeichert wird
+---
+
+# Notizbuch
+
+Es soll ein Notizbuch umgesetzt werden, dessen Inhalt beim Neuladen der
+Seite erhalten bleibt.
+
+## Beschreibung
+
+* 1 Eingabefeld für Titel
+* 1 Freitextfeld für Notiz
+* Knopf zum Leeren von Titel und Notiz
+
+## Mindestanforderungen
+
+* Titel soll einzeilig sein.
+* Notiz soll mehrzeilig sein.
+* Titel und Notiz sollen beim Neuladen der Seite oder Neustart des Rechners erhalten bleiben.
+* Das Speichern soll während der Eingabe automatische passieren, es soll keinen
+  separaten Speicher-Knopf geben.
+
+## Hinweise
+
+Nutzen Sie entweder
+[Local Storage](https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API)
+oder [Indexed DB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)
+zum Speichern der Daten.
+
+<video controls src={require('@site/static/video/exam/basic/notebook.webm').default}></video>
+
