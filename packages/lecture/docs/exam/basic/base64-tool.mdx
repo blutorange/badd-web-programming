@@ -1,0 +1,36 @@
+---
+id: exam-base64-tool
+slug: /exam/basic/base64-tool
+description: Dev-Tool zur Konvertierung von Base64
+---
+
+# Base64-Tool
+
+Zur Unterstützung bei der Entwicklung soll ein kleines Tools entwickelt werden,
+mit dem [Base64](https://developer.mozilla.org/en-US/docs/Glossary/Base64)
+kodiert und dekodiert werden kann.
+
+## Beschreibung
+
+* 2 Textarea für Klartext und Base64-Text
+* 1 Button zum Konvertieren von Klartext zu Base64-Text
+* 1 Button zum Konvertieren von Base64-Text zu Klartext
+
+## Mindestanforderungen
+
+* Es muss nur Texteingabe unterstützt werden, keine beliebigen Binärdateien.
+* Das Base64 kann, muss aber nicht, auf mehrere Zeilen umgebrochen werden.
+* Ungültige Base64-Eingaben müssen bedacht werden.
+
+## Hinweise
+
+Tipps zum Konvertierung von Base64 finden sich bei MDN web docs unter
+[Base64](https://developer.mozilla.org/en-US/docs/Glossary/Base64),
+[btoa](https://developer.mozilla.org/en-US/docs/Web/API/Window/btoa) und
+[atob](https://developer.mozilla.org/en-US/docs/Web/API/Window/atob).
+
+Das Programm sollte auch mit Unicode-Zeichen wie `鳳凰`, `김치` oder `🥰` getestet
+werden.
+
+<video controls src={require('@site/static/video/exam/basic/base64-tool.webm').default}></video>
+
