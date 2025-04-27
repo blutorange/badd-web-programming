@@ -1,0 +1,38 @@
+---
+id: exam-advanced-chat
+slug: /exam/basic/chat
+description: Chat zwischen 2 Teilnehmern per Websocket
+---
+
+# Chat
+
+Hinweis: Diese Aufgabe richtet sich an diejenigen, welche auch etwas Serverprogrammierung
+ausprobieren wollen.
+
+Es soll ein Chat-Server erstellt werden, der es 2 Teilnehmern erlaubt, miteinander
+zu chatten. Die Kommunikation erfolgt mittels [Websocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API).
+
+## Mindestanforderungen
+
+* Verbindung zwischen den Teilnehmern wird über eine Chatroom-ID hergestellt.
+  Jeder Teilnehmer mit der gleichen Chatroom-ID tritt dem gleichen Chat bei
+  und kann dort Nachrichten schreiben.
+* Jeder Teilnehmer muss zudem noch seinen Namen eingeben, dieser wird allen
+  anderen Teilnehmern des Chatroom angezeigt. 
+* Jeder Teilnehmer eines Chatroom kann Textnachrichten in den Chatroom schreiben.
+  Diese werden allen anderen Teilnehmern des Chatroom angezeigt, und zwar sobald
+  wie technisch möglich (in der Regel nahezu sofort).
+* Es müssen nur Textnachrichten unterstützt werden, keine Bilder, Audios oder Videos.
+* Es müssen keinerlei Sicherheitsaspekte berücksichtigt werden.
+* Der Inhalt des Chatrooms soll serverseitig gespeichert werden, sodass bei Neuladen
+  der Browser-Seite der Inhalt nicht verloren geht. Der Inhalt braucht aber nur
+  im RAM gespeichert werden, d.h. bei Neustart des Servers müssen die Nachrichten nicht
+  erhalten bleiben.
+
+## Hinweise
+
+Serverseitig kann [Socket.IO](https://socket.io/) für die Bereitstellung eines
+Websocket-Servers verwendet werden.
+
+Clientseitig kann ebenfalls Socket.IO genutzt werden, um die native Websocket-API
+des Browsers zu vereinfachen.
