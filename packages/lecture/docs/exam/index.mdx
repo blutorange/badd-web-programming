@@ -25,23 +25,95 @@ werden, die als Unterseite in die Webseite zu integrieren sind.
 
 ### 1. NPM-Projekt
 
-NPM / yarn / pnpm
+Als Grundlage für die gesamte Aufgabe ist ein NPM-Projekt aufzusetzen. Andere
+Package Manager wie yarn oder pnpm sind auch erlaubt.
+
+Für die Ordnerstruktur gibt es keine Vorgaben. Es empfiehlt sich aber, Dateien
+sinnvoll zu gruppieren, z.B. `src/js`, `src/css`, `src/img` etc.
+
+In der `package.json` müssen mindestens folgende
+[Scripte](https://docs.npmjs.com/cli/v8/using-npm/scripts) vorhanden sein:
+
+* `start` - Baut bei Bedarf die Ressourcen und startet einen Server, über den auf die Seite zugegriffen werden kann.
+  Ein sogenanntes `watch` ist nicht erforderlich.
+* `build` - Baut bzw. erzeugt die finalen Ressourcen für das Deployment auf einen produktiven Server. Dies umfasst
+  beispielsweise Minifizierung von Code und Bundling von Abhängigkeiten. 
+* `lint` - Prüft den Code mit einem Linter auf potentielle Probleme im Code.
+* `format` - Formatiert den Code mit einem geeigneten Code-Formatierer. 
+
+Mögliche Linter sind etwa [Biome](https://biomejs.dev/guides/getting-started/) oder [eslint](https://eslint.org/).
+
+Mögliche Code-Formatierer sind etwa [Biome](https://biomejs.dev/guides/getting-started/) oder [Prettier](https://prettier.io/).
+
+Mögliche Bundler um den Code mit Abhängigkeiten zu einer Datei zusammenzufügen sind etwa [esbuild](https://esbuild.github.io/),
+[Webpack](https://webpack.js.org/) oder [rollup.js](https://rollupjs.org/).
 
 ### 2. Webseiten-Frame
 
+Es ist eine einfache Webseite mit Header, Main-Bereich, Footer und Sidebar zu erstellen.
+
+![Seitenlayout mit Header, Main-Content, Footer und Sidebar](/img/exam/page-frame.png)
+
+#### Seitenlayout
+
+* Es sollen die entsprechenden semantischen HTML-Elemente verwendet werden (`<header>`, `<nav>`, `<main>`, `<aside>`, `<footer>`)
+* Im Header ist eine Navigationsleiste unterzubringen. Hier sollen Links auf die
+  entsprechenden Unterseiten stehen.
+* Im Main-Bereich soll der Inhalt der entsprechenden Unterseite stehen. Falls der Inhalt
+  sehr hoch ist, soll nur der Main-Bereich scrollen, Header, Footer, Sidebar
+  sollen immer an der gleichen Stelle verweilen.
+* Der Inhalt der Sidebar kann mit beliebigen Inhalt gefüllt werden.
+* Im Footer sollen Links auf Impressum und Datenschutz stehen.
+
+#### Unterseiten
+
+Folgende Unterseiten soll es geben, die über die Navigationsleiste im Header erreichbar sind:
+
+* Rezeptliste
+  * Mindestens 2 Überschriften für 2 verschiedene Rezepte. Für jedes Rezept
+    ist eine Liste von Zubereitungsschritten anzugeben. Hierzu soll ein geeignetes
+    Listenelement verwendet werden, welches der HTML-Standard bereitstellt.
+    Der Text der einzelnen Schritte kann beliebig ausgedacht werden.
+* Bildergallerie
+  * Eine Seite mit 10 oder mehr beliebigen Bildern, welche von links nach rechts und
+  von rechts nach links angeordnet sind. Für jedes Bild soll das
+  [`<figure>`-Element](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/figure)
+  mit jeweils einem [`<figcaption>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/figcaption)
+  für die Bildbeschreibung verwendet werden. Die Bildbeschreibung kann beliebiger Demo-Text sein.
+* Weltkarte
+  * Mittels der Bibliothek [leaflet.js](https://leafletjs.com/) soll eine Karte
+    dargestellt werden. Die Bibliothek ist als NPM-Abhängigkeit zu laden und
+    mittels JavaScript zu initialisieren.
+
+Folgende Unterseiten soll es geben, die über den Footer erreichbar sind:
+
+* Impressum - Überschrift und beliebiger Text mit mehreren Absätzen, etwa [Lorem Ipsum](https://www.lipsum.com/).
+* Datenschutz - Überschrift und beliebiger Text mit mehreren Absätzen, etwa [Lorem Ipsum](https://www.lipsum.com/).
 
 ### 3. Programmieraufgaben
 
-beliebiges UI-framework und Bibliotheken, oder auch vanilla js
+Es sind entweder __4 kleine__ oder __1 große__ Aufgabe auszusuchen und zu bearbeiten.
 
-aber: keine NPM abhängigkeit, die die aufgabenstellung bereits löst!
+* <Link to="/docs/exam-basic/" rel="noopener noreferrer">Kleine Aufgaben</Link>
+* <Link to="/docs/exam-advanced/" rel="noopener noreferrer">Große Aufgaben</Link>
 
-Kleine Aufgaben sind wohl definiert und haben einen geringen Umfang. Diese eignen
+Für jede Aufgabe ist 1 Unterseite auf der Webseite zu erstellen und in der
+Navigation zu verlinken. Die Unterseiten müssen den Webseiten-Frame nutzen.
+Im main-Bereich ist die entsprechende Aufgabe zu lösen.
+
+Es dürfen beliebiges UI-Framework und beliebige Bibliotheken verwendet werden.
+Dies ist aber nicht erforderlich, spezielle alle kleinen Aufgaben sind auch
+ohne Bibliotheken und UI-Frameworks mit wenig Code lösbar.
+
+Aber: Es darf keine Bibliothek verwendet werden, welche die Aufgabenstellung
+trivialisiert beziehungsweise bereits löst!
+
+__Kleine Aufgaben__ sind wohl definiert und haben einen geringen Umfang. Diese eignen
 sich besonders, wenn wir noch wenig bis kaum Erfahrung in der Webprogrammierung
 haben. Jede Aufgabe enthält eine genaue Beschreibung, was in welchem Umfang
 umgesetzt werden muss.
 
-Große Aufgaben sind etwas anspruchsvoller und erfordern Mitdenken bzw. eigene
+__Große Aufgaben__ sind etwas anspruchsvoller und erfordern Mitdenken bzw. eigene
 Recherche zum Thema. Sie eignen sich einerseits, wenn wir bereits Erfahrung
 in der Programmierung haben. Aber auch, wenn wir eine Herausforderung suchen und
 willens sind, Engagement zu zeigen. Bei große Aufgaben sind die Anforderungen grob
