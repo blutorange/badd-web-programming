@@ -1,0 +1,36 @@
+---
+id: exam-basic-infinite-scrolling
+slug: /exam/basic/infinite-scrolling
+description: On-Demand-Anzeige von weiteren Elementen beim Scrollen
+---
+
+# Infinite Scrolling
+
+Beim Scrollen sollen weitere Elemente angezeigt werden, wenn der Nutzer zum Ende
+der aktuell angezeigten Elemente scrolled.
+
+## Beschreibung
+
+* 1 Eingabefeld für die Anzahl nachzuladender Elemente
+* 1 Container mit 100 Elementen beliebigen Inhalts
+* Nachladen weiterer 100 Elemente, wenn der Nutzer zum Ende der angezeigten Elemente scrolled
+
+## Mindestanforderungen
+
+* Die initial angezeigten 100 Elemente müssen so dimensioniert sein, dass ein Scrolling
+  notwendig wird.
+* Jedes mal, wenn Nutzer ans Ende der Seite scrolled, müssen weitere Elemente
+  generiert und angezeigt werden. Deren Anzahl bestimmt sich durch den Wert im
+  Eingabefeld.
+* Beim Anzeigen neuer Elemente soll die Position der Scroll-Leiste erhalten bleiben.
+* Die Anzahl der angezeigten Elemente soll keine Beschränkung haben (außer der Leistungsfähigkeit des Rechners).
+
+## Hinweise
+
+Die Elemente sollten per JavaScript generiert werden, z.B. Karten mit Zahlen.
+
+Das [scroll](https://developer.mozilla.org/en-US/docs/Web/API/Document/scroll_event)-Event
+kann bei der Umsetzung nützlich sein.
+
+<video controls src={require('@site/static/video/exam/basic/infinite-scrolling.webm').default}></video>
+
