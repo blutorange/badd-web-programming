@@ -38,3 +38,7 @@
 video {
   border: 1px solid #ccc;
 }
+
+audio, video {
+  max-width: 100%;
+}
