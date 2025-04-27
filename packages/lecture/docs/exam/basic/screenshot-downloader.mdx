@@ -1,0 +1,68 @@
+---
+id: exam-basic-screenshot-downloader
+slug: /exam/basic/screenshot-downloader
+description: Screenshot-Downloader
+---
+
+# Screenshot-Downloader
+
+Über einen Button soll ein Screenshot vom Bildschirm erstellt werden, der
+einsehbar ist und heruntergeladen werden kann.
+
+## Beschreibung
+
+* 1 Button zum Aufnehmen eines Screenshots
+* 1 Eingabefeld für den Dateinamen beim Herunterladen
+
+## Mindestanforderungen
+
+* Bei Klick auf den Button wird ein Screenshot gemacht und als Bild
+  angezeigt.
+* Bei Klick auf das Bild wird ein Download mit dem Bild gestartet.
+* Für den Dateinamen beim Herunterladen wird der Wert im Textfeld genommen.
+  Ist kein Wert eingetragen, wird der Default-Dateiname `screen.png` genommen.
+  Hat der eingegebene Dateiname keine Dateiendung, soll die Dateiendung angefügt
+  werden.
+* Das zu nutzende Bildformat ist undefiniert (d.h. keine Einschränkung).
+
+## Hinweise
+
+Auf das Media-Device zur Aufnahme des Bildschirminhalts kann mittels 
+[navigator.mediaDevices.getDisplayMedia](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getDisplayMedia)
+zugegriffen werden.
+
+Zum Aufnehmen eines Screenshots eines MediaStream mit Video-Track kann folgende
+Funktion benutzt werden:
+
+<details>
+```js
+/**
+ * Takes a snapshot from the given media stream, which must have a video track.
+ * @param {MediaStream} stream A video media stream from which to capture a screenshot.
+ * @returns {Promise<Blob>} A blob with the image data.
+ */
+function takeSnapshotFromMediaStream(stream) {
+    return new Promise((resolve, reject) => {
+        const video = document.createElement("video");
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        video.addEventListener("loadeddata", async () => {
+            const { videoWidth, videoHeight } = video;
+            canvas.width = videoWidth;
+            canvas.height = videoHeight;
+            try {
+                await video.play();
+                context.drawImage(video, 0, 0, videoWidth, videoHeight);
+                canvas.toBlob(resolve, 'image/png');
+            } catch (error) {
+                reject(error);
+            }
+        });
+        video.srcObject = stream;
+    });
+}
+```
+</details>
+
+<video controls src={require('@site/static/video/exam/basic/screenshot-downloader.webm').default}></video>
+

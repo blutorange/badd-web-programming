@@ -76,7 +76,6 @@ function prepareHtmlForDownload(html: string): string {
   return `<!DOCTYPE html>\n${doc.documentElement.outerHTML}`;
 }
 
-
 export function prepareHtmlContent(
   html: string,
   css: string,
@@ -624,8 +623,9 @@ export function captureLogEntries(
 }
 
 function errorToString(e: unknown): string {
-  if (e instanceof Error) {
-    return e.stack ?? e.message;
+  if (getConstructorNames(e).has("Error")) {
+    const error = e as Error;
+    return error.stack ?? error.message;
   }
   return String(e);
 }
@@ -659,6 +659,9 @@ function stringify(value: unknown): string {
       if (value === null) {
         return "null";
       }
+      if (getConstructorNames(value).has("Error")) {
+        return errorToString(value);
+      }
       const instances = new Set();
       // Don't fail on cyclic object graphs
       const replacer = (key: unknown, value: unknown) => {
@@ -668,15 +671,15 @@ function stringify(value: unknown): string {
         if (typeof value === "function") {
           return value.toString();
         }
-        if (value instanceof Error) {
-          return errorToString(value);
-        }
         if (typeof value === "object" && value !== null) {
           if (instances.has(value)) {
             return "circular";
           }
           // Don't use instanceof, won't work for objects from another scope (e.g. iframe)
           const names = getConstructorNames(value);
+          if (names.has("Error")) {
+            return errorToString(value);
+          }
           if (names.has("Window") || names.has("Document")) {
             return String(value);
           }
