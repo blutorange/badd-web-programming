@@ -1,0 +1,39 @@
+---
+id: exam-keycode-viewer
+slug: /exam/basic/keycode-viewer
+description: Anzeige der Keycodes der gedrückten Tasten
+---
+
+# Keycode-Viewer
+
+Zur Unterstützung bei der Entwicklung soll ein kleines Tools entwickelt werden,
+welches die Eigenschaft
+[KeyboardEvent](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent).[key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key)
+der gedrückten Taste anzeigt.
+
+## Beschreibung
+
+* 1 Textarea, beim Drücken einer Taste wird der Key-Code angezeigt.
+* 1 Checkbox, welche gesperrt ist und angehakt, wenn die
+  [Ctrl](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/ctrlKey)-Taste als letztes gedrückt wurde
+* Analog Checkboxen für [Meta-](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/metaKey),
+  [Shift-](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/shiftKey) und [Alt](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/altKey)-Taste.
+
+
+## Mindestanforderungen
+
+* In der Textarea soll nicht das gedrückte Zeichen erscheinen, sondern nur der Key-Code.
+* Bestehender Text in der Textarea soll erhalten bleiben und nicht überschrieben werden. 
+* Technisch gesprochen sollen immer die Eigenschaften des zuletzt eingerichteten
+  [KeyboardEvent](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent)
+  angezeigt werden. 
+
+## Hinweise
+
+[Event.preventDefault](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault)
+kann nützlich sein, um das Standard-Verhalten des Browsers bei einem Event zu unterbinden.
+Das Standardverhalten beim Drücken einer Taste besteht darin, das Zeichen in
+das Eingabefeld zu schreiben.
+
+<video controls src={require('@site/static/video/exam/basic/keycode-viewer.webm').default}></video>
+
