@@ -1,0 +1,39 @@
+---
+id: exam-advanced-recipe-book
+slug: /exam/basic/recipe-book
+description: Anbindung einer CRUD-REST-API für Rezepte
+---
+
+# Kochbuch
+
+Es soll eine Kochbuch-App erstellt werden, welches eine entsprechende REST-API anbindet.
+In dem Kochbuch kann der Nutzer Rezepten suchen und lesen sowie auch Rezepte erstellen,
+bearbeiten und löschen.
+
+Es handelt sich sich also um die Anbindung von [CRUD-Operationen](https://developer.mozilla.org/en-US/docs/Glossary/CRUD).
+
+## Mindestanforderungen
+
+* Server, der eine REST-API für CRUD-Operationen bereitstellt (create, read, update, delete) 
+* Alle Änderungen, die über die UI vorgenommen werden, sollen per REST-API
+  an den Server übertragen werden.
+* Anzeige einer Liste mit allen Rezepten.
+  * Es soll nach Rezepten gesucht werden können.
+  * Es soll die Sortierung der Rezepte geändert werden können.
+* Detailansicht eines Rezepts bei Klick auf das Rezept.
+* Möglichkeit zum Bearbeiten eines Rezepts in der Detailansicht.
+* Möglichkeit zum Löschen eines Rezepts, z.B. über Button auf der Detailansicht oder in der Liste aller Rezepte.
+* Möglichkeit zum Erstellen eines neuen Rezepts, z.B. über Button in der Liste alle Rezepte.
+
+## Hinweise
+
+Mittels der Bibliothek [JSON server](https://www.npmjs.com/package/json-server) kann auf einfache
+Weise ein Server mit einer REST-API für Testzwecke erstellt werden, wo auch Neuerstellen, Ändern
+und Löschen möglich ist. Siehe auch unser Beispiel unter
+
+> https://github.com/blutorange/badd-web-programming/tree/main/packages/rest-api
+
+Beispielsdaten finden sich etwa bei [dummyjson.com - recipes](https://dummyjson.com/docs/recipes)
+
+Es ist entsprechend auf Fehler zu reagieren, wenn beispielsweise die REST-API
+ein Rezept findet oder nicht löschen kann.
