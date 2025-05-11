@@ -9,5 +9,268 @@ import Link from "@docusaurus/Link";
 
 # Aufgaben zum Build-Step
 
+Diese Aufgaben betreffen den Build-Step, also wie wir Quellcode in 
+die fertigen JavaScript-, CSS- und HTML-Dateien überführen.
+
+Wir werden im folgenden [Node.js](https://nodejs.org/) als serverseitige
+JavaScript-Runtime verwenden. Wer möchte, darf aber gerne auch Alternativen
+wie [Deno](https://deno.com/) oder [Bun](https://bun.sh/) ausprobieren.
+
+Es empfiehlt sich, die Aufgaben der Reihe nach auszuführen, da diese aufeinander
+aufbauen.
+
+## Aufgabe 1 - Hallo Welt
+
+Installieren Sie Node.js in einer geeigneten Form und führen Sie über dessen
+[REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) den
+folgenden JavaScript-Code aus!
+
+```js
+console.log(`Hallo Welt! 1+2=${1+2}`)
+```
+
+Hinweise:
+
+* Ich empfehle die aktuelle [LTS](https://en.wikipedia.org/wiki/Long-term_support)-Version.
+* Unter Linux ist der [NVM - node version manager](https://github.com/nvm-sh/nvm)
+  sehr praktisch. Er lässt sich mit einem [Bash-Befehl installieren](https://github.com/nvm-sh/nvm?tab=readme-ov-file#install--update-script)
+  und erlaubt den einfachen Wechseln zwischen Node-Versionen.
+* Unter MacOS soll nvm auch funktionieren, habe ich aber selber noch nicht probiert.
+  Es gibt auch ein [Homebrew-Package für nvm](https://formulae.brew.sh/formula/nvm)
+  und [Node.js](https://formulae.brew.sh/formula/node)
+
+## Aufgabe 2 - Script mit Node.js ausführen
+
+Legen Sie folgende Dateien an und führen Sie anschließend die Datei `compare.js`
+mittels Node.js aus! Was macht das Script?
+
+<details>
+  <summary>Datei compare.js</summary>
+
+```js
+const fs = require("node:fs/promises");
+const { setDiff, setIntersect } = require("./set-utils.js");
+
+async function main() {
+  if (process.argv.length !== 4) {
+    console.log(`Usage: ${process.argv[0]} ${process.argv[1]} <source> <target>`);
+    console.log(`  Compares the contents of the files in the source and target folder`);
+    return;
+  }
+
+  const sourceFolder = process.argv[2];
+  const targetFolder = process.argv[3];
+
+  const sourceContents = await fs.readdir(sourceFolder, { recursive: true });
+  const targetContents = await fs.readdir(targetFolder, { recursive: true });
+
+  const sourceSet = new Set(sourceContents);
+  const targetSet = new Set(targetContents);
+
+  const onlyInSource = setDiff(sourceSet, targetSet);
+  const onlyInTarget = setDiff(targetSet, sourceSet);
+  const commonFiles = setIntersect(sourceSet, targetSet);
+
+  if (onlyInSource.size > 0) {
+    console.log("Files only in source that do not exist in target:");
+    for (const item of onlyInSource) {
+      console.log(`  - ${item}`)
+    }
+  }
+
+  if (onlyInTarget.size > 0) {
+    console.log("Files only in target that do not exist in source:");
+    for (const item of onlyInTarget) {
+      console.log(`  - ${item}`)
+    }
+  }
+
+  if (commonFiles.size > 0) {
+    console.log("Files that exist in both folders:");
+    for (const item of commonFiles) {
+      console.log(`  - ${item}`)
+    }
+  }
+}
+
+main().catch(e => {
+  console.error("Failed to run script", e);
+  process.exit(1);
+});
+```
+</details>
+
+<details>
+  <summary>Datei set-utils.js</summary>
+```js
+/**
+ * Computes the set difference a \ b.
+ * @param {Set<string>} a First set.
+ * @param {Set<string>} b Second set.
+ * @returns {Set<string>} b The difference a \ b.
+ */
+function setDiff(a ,b) {
+  const diff = new Set(a);
+  b.forEach(x => diff.delete(x));
+  return diff;
+}
+
+/**
+ * Computes the set intersection a ^ b.
+ * @param {Set<string>} a First set.
+ * @param {Set<string>} b Second set.
+ * @returns {Set<string>} b The intersection a ^ b.
+ */
+function setIntersect(a ,b) {
+  const intersect = new Set();
+  a.forEach(x => b.has(x) && intersect.add(x));
+  return intersect;
+}
+
+module.exports.setDiff = setDiff;
+module.exports.setIntersect = setIntersect;
+```
+</details>
+
+
+## Aufgabe 3 - ESM mit Node.js ausführen
+
+Wandeln Sie das Dateien aus Aufgabe 2 in
+[ESM](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules) um!
+
+Sie werden feststellen, dass sich die Dateien dann entweder nicht mehr ausführen
+lassen oder Warnungen beim Ausführen ausgegeben werden.
+
+Um das zu beheben, legen Sie die Datei [package.json](https://docs.npmjs.com/cli/v11/configuring-npm/package-json)
+an. Neben grundlegenden Eigenschaften wie `name`,`description` und `version` müssen
+Sie hier `"type": "module"` eintragen.
+
+Hinweis: ESM verwendet `import`-Statements statt `require` und `export`-Statements statt `module.exports`.
+
+## Aufgabe 4 - Externe Bibliothek einbinden
+
+Installieren Sie die externe Bibliothek esbuild ([Homepage](https://esbuild.github.io/), [NPM](https://www.npmjs.com/package/esbuild))!
+Legen Sie anschließend folgende Dateien an und führen Sie die Datei `build.js` aus!
+Führen Sie nun auch die Datei `dist/index.js` aus! Was macht das Script?
+
+<details>
+  <summary>Datei build.js</summary>
+```js
+import * as esbuild from "esbuild";
+
+const buildResult = await esbuild.build({
+    entryPoints: ["src/index.js"],
+    outdir: "dist",
+    bundle: true,
+    target: "es2020",
+    minify: true,
+    write: true,
+    logLevel: "info",
+});
+
+console.log(`Build finished with ${buildResult.errors.length} errors, ${buildResult.warnings.length} warnings`);
+```
+</details>
+
+<details>
+  <summary>Datei src/index.js</summary>
+```js
+import { factorial } from "./factorial.js";
+
+for (let i = 0n; i <= 20n; i++) {
+  console.log(`${i}! = ${factorial(i)}`);
+}
+```
+</details>
+
+<details>
+  <summary>Datei src/factorial.js</summary>
+```js
+export function factorial(x) {
+  return x > 1n ? x * factorial(x - 1n) : 1n;
+}
+```
+</details>
+
+## Aufgabe 5 - Script in HTML-Seite einbinden
+
+Erstellen Sie unter `dist/index.html` eine einfache HTML-Seite und
+binden Sie dort das Script aus `dist/index.js` ein! Öffnen sie die HTML-Seite
+im Browser und bestätigen Sie, dass das Script korrekt funktioniert!
+
+## Aufgabe 5 - Lokaler Web-Server
+
+Für einige Funktionalitäten wie HTTP-Requests per fetch ist es notwendig,
+die HTML-Seite über einen Webserver per HTTP-Protokoll zu öffnen.
+
+Installieren Sie hierzu die externe Bibliothek [http-server](https://www.npmjs.com/package/http-server)!
+Starten Sie den Server im `dist`-Ordner und rufen Sie die Webseite im Browser
+via HTTP auf!
+
+Hinweis: Lesen Sie die verlinkte Dokumentation bei NPM!
+
+## Aufgabe 6 - NPM-Script für Server
+
+Öffnen Sie die `package.json` und fügen sie hier ein Script ein, sodass Sie
+anschließend den HTTP-Server mittel `npm run start` starten können!
+
+Hinweise:
+ * Siehe die Doku von NPM bzgl. [scripts](https://docs.npmjs.com/cli/v11/using-npm/scripts)
+ * Innerhalb eines Script stehen NPM-Binaries zur Verfügung, d.h. das `npx ...` am Anfang kann weggelassen werden.
+
+## Aufgabe 6 - NPM-Script für Build
+
+Ergänzen Sie ein NPM-Script für den Build-Prozess, sodass Sie mittels `npm run build`
+die Dateien im dist-Ordner erzeugen können!
+
+Hinweis: Siehe Aufgabe 4.
+
+## Aufgabe 7 - Watch Mode
+
+Ergänzen Sie zuerst das `build.js`-Script um einen Watch-Mode! Wenn in der
+Kommandozeile das `--watch` mit angegeben wird, soll der Watch-Mode von `esbuild`
+aktiviert werden. Fügen Sie nun noch ein Script `build-dev` ein, was das gleiche
+tut wie `build`, aber den Watch-Modus aktiviert.
+
+Hinweise:
+  * Bei einem [Watch-Mode] wird bei jeder Änderung eine Quellcode-Datei der Bundler
+    erneut ausgeführt, sodass die Dateien im `dist`-Ordner den aktuellen Stand
+    widerspiegeln.
+  * Auf die Argument der Kommandozeile können Sie mittels `process.argv` zugreifen.
+  * Lagern Sie die esbuild-Optionen in eine Variable aus und verwenden Sie
+    `esbuild.context(...)` sowie `context.watch()` für den Watch-Mode. Siehe
+    auch [esbuild - build](https://esbuild.github.io/api/#build) (auf den JS-Tab klicken).
+
+## Aufgabe 8 - Copy-Script für HTML
+
 WIP
 
+## Aufgabe 9 - Bundling für CSS 
+
+WIP
+
+## Aufgabe 10 - Leaflet
+
+Installieren Sie per NPM die externe Bibliothek leaflet.js
+([Homepage](https://leafletjs.com/), [NPM](https://www.npmjs.com/package/leaflet))!
+
+Bereiten Sie die HTML-Seite entsprechend vor, indem Sie die benötigten HTML-Elemente
+erstellen.
+
+Importieren Sie leaflet.js nun über ein Import-Statement in ihre JavaScript-Datei
+und initialisieren Sie leaflet.js, sodass in der Webseite nun eine interaktive
+Karte sichtbar ist.
+
+Erstellen Sie einen Button auf der HTML-Seite, der beim Drücken einen Marker
+auf der Karte anzeigt (Position ist egal).
+
+Hinweis: Siehe auch auch den [Quick start guide](https://leafletjs.com/examples/quick-start/)
+von leaflet.js.
+
+## Aufgabe 11 - Formatierer
+
+WIP
+
+## Aufgabe 12 - Linter
+
+WIP
