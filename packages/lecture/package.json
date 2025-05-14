@@ -15,22 +15,22 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@babel/standalone": "^7.27.0",
+    "@babel/standalone": "^7.27.2",
     "@docusaurus/core": "3.7.0",
     "@docusaurus/preset-classic": "3.7.0",
-    "@mdx-js/react": "^3.0.0",
+    "@mdx-js/react": "^3.1.0",
     "@monaco-editor/react": "^4.7.0",
-    "@zip.js/zip.js": "^2.7.60",
-    "clsx": "^2.0.0",
+    "@zip.js/zip.js": "^2.7.61",
+    "clsx": "^2.1.1",
     "docusaurus-plugin-image-zoom": "^3.0.1",
     "lz-string": "^1.5.0",
     "monaco-editor": "^0.52.2",
     "primeflex": "^4.0.0",
-    "primereact": "^10.9.2",
-    "prism-react-renderer": "^2.3.0",
+    "primereact": "^10.9.5",
+    "prism-react-renderer": "^2.4.1",
     "raw-loader": "^4.0.2",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "svelte": "^5.26.2",
     "tslib": "^2.8.1"
   },
@@ -40,8 +40,8 @@
     "@docusaurus/tsconfig": "3.7.0",
     "@docusaurus/types": "3.7.0",
     "@types/babel__standalone": "^7",
-    "@types/react": "^18.3.12",
-    "typescript": "~5.7.0"
+    "@types/react": "^19.1.4",
+    "typescript": "~5.8.3"
   },
   "browserslist": {
     "production": [
