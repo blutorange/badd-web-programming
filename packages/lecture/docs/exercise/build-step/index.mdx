@@ -159,8 +159,8 @@ Führen Sie nun auch die Datei `dist/index.js` aus! Was macht das Script?
 import * as esbuild from "esbuild";
 
 const buildResult = await esbuild.build({
-    entryPoints: ["src/index.js"],
-    outdir: "dist",
+    entryPoints: ["src/js/index.js"],
+    outdir: "dist/js",
     bundle: true,
     target: "es2020",
     minify: true,
@@ -173,7 +173,7 @@ console.log(`Build finished with ${buildResult.errors.length} errors, ${buildRes
 </details>
 
 <details>
-  <summary>Datei src/index.js</summary>
+  <summary>Datei src/js/index.js</summary>
 ```js
 import { factorial } from "./factorial.js";
 
@@ -184,7 +184,7 @@ for (let i = 0n; i <= 20n; i++) {
 </details>
 
 <details>
-  <summary>Datei src/factorial.js</summary>
+  <summary>Datei src/js/factorial.js</summary>
 ```js
 export function factorial(x) {
   return x > 1n ? x * factorial(x - 1n) : 1n;
@@ -194,8 +194,8 @@ export function factorial(x) {
 
 ## Aufgabe 5 - Script in HTML-Seite einbinden
 
-Erstellen Sie unter `dist/index.html` eine einfache HTML-Seite und
-binden Sie dort das Script aus `dist/index.js` ein! Öffnen sie die HTML-Seite
+Erstellen Sie unter `dist/html/index.html` eine einfache HTML-Seite und
+binden Sie dort das Script aus `dist/src/index.js` ein! Öffnen sie die HTML-Seite
 im Browser und bestätigen Sie, dass das Script korrekt funktioniert!
 
 ## Aufgabe 5 - Lokaler Web-Server
@@ -212,7 +212,7 @@ Hinweis: Lesen Sie die verlinkte Dokumentation bei NPM!
 ## Aufgabe 6 - NPM-Script für Server
 
 Öffnen Sie die `package.json` und fügen sie hier ein Script ein, sodass Sie
-anschließend den HTTP-Server mittel `npm run start` starten können!
+anschließend den HTTP-Server mittels `npm run start` starten können!
 
 Hinweise:
  * Siehe die Doku von NPM bzgl. [scripts](https://docs.npmjs.com/cli/v11/using-npm/scripts)
@@ -230,7 +230,7 @@ Hinweis: Siehe Aufgabe 4.
 Ergänzen Sie zuerst das `build.js`-Script um einen Watch-Mode! Wenn in der
 Kommandozeile das `--watch` mit angegeben wird, soll der Watch-Mode von `esbuild`
 aktiviert werden. Fügen Sie nun noch ein Script `build-dev` ein, was das gleiche
-tut wie `build`, aber den Watch-Modus aktiviert.
+tut wie `build`, aber mit aktivierten Watch-Modus.
 
 Hinweise:
   * Bei einem [Watch-Mode] wird bei jeder Änderung eine Quellcode-Datei der Bundler
@@ -243,11 +243,51 @@ Hinweise:
 
 ## Aufgabe 8 - Copy-Script für HTML
 
-WIP
+Verschieben Sie die Datei `dist/html/index.html` nach `src/html/index.html` und
+ergänzen Sie das Script `build.js` um zusätzliche Logik, welche alle HTML-Dateien
+von `src/html` nach `dist/html` kopiert!
+
+Hinweis: Dateizugriff geschieht in Node.js mittels den Modules
+[node:fs/promises](https://nodejs.org/dist/latest-v10.x/docs/api/fs.html#fs_fs_promises_api)
+und [node:path](https://nodejs.org/dist/latest-v10.x/docs/api/path.html).
 
 ## Aufgabe 9 - Bundling für CSS 
 
-WIP
+Erstellen Sie folgende CSS-Dateien im src-Ordner. Binden Sie die `src/css/index.css`
+in der `src/html/index.html` ein.
+
+Ergänzen Sie nun das Script `build.js` so, dass analog zum JavaScript eine
+minifizierte Datei `dist/css/index.css` erstellt wird!
+
+<details>
+<summary>Datei src/css/index.css</summary>
+```css
+@import url("./variables.css");
+@import url("./base.css");
+```
+</details>
+
+<details>
+<summary>Datei src/css/variables.css</summary>
+```css
+:root {
+  --font-size: 20px;
+  --theme-color: blue;
+}
+```
+</details>
+
+<details>
+<summary>Datei src/css/base.css</summary>
+```css
+html {
+  font-size: var(--font-size);
+  color: var(--theme-color);
+}
+```
+</details>
+
+Hinweis: Sie können mehrere Entry-Points definieren.
 
 ## Aufgabe 10 - Leaflet
 
@@ -269,8 +309,48 @@ von leaflet.js.
 
 ## Aufgabe 11 - Formatierer
 
-WIP
+Installieren Sie die externe Bibliothek `biome` ([Homepage](https://biomejs.dev/), [NPM](https://www.npmjs.com/package/@biomejs/biome))!
+Nutzen Sie diese anschließend für ein NPM-Script `format`, welche den JavaScript-
+und CSS-Code automatisch formatiert!
+
+Hinweis: Siehe [Getting started](https://biomejs.dev/guides/getting-started/)
 
 ## Aufgabe 12 - Linter
 
-WIP
+Verwenden Sie die in Aufgabe 11 installierte Bibliothek `biome` für ein weiteres
+NPM-Script `lint`, welches den Code auf potentielle Probleme durchsucht und
+diese anzeigt.
+
+Hinweis: Siehe ebenfalls [Getting started](https://biomejs.dev/guides/getting-started/)
+
+## Aufgabe 13 - Dynamisches Nachladen von Inhalt
+
+Legen Sie im Ordner `src/html` einige Unterseiten an, z.B. mit den Namen `page1.html`,
+`page2.html` uws. Diese Unterseiten sollen keine vollständigen HTML-Seiten sein,
+sondern nur den Inhalt enthalten, der in der `<main>`-Sektion der `src/main/index.html`
+geladen wird.
+
+Fügen Sie nun in der `src/index.html` Links in der Navigationsleiste auf diese
+Unterseiten ein. Schreiben Sie anschließend JavaScript, welches beim Klick auf
+diese Links den Inhalt der entsprechenden Seite per HTTP-Request (AJAX) lädt
+und die `<main>`-Sektion der Seite aktualisiert!
+
+## Aufgabe 14 - TypeScript (optional)
+
+Falls Sie TypeScript ausprobieren möchten, fügen Sie
+[TypeScript](https://www.typescriptlang.org/) zu Ihrem Projekt hinzu!
+
+Hinweise:
+
+* Installieren der externen Bibliothek [typescript](https://npmjs.com/package/typescript).
+* Erstellen der [tsconfig.json](https://www.typescriptlang.org/tsconfig/) im Root-Verzeichnis.
+  Siehe auch [What is a tsconfig.json](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html).
+  Speziell [include](https://www.typescriptlang.org/tsconfig/#include) sollte
+  auf den `src`-Ordner gesetzt werden. Da wir esbuild zum Bauen nutzen, kann
+  noch das Flag [emitDeclarationOnly](https://www.typescriptlang.org/tsconfig/#emitDeclarationOnly)
+  aktiviert werden.
+* Umbenennen der `*.js`-Dateien in `*.ts`.
+* esbuild kann problemlos mit TypeScript umgehen, hier sollte keine Anpassungen
+  erforderlich sein. Nur der EntryPoint muss auf `src/index.ts` geändert werden.
+* Erstellen eines NPM-Script `verify`, welches TypeScript ausführt und die Typen
+  prüft.
