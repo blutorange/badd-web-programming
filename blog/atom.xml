@@ -16,7 +16,9 @@
         <content type="html"><![CDATA[<p>Update der Seite vom 14. Mai 2025</p>
 <ul>
 <li>Übungsaufgaben zum Build-Step ergänzt. Zudem findet sich im git eine Beispielslösung.</li>
-</ul>]]></content>
+<li>Übungsaufgaben zu UI-Frameworks ergänzt.</li>
+</ul>
+<p>Zudem auch react auf Version 19 aktualisiert. Wird nun von Docusaurus unterstützt.</p>]]></content>
         <author>
             <name>Andre Wachsmuth</name>
             <uri>https://github.com/blutorange</uri>
