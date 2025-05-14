@@ -4,10 +4,22 @@
         <title>Webprogrammierung Blog</title>
         <link>https://blutorange.github.io/badd-web-programming/blog/</link>
         <description>Webprogrammierung Blog</description>
-        <lastBuildDate>Sun, 27 Apr 2025 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Wed, 14 May 2025 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>de</language>
+        <item>
+            <title><![CDATA[Update 14. Mai 2025]]></title>
+            <link>https://blutorange.github.io/badd-web-programming/blog/update-2025-05-14/</link>
+            <guid>https://blutorange.github.io/badd-web-programming/blog/update-2025-05-14/</guid>
+            <pubDate>Wed, 14 May 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[Update der Seite vom 14. Mai 2025]]></description>
+            <content:encoded><![CDATA[<p>Update der Seite vom 14. Mai 2025</p>
+<ul>
+<li>Übungsaufgaben zum Build-Step ergänzt. Zudem findet sich im git eine Beispielslösung.</li>
+</ul>]]></content:encoded>
+            <category>Update</category>
+        </item>
         <item>
             <title><![CDATA[Update 27. April 2025]]></title>
             <link>https://blutorange.github.io/badd-web-programming/blog/update-2025-04-27/</link>

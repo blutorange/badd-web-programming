@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[8055],{1210:e=>{e.exports=JSON.parse('{"metadata":{"permalink":"/badd-web-programming/blog","page":1,"postsPerPage":10,"totalPages":1,"totalCount":4,"blogDescription":"Blog","blogTitle":"Blog"}}')}}]);
