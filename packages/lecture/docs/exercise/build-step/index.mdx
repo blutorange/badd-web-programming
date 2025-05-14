@@ -41,20 +41,20 @@ Hinweise:
 
 ## Aufgabe 2 - Script mit Node.js ausführen
 
-Legen Sie folgende Dateien an und führen Sie anschließend die Datei `compare.js`
+Legen Sie folgende Dateien an und führen Sie anschließend die Datei `bin/compare.js`
 mittels Node.js aus! Was macht das Script?
 
 <details>
-  <summary>Datei compare.js</summary>
+  <summary>Datei bin/compare.js</summary>
 
 ```js
 const fs = require("node:fs/promises");
-const { setDiff, setIntersect } = require("./set-utils.js");
+const { setDiff, setIntersect } = require("../src/js/set-utils.js");
 
 async function main() {
   if (process.argv.length !== 4) {
     console.log(`Usage: ${process.argv[0]} ${process.argv[1]} <source> <target>`);
-    console.log(`  Compares the contents of the files in the source and target folder`);
+    console.log("  Compares the contents of the files in the source and target folder");
     return;
   }
 
@@ -101,7 +101,7 @@ main().catch(e => {
 </details>
 
 <details>
-  <summary>Datei set-utils.js</summary>
+  <summary>Datei src/js/set-utils.js</summary>
 ```js
 /**
  * Computes the set difference a \ b.
@@ -150,17 +150,17 @@ Hinweis: ESM verwendet `import`-Statements statt `require` und `export`-Statemen
 ## Aufgabe 4 - Externe Bibliothek einbinden
 
 Installieren Sie die externe Bibliothek esbuild ([Homepage](https://esbuild.github.io/), [NPM](https://www.npmjs.com/package/esbuild))!
-Legen Sie anschließend folgende Dateien an und führen Sie die Datei `build.js` aus!
+Legen Sie anschließend folgende Dateien an und führen Sie die Datei `scripts/build.js` aus!
 Führen Sie nun auch die Datei `dist/index.js` aus! Was macht das Script?
 
 <details>
-  <summary>Datei build.js</summary>
+  <summary>Datei scripts/build.js</summary>
 ```js
 import * as esbuild from "esbuild";
 
 const buildResult = await esbuild.build({
     entryPoints: ["src/js/index.js"],
-    outdir: "dist/js",
+    outdir: "dist",
     bundle: true,
     target: "es2020",
     minify: true,
@@ -195,7 +195,7 @@ export function factorial(x) {
 ## Aufgabe 5 - Script in HTML-Seite einbinden
 
 Erstellen Sie unter `dist/html/index.html` eine einfache HTML-Seite und
-binden Sie dort das Script aus `dist/src/index.js` ein! Öffnen sie die HTML-Seite
+binden Sie dort das Script aus `dist/index.js` ein! Öffnen sie die HTML-Seite
 im Browser und bestätigen Sie, dass das Script korrekt funktioniert!
 
 ## Aufgabe 5 - Lokaler Web-Server
@@ -207,7 +207,11 @@ Installieren Sie hierzu die externe Bibliothek [http-server](https://www.npmjs.c
 Starten Sie den Server im `dist`-Ordner und rufen Sie die Webseite im Browser
 via HTTP auf!
 
-Hinweis: Lesen Sie die verlinkte Dokumentation bei NPM!
+Hinweis 1: Lesen Sie die verlinkte Dokumentation bei NPM!
+
+Hinweis 2: Der `http-server` hat auch eine Option zum Deaktivieren des Browser-Cache.
+Dies kann bei der Entwicklung sehr hilfreich sein. Wenn Sie diese aktivieren,
+wie funktioniert diese? Schauen Sie sich im Netzwerk-Tab die HTTP-Requests an!
 
 ## Aufgabe 6 - NPM-Script für Server
 
@@ -227,7 +231,7 @@ Hinweis: Siehe Aufgabe 4.
 
 ## Aufgabe 7 - Watch Mode
 
-Ergänzen Sie zuerst das `build.js`-Script um einen Watch-Mode! Wenn in der
+Ergänzen Sie zuerst das `scripts/build.js`-Script um einen Watch-Mode! Wenn in der
 Kommandozeile das `--watch` mit angegeben wird, soll der Watch-Mode von `esbuild`
 aktiviert werden. Fügen Sie nun noch ein Script `build-dev` ein, was das gleiche
 tut wie `build`, aber mit aktivierten Watch-Modus.
@@ -244,19 +248,23 @@ Hinweise:
 ## Aufgabe 8 - Copy-Script für HTML
 
 Verschieben Sie die Datei `dist/html/index.html` nach `src/html/index.html` und
-ergänzen Sie das Script `build.js` um zusätzliche Logik, welche alle HTML-Dateien
+ergänzen Sie das Script `scripts/build.js` um zusätzliche Logik, welche alle HTML-Dateien
 von `src/html` nach `dist/html` kopiert!
 
 Hinweis: Dateizugriff geschieht in Node.js mittels den Modules
 [node:fs/promises](https://nodejs.org/dist/latest-v10.x/docs/api/fs.html#fs_fs_promises_api)
 und [node:path](https://nodejs.org/dist/latest-v10.x/docs/api/path.html).
 
+Alternativ können Sie auch `esbuild` zum Kopieren verwenden, indem Sie die HTML-Seiten
+zu den Entry-Points hinzufügen und als [loader](https://esbuild.github.io/api/#loader)
+für `.html` den [copy](https://esbuild.github.io/content-types/#copy)-Loader setzen.
+
 ## Aufgabe 9 - Bundling für CSS 
 
 Erstellen Sie folgende CSS-Dateien im src-Ordner. Binden Sie die `src/css/index.css`
 in der `src/html/index.html` ein.
 
-Ergänzen Sie nun das Script `build.js` so, dass analog zum JavaScript eine
+Ergänzen Sie nun das Script `scripts/build.js` so, dass analog zum JavaScript eine
 minifizierte Datei `dist/css/index.css` erstellt wird!
 
 <details>
@@ -335,7 +343,12 @@ Unterseiten ein. Schreiben Sie anschließend JavaScript, welches beim Klick auf
 diese Links den Inhalt der entsprechenden Seite per HTTP-Request (AJAX) lädt
 und die `<main>`-Sektion der Seite aktualisiert!
 
-## Aufgabe 14 - TypeScript (optional)
+## Aufgabe 14 - Clean des dist-Ordners
+
+Ergänzen Sie das Script `scripts/build.js` um einen zusätzlichen Schritt, sodass
+vor dem eigentlichen Build der komplette `dist`-Ordner gelöscht wird!
+
+## Aufgabe 15 - TypeScript (optional)
 
 Falls Sie TypeScript ausprobieren möchten, fügen Sie
 [TypeScript](https://www.typescriptlang.org/) zu Ihrem Projekt hinzu!

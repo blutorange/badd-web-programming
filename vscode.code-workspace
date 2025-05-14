@@ -10,11 +10,15 @@
 			"name": "lecture",
 			"path": "./packages/lecture/"
 		},
-		// Demo REST API
 		{
-			// Lecture notes
+			// Demo REST API
 			"name": "rest-api",
 			"path": "./packages/rest-api/"
+		},
+		{
+			// Demo Build step
+			"name": "build-step",
+			"path": "./packages/build-step/"
 		}
 	],
   "extensions": {

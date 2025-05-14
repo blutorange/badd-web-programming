@@ -1,0 +1,6 @@
+@import url("leaflet/dist/leaflet.css");
+
+#leaflet-map {
+	width: 80%;
+	height: 600px;
+}

@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "name": "build-step",
+  "description": "Reference solution for the build step exercises",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "http-server -c-1 dist",
+    "build": "node scripts/build.js",
+    "build-dev": "node scripts/build.js --watch",
+    "format": "biome format --write src/**",
+    "lint": "biome lint src/**"
+  },
+  "dependencies": {
+    "http-server": "^14.1.1",
+    "leaflet": "^1.9.4"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "esbuild": "^0.25.4"
+  },
+  "engines": {
+    "node": ">=18.0"
+  }
+}

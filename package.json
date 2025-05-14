@@ -2,7 +2,8 @@
   "packageManager": "yarn@4.7.0",
   "workspaces": [
     "packages/lecture",
-    "packages/rest-api"
+    "packages/rest-api",
+    "packages/build-step"
   ],
   "devDependencies": {
     "typescript": "~5.7.0"
