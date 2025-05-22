@@ -13,7 +13,8 @@ Es soll eine Sūdoku-Spiel für den Browser erstellt werden.
 * Auswahl zwischen 5 verschiedenen Sūdoku-Rätseln. Zudem soll es dem Spieler
   auch möglich sein, ein eigenes Sūdoku-Rätsel einzugeben. Das Format hierfür
   kann beliebig festgelegt werden, z.B. JSON. Das Format muss __kurz__
-  beschrieben werden.
+  an der Oberfläche für den Nutzer beschrieben werden. Alternativ kann auch eine
+  UI für die Eingabe neuer Sudokus umgesetzt werden.
 * Die 5 Sūdoku-Rätsel können fest hinterlegt werden, es ist keine automatische Generierung erforderlich.
 * Nach Auswahl oder Eingabe eines eigenen Rätsels beginnt das Rätsel. Aufgabe
   des Spielers ist es, in jedes freie Feld die korrekte Zahl einzutragen.
@@ -38,3 +39,6 @@ wie das Sūdoku im JavaScript dargestellt und gespeichert wird.
 Das Programm muss keine Sūdoku lösen können &mdash; das Überprüfen, ob eine
 bestimmte Belegung der Felder gültig ist oder nicht, lässt sich wesentlich einfacher
 programmieren.
+
+Optional kann als Erweiterung auch localStorage oder IndexedDB verwendet werden,
+um Daten zu speichern (z.B. High-Score, Lösungen, selber eingegebene Sūdoku).
