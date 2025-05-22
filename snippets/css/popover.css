@@ -3,7 +3,8 @@
 }
 
 [popover]:popover-open {
-  top: anchor(bottom);
+  top: auto;
+  bottom: anchor(top);
   left: calc(anchor(left) + 20px);
   background: #333;
   color: white;

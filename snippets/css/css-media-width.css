@@ -1,0 +1,20 @@
+@media (max-width: 419px) {
+  * {
+      color: red;
+  }
+}
+@media (min-width: 420px) and (max-width: 579px) {
+  * {
+      color: green;
+  }
+}
+@media (min-width: 580px) and (max-width: 799px) {
+  * {
+      color: blue;
+  }
+}
+@media (min-width: 800px) {
+  * {
+      color: black;
+  }
+}
