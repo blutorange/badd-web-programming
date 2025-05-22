@@ -5,6 +5,7 @@ sidebar_position: 4
 description: Verschiedene häufig verwendete @rules
 ---
 
+import Link from "@docusaurus/Link";
 import HtmlSnippet from "@site/src/components/HtmlSnippet";
 
 # Abschnitt 4 - At-Rules
@@ -105,7 +106,7 @@ Weiterhin können wir auch für verschiedene Größen verschiedenes CSS anwenden
 @media (max-width: 319px) {
   /* Styling für Geräte mit kleinem Bildschirm */
 }
-@media (min-width: 320px) and (max-width: 419px) {
+@media (min-width: 320px) and (max-width: 479px) {
   /* Styling für Geräte mit mittleren Bildschirm */
 }
 @media (min-width: 480px) and (max-width: 719px) {
@@ -115,6 +116,10 @@ Weiterhin können wir auch für verschiedene Größen verschiedenes CSS anwenden
   /* Styling für Geräte mit sehr großen Bildschirm */
 }
 ```
+
+<p>
+  <Link to="/sandbox?snippet=css-media-width&tab=css" target="_blank" rel="noopener noreferrer">Sandbox-Beispiel für Media-Query mit Größen.</Link>
+</p>
 
 Wie im Beispiel oben zu sehen, wird das oft verwendet, um Webseiten responsive
 zu gestalten, sodass diese auf allen Geräten bedienbar sind.
