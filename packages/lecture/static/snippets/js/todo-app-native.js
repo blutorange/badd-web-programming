@@ -53,7 +53,7 @@ todoList.addEventListener("pointerdown", (e) => {
 });
 
 // Alle TODOs erledigt oder unerledigt markieren bei Toggle-Button
-toggleAll.addEventListener("pointerdown", () => {
+toggleAll.addEventListener("change", () => {
   const someCompleted = [...todoList.querySelectorAll(".toggle")].some(
     (item) => item.checked,
   );
@@ -137,6 +137,7 @@ function createNewTodo(content, completed) {
     .querySelector(".todo-list-item");
   newTodo.querySelector(".todo-list-item-content").textContent = content;
   newTodo.querySelector(".toggle").checked = completed;
+  newTodo.classList.toggle("completed", completed);
   todoList.append(newTodo);
 }
 
