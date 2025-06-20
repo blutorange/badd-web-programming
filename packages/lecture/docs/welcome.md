@@ -10,9 +10,13 @@ description: Willkommen in der Webprogrammierung
 Willkommen bei der Webprogrammierung. Wir werden zusammen die Grundlagen
 des Webs kennen lernen.
 
-Die Vorlesung ist fertig, die Übungen größtenteils auch.
+Diese Seite besteht aus 3 wesentlichen Teilen:
 
-Informationen zur Prüfungsaufgabe folgen noch :/
+* Ein Tutorial mit Erklärungen zu den Grundlagen von HTML, CSS und JavaScript.
+  Hier werden auch viele Beispiele in der Sandbox verlinkt, an denen jeder
+  selber interaktiv üben kann.
+* Anregungen zum selbständigen Lernen anhand von Vorschlägen für Übungsaufgaben.
+* Beschreibung der Prüfungsaufgaben für die Benotung des Moduls.
 
 Das moderne Web ist überall. Auf fast allen Endgeräten ist ein Webbrowser
 installiert. Ich habe hierzu vor einiger zeit einen Spruch gehört, an den ich
