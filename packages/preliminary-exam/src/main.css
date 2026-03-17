@@ -1,0 +1,23 @@
+.txtJsOutput iframe {
+  width: 100%;
+  border: 1px solid #ccc;
+  height: 200px;
+}
+
+.code-fieldset > div > .XFieldSet {
+  padding: 0;
+}
+
+.XItem>DIV.xm-item-div.output-error {
+  padding-top: 0;
+
+  pre {
+    margin: 0;
+    color: rgb(171, 32, 32);
+    white-space: break-spaces;
+  }
+}
+
+.hidden {
+  display: none !important;
+}

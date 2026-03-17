@@ -1,19 +1,24 @@
 {
   "private": true,
-  "name": "build-step",
-  "description": "Reference solution for the build step exercises",
+  "name": "preliminary-exam",
+  "description": "Client code for the preliminary exam",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
     "start": "http-server -c-1 dist",
     "build": "node scripts/build.ts",
-    "build-dev": "node scripts/build.js --watch",
+    "build-dev": "node scripts/build.ts --watch",
     "format": "biome format --write src/**",
     "lint": "biome lint src/**"
   },
   "dependencies": {
+    "@codemirror/lang-css": "^6.3.1",
+    "@codemirror/lang-javascript": "^6.2.5",
+    "@codemirror/view": "^6.40.0",
+    "codemirror": "^6.0.2",
     "http-server": "^14.1.1",
-    "leaflet": "^1.9.4"
+    "leaflet": "^1.9.4",
+    "the-new-css-reset": "^1.11.3"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",

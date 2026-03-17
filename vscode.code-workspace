@@ -19,6 +19,11 @@
 			// Demo Build step
 			"name": "build-step",
 			"path": "./packages/build-step/"
+		},
+		{
+			// Demo Build step
+			"name": "preliminary-exam",
+			"path": "./packages/preliminary-exam/"
 		}
 	],
   "extensions": {

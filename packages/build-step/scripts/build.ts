@@ -1,6 +1,4 @@
-// @ts-check
-
-/** @import { BuildOptions } from "esbuild"; */
+import type { BuildOptions } from "esbuild";
 
 import * as esbuild from "esbuild";
 import fs from "node:fs/promises";
@@ -73,8 +71,7 @@ async function runCopyHtml() {
  * Builds JavaScript and CSS files via esbuild.
  */
 async function runEsbuild() {
-	/** @type {BuildOptions} */
-	const options = {
+	const options: BuildOptions = {
 		bundle: true,
 		target: "es2020",
 		minify: true,
@@ -89,7 +86,7 @@ async function runEsbuild() {
 
 	const entryPoints = await findEntryPoints();
 
-	const config = {
+	const config: BuildOptions = {
 		...options,
 		entryPoints,
 		outdir: "dist",
