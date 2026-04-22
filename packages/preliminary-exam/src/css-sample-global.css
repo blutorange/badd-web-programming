@@ -1,0 +1,16 @@
+.cc-basic-icon::before {
+  display: inline-block;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-style: normal;
+
+  font-variant: normal;
+  font-weight: normal;
+
+  line-height: 1em;
+
+  speak: never;
+  text-decoration: inherit;
+  text-transform: none;
+}

@@ -1,7 +1,13 @@
+@font-face {
+  font-family: "cc-basic-icons";
+  src: url('<CONTEXT>/form/includes/ressource?pid=<PID>&name=cc-basic-icons.woff') format('woff');
+}
+
 .txtJsOutput iframe {
   width: 100%;
   border: 1px solid #ccc;
   height: 200px;
+  overflow-y: hidden;
 }
 
 .code-fieldset > div > .XFieldSet {
@@ -11,11 +17,57 @@
 .XItem>DIV.xm-item-div.output-error {
   padding-top: 0;
 
-  pre {
+  * {
+    font-family: monospace;
+  }
+
+  ul {
     margin: 0;
     color: rgb(171, 32, 32);
     white-space: break-spaces;
+    list-style: none;
+    padding-left: 0;
   }
+}
+
+.XItem>DIV.xm-item-div.output-console {
+  padding-top: 0;
+
+  * {
+    font-family: monospace;
+  }
+
+  ul {
+    margin: 0;
+    white-space: break-spaces;
+    list-style: none;
+    padding-left: 0;
+  }
+
+  li.console-log {
+    color: #333;
+  }
+
+  li.console-error {
+    color: rgb(171, 32, 32);
+  }
+
+  li.console-warn {
+    color: rgb(171, 100, 32);
+  }
+
+  li.console-info {
+    color: rgb(32, 32, 171);
+  }
+
+  li.console-debug, li.console-trace {
+    color: rgb(168, 168, 168);
+  }
+}
+
+.xm-form.modern .txtHtmlJs pre, .xm-form.modern .txtHtmlCss pre {
+  font-family: monospace;
+  white-space: pre-wrap;
 }
 
 .hidden {
