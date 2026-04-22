@@ -1,11 +1,14 @@
 {
-  "packageManager": "yarn@4.7.0",
+  "packageManager": "yarn@4.14.1",
   "workspaces": [
     "packages/lecture",
     "packages/rest-api",
     "packages/preliminary-exam"
   ],
+  "resolutions": {
+    "webpackbar": "^7.0.0"
+  },
   "devDependencies": {
-    "typescript": "~5.7.0"
+    "typescript": "~5.7.3"
   }
 }
