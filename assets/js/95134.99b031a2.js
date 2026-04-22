@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[95134],{95134(e,l,a){a.d(l,{default:()=>n});const n="<h2>Einkaufsliste</h2>\n<ul>\n  <li>Bananen\n  <li>K\xe4se\n  <li>Waln\xfcsse\n</ul>"}}]);

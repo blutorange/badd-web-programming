@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[53819,76200],{76200(s,e,a){a.d(e,{default:()=>n});const n="const numbers = [1, 2, 3, 4, 5];\n\nconst squares = numbers.map(x => x * x);\n\nconsole.log(squares);"}}]);

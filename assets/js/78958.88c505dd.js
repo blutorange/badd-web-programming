@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[78958],{56577(a,e,l){l.d(e,{default:()=>o});const o="video {\n  max-width: 90%;\n}\n\nvideo, audio {\n  display: block flow-root;\n}"}}]);

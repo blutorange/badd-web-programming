@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[53837,76218],{53837(e,t,a){a.d(t,{default:()=>n});const n="const nowTimestamp = Date.now();\nconst nowFormatted = new Date().toLocaleString();\n[nowTimestamp, nowFormatted];\n"}}]);

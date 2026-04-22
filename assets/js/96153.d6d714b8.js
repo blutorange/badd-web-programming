@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[96153],{96153(e,t,a){a.d(t,{default:()=>n});const n='<form>\n  <p>\n    <input id="tos" name="terms-of-service" type="checkbox" required value="accept">\n    <label for="tos">Ich akzeptiere die AGBs.</label>\n  </p>\n  <button type="submit">Absenden</button>\n</form>'}}]);

@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[47805],{47805(e,a,l){l.d(a,{default:()=>i});const i='<form>\n  <label for="work-email">Arbeits-E-Mail</label>\n  <input id="work-email" type="email" required>\n</form>'}}]);

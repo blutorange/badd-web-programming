@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[16991],{16991(e,t,n){n.d(t,{default:()=>u});const u='<button id="generate" type="button">\xdcbereinander gelagerte Boxen erzeugen...</button>\n<button id="shuffle" type="button">z-index ver\xe4ndern...</button>\n'}}]);

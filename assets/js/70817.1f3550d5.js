@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[70817],{70817(l,e,a){a.d(e,{default:()=>p});const p="<p>Hallo Welt!</p>\n<p>Hallo  Welt!</p>\n<p>Hallo    Welt!</p>\n<p>\n  Hallo\n  \n  Welt!\n</p>\n"}}]);

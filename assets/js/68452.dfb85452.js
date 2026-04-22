@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[68452],{68452(e,s,t){t.d(s,{default:()=>a});const a='<h1>\xdcberschrift</h1>\n\n<span style="font-weight: bold; font-size: 32px;">\xdcberschrift</span>\n'}}]);

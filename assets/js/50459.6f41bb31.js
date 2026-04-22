@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[50459,72840],{72840(e,a,c){c.d(a,{default:()=>l});const l='function add(x, y) {\n  console.log(x + " plus " + y + " ergibt " + (x+y));\n}\n\nadd(39, 3);'}}]);

@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[33657,56038],{56038(e,a,s){s.d(a,{default:()=>c});const c='/^[0-9]+$/.test("345")'}}]);

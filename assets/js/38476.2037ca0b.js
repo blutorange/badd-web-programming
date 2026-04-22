@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[38476],{38476(e,t,c){c.d(t,{default:()=>i});const i="picture, img {\n  display: inline flow-root;\n  width: 100%;\n  height: 100%;\n  object-fit: cover;\n}"}}]);

@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[15645,38026],{15645(e,n,t){t.d(n,{default:()=>l});const l='function writeFile(name, content) {\n  throw new Error("No file system available!");\n}\n\ntry {\n  writeFile("out.txt", "Hello world");\n} catch (e) {\n  console.error("Unable to write file", e);\n}\n'}}]);

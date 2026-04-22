@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[32583],{32583(a,e,n){n.d(e,{default:()=>o});const o="<body>\n  <header>Header</header>\n  <nav>Navigation</nav>\n  <main>Main area</main>\n  <footer>Footer</footer>\n</body>"}}]);

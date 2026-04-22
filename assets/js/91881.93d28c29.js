@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[14262,91881],{91881(e,t,n){n.d(t,{default:()=>a});const a='document.querySelector("img").addEventListener("click", (event) => {\n  if (event.target instanceof Element) {\n    event.target.requestFullscreen({ navigationUI: "show" });\n  }\n});\n'}}]);

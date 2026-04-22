@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[97088],{97088(e,l,a){a.d(l,{default:()=>n});const n="hello-world::part(exclamation) {\n  color: rgb(34, 84, 199);\n  font-size: 3em;\n  font-weight: bold;\n}\n"}}]);

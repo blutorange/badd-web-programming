@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[75156],{75156(e,a,c){c.d(a,{default:()=>l});const l="fieldset {\n  color: darkred;\n}"}}]);

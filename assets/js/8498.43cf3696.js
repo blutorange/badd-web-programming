@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[8498,86117],{86117(e,n,t){t.d(n,{default:()=>a});const a="/**\n * @template T\n * @param {T[]} list \n * @param {T} newItem \n * @returns {T[]} \n */\nfunction appendToList(list, newItem) {\n  return [...list, newItem];\n}\n\nappendToList([1, 2, 3], 4);"}}]);

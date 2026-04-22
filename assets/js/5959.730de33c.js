@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[5959],{5959(n,a,e){e.d(a,{default:()=>s});const s="button {\n  padding: 1em;\n  transition: padding 10s;\n  &:hover {\n    padding: 10em;\n  }\n}\n"}}]);

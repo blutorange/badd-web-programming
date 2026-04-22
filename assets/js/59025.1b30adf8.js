@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[59025],{59025(e,s,a){a.d(s,{default:()=>n});const n='<form>\n  <p>\n    <label for="newPass">Neues Passwort</label>\n    <input id="newPass" name="newPass" type="password" autocomplete="new-password" required>\n  </p>\n  <button type="submit">Absenden</button>\n</form>'}}]);

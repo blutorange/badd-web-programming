@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[68093,90474],{90474(e,t,s){s.d(t,{default:()=>a});const a="function startsWith(value, prefix) {\n  return value.substring(0, prefix.length) === prefix;\n}\n\nstartsWith();"}}]);

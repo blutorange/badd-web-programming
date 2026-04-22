@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[43786],{43786(s,e,c){c.d(e,{default:()=>n});const n='@import url("https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/styles/choices.min.css");\n\n.choices__inner {\n  min-height: auto;\n  box-sizing: border-box;\n}\n'}}]);

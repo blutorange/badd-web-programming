@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[20395,42776],{20395(e,a,l){l.d(a,{default:()=>i});const i='$("div").append(`<label for="email">E-Mail</label><input id="email" name="email" type="email">`);'}}]);

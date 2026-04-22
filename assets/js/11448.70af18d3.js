@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[11448,89067],{11448(e,o,l){l.d(o,{default:()=>s});const s='console.log("a")\nsetTimeout(() => console.log("b"), 0);\nPromise.resolve().then(() => console.log("c"));\nsetTimeout(() => console.log("d"), 0);\nconsole.log("e");\n'}}]);

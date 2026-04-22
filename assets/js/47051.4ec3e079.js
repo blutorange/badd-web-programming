@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[47051,69432],{69432(e,a,o){o.d(a,{default:()=>n});const n='for (const radio of document.getElementsByName("overflow")) {\n  radio.addEventListener("change", () => {\n    document.querySelector(".container").style.overflow = radio.value;\n  });\n}'}}]);

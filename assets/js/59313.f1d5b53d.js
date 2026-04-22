@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[59313],{59313(c,e,s){s.d(e,{default:()=>t});const t='<script src="https://code.jquery.com/jquery-3.7.1.js"><\/script>\n'}}]);

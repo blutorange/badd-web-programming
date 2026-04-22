@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[53391,75772],{75772(n,a,e){e.d(a,{default:()=>c});const c="main().then(x => x + 3);\n\nasync function main() {\n  return 1 + 2;\n}\n"}}]);

@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[37334],{37334(a,e,u){u.d(e,{default:()=>c});const c="input, output {\n  display: block;\n}"}}]);

@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[9630,87249],{9630(n,e,t){t.d(e,{default:()=>s});const s='"svelte";\n\n// file: Counter.js\nlet count = $state(0);\n\nfunction increment() {\n  count = count + 1;\n}\n\n// file: App.js\nimport Counter from "@sandbox/Counter.js"; '}}]);

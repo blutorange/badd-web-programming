@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[41274],{41274(n,c,o){o.d(c,{default:()=>a});const a=".fancy-button {\n  padding: 1em 3em;\n  background-color: black;\n  color: white;\n  transition: background-color 0.3s;\n  &:hover {\n    background-color: #633;\n  }\n}"}}]);

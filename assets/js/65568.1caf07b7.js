@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[65568],{65568(e,l,a){a.d(l,{default:()=>s});const s="<h1>Basic Custom Element</h1>\n\n<hello-world></hello-world>"}}]);

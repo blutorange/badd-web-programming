@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[972,94943],{972(e,t,a){a.d(t,{default:()=>c});const c='document.getElementById("open").addEventListener("click", () => {\n  document.getElementById("dialog").showModal();\n});'}}]);

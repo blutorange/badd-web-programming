@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[76785,99166],{99166(e,a,s){s.d(a,{default:()=>l});const l='const hand = ["Max C", "Ash Blossom", "Effect Veiler"];\nconst [max, ash, veiler] = hand;\nconsole.log(max, ash, veiler);\n'}}]);

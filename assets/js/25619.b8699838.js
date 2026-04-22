@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[25619],{25619(a,e,l){l.d(e,{default:()=>c});const c="p > label {\n  display: block;\n}\n"}}]);

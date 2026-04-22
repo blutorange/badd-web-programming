@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[5130],{5130(n,e,t){t.d(e,{default:()=>c});const c="\x3c!-- file: Counter.html--\x3e\n<button onclick={increment}>\n\tClicked {count}\n\t{count === 1 ? 'time' : 'times'}\n</button>\n\n\x3c!-- file: App.html--\x3e\n <div>\n\t<h1>Z\xe4hler</h1>\n  <Counter />\n </div>\n"}}]);

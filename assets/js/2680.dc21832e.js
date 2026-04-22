@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[2680,80299],{80299(a,e,c){c.d(e,{default:()=>s});const s='const items = [["foo"], ["bar"], ["baz"], ["qux"]]\n[1,2,3].forEach(i => console.log(i))\n'}}]);

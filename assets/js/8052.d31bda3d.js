@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[8052],{8052(e,n,l){l.d(n,{default:()=>i});const i="<fieldset>\n  <legend>Erbschaft</legend>\n  <div>\n    <p>Erbschaften sind rechtlich eine komplizierte Angelegenheit.</p>\n  </div>\n</fieldset>"}}]);

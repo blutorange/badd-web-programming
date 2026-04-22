@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[51291],{51291(e,n,t){t.d(n,{default:()=>a});const a="#input {\n  width: 100%;\n  field-sizing: content;\n}"}}]);

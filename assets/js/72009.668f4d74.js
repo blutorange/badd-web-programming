@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[72009,94390],{94390(e,t,n){n.d(t,{default:()=>a});const a='document.getElementById("animate").addEventListener("click", () => {\n  document.getElementById("book").getAnimations()[0].play();\n});\n'}}]);

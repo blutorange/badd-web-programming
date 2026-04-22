@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[43755,66136],{43755(c,e,a){a.d(e,{default:()=>s});const s='const object = { "a.b.c": "d" };\nobject["a.b.c"];\n'}}]);

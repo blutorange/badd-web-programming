@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[45825,68206],{68206(e,t,n){n.d(t,{default:()=>a});const a='document.getElementById("width").addEventListener("input", (e) => {\n  const percentage = e.target.value;\n  document.querySelector(".container").style.width = `${percentage}%`;\n});\n'}}]);

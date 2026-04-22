@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[33673],{33673(l,s,e){e.d(s,{default:()=>a});const a='<ul id="list" class="list">\n  <li>Asterix\n  <li>Obelix\n</ul>'}}]);

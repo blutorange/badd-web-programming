@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[95722],{95722(e,a,c){c.d(a,{default:()=>s});const s="output {\n  white-space: pre;\n  font-family: monospace;\n}"}}]);

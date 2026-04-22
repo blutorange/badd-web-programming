@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[24963,47344],{24963(e,l,a){a.d(l,{default:()=>n});const n='const value = Math.random();\nif (value > 0.5) {\n  console.log("Coin flip: Heads");\n} else {\n  console.log("Coin flip: Tails");\n}'}}]);

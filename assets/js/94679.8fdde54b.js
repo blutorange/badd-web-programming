@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[94679],{94679(c,e,s){s.d(e,{default:()=>h});const h='<script src="https://code.jquery.com/jquery-3.7.1.js"><\/script>\n<h1>H1</h1>\n<h2>H2</h2>\n<h2>H3</h2>\n'}}]);

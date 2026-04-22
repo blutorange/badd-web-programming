@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[68232],{68232(e,n,l){l.d(n,{default:()=>a});const a='/* <p id="blue-sky" class="green-tea" >*/\n\n#blue-sky {\n  color: blue;\n}\n\n.green-tea {\n  color: green;\n}\n\np {\n  color: red;\n}\n'}}]);

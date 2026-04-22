@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[60746],{60746(e,a,n){n.d(a,{default:()=>s});const s="input {\n  width: 100%;\n  padding: 0.5em;\n  font-size: 20px;\n}"}}]);

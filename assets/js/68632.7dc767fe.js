@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[46251,68632],{46251(e,n,c){c.d(n,{default:()=>l});const l='const a = undefined;\nconst b = null;\nconst c = () => "success";\n\nconsole.log(a?.() ?? "failure");\nconsole.log(b?.() ?? "failure");\nconsole.log(c?.() ?? "failure");\n'}}]);

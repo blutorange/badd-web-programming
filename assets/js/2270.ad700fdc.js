@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[2270,79889],{2270(e,l,s){s.d(l,{default:()=>c});const c="if (4 ** 5 > 5 ** 4) {\n  console.log(`4**5 = ${4 ** 5} > 5**4 = ${5 ** 4}`);\n} else {\n  console.log(`4**5 = ${4 ** 5} < 5**4 = ${5 ** 4}`);\n}\n"}}]);

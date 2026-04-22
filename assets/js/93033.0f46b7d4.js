@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[93033],{93033(e,t,a){a.d(t,{default:()=>u});const u='<button type=""button>Fahre \xfcber mich dr\xfcber f\xfcr eine Animation</button>'}}]);

@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkpackages_lecture=self.webpackChunkpackages_lecture||[]).push([[7277],{7277:(e,n,t)=>{t.r(n),t.d(n,{default:()=>s});const s="function appendToList<T>(list: T[], newItem: T): T[] {\n  return [...list, newItem];\n}\n\nappendToList([1, 2, 3], 4);\n"}}]);

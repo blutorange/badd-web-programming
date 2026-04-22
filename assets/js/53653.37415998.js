@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpackages_lecture=globalThis.webpackChunkpackages_lecture||[]).push([[53653],{53653(e,a,n){n.d(a,{default:()=>t});const t='<form action="http://example.com">\n  <label for="name">Vor- und Nachname</label>\n  <input id="name" name="name" required>\n  <button type="submit">Absenden</button>\n</form>'}}]);
