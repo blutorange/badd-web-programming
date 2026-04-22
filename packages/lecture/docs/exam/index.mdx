@@ -54,11 +54,11 @@ In der `package.json` müssen mindestens folgende
 * `lint` - Prüft den Code mit einem Linter auf potentielle Probleme im Code.
 * `format` - Formatiert den Code mit einem geeigneten Code-Formatierer. 
 
-Mögliche Linter sind etwa [Biome](https://biomejs.dev/guides/getting-started/) oder [eslint](https://eslint.org/).
+Linter sind beispielsweise etwa [Biome](https://biomejs.dev/guides/getting-started/) oder [eslint](https://eslint.org/).
 
-Mögliche Code-Formatierer sind etwa [Biome](https://biomejs.dev/guides/getting-started/) oder [Prettier](https://prettier.io/).
+Code-Formatierer sind beispielsweise etwa [Biome](https://biomejs.dev/guides/getting-started/) oder [Prettier](https://prettier.io/).
 
-Mögliche Bundler um den Code mit Abhängigkeiten zu einer Datei zusammenzufügen sind etwa [esbuild](https://esbuild.github.io/),
+Bundler um den Code mit Abhängigkeiten zu einer Datei zusammenzufügen sind beispielsweise etwa [esbuild](https://esbuild.github.io/),
 [Webpack](https://webpack.js.org/) oder [rollup.js](https://rollupjs.org/).
 
 ### 2. Webseiten-Frame
@@ -67,15 +67,19 @@ Es ist eine einfache Webseite mit Header, Main-Bereich, Footer und Sidebar zu er
 
 ![Seitenlayout mit Header, Main-Content, Footer und Sidebar](/img/exam/page-frame.png)
 
+Alternativ kann auch ein "modernes" Seitenlayout mit einer ausklappbaren Sidebar (Menubar) erstellt werden.
+
+![Seitenlayout mit Header, Main-Content, Footer und Sidebar](/img/exam/page-frame-2.png)
+
 #### Seitenlayout
 
 * Es sollen die entsprechenden semantischen HTML-Elemente verwendet werden (`<header>`, `<nav>`, `<main>`, `<aside>`, `<footer>`)
-* Im Header ist eine Navigationsleiste unterzubringen. Hier sollen Links auf die
+* Im Header bzw. der Sodebar ist eine Navigationsleiste unterzubringen. Hier sollen Links auf die
   entsprechenden Unterseiten stehen.
 * Im Main-Bereich soll der Inhalt der entsprechenden Unterseite stehen. Falls der Inhalt
   sehr hoch ist, soll nur der Main-Bereich scrollen, Header, Footer, Sidebar
   sollen immer an der gleichen Stelle verweilen.
-* Der Inhalt der Sidebar kann mit beliebigen Inhalt gefüllt werden.
+* Der Inhalt der rechten Sidebar kann mit beliebigen Inhalt gefüllt werden.
 * Im Footer sollen Links auf Impressum und Datenschutz stehen.
 
 #### Unterseiten
