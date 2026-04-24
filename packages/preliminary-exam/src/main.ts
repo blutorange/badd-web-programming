@@ -33,6 +33,7 @@ async function main() {
 
   const dom = createDom();
 
+  loadFromLocalStorage(dom);
 
   const cssEditor = new EditorView({
     doc: defaultIfEmpty(dom.cssInput.value, "/* Your CSS code... */\n * { color: red; }"),
@@ -45,6 +46,7 @@ async function main() {
           const css = cssEditor.state.doc.toString();
           dom.cssInput.value = css;
           updateCssPreview(dom, css);
+          writeToLocalStorage(dom);
         }
       }),
     ],
@@ -61,16 +63,31 @@ async function main() {
           const css = jsEditor.state.doc.toString();
           dom.jsInput.value = css;
           updateJsPreview(dom, css);
+          writeToLocalStorage(dom);
         }
       }),
     ],
   });
 
+  // Prevent students from navigating away from the page when they accidentally click a link in the preview
+  dom.jsOutput.addEventListener("click", e => {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+  }, { capture: true });
+
+  dom.cssOutput.addEventListener("click", e => {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+  }, { capture: true });
+
   updateCssPreview(dom, cssEditor.state.doc.toString());
   updateJsPreview(dom, jsEditor.state.doc.toString());
 
-
   captureScreenshotWhenLeavingCssPage(dom);
+
+  dom.form.addEventListener("change", () => writeToLocalStorage(dom));
+  dom.form.addEventListener("input", () => writeToLocalStorage(dom));
+  dom.form.addEventListener("submit", () => clearLocalStorage());
 }
 
 function createDom(): Dom {
@@ -84,6 +101,8 @@ function createDom(): Dom {
   const jsOutputConsole = document.querySelector(".txtJsOutputConsole");
   const jsOutputError = document.querySelector(".txtJsOutputError");
 
+  const form = document.querySelector(".xm-form");
+
   assertInstanceOf(cssCode, HTMLElement);
   assertInstanceOf(cssOutput, HTMLElement);
   assertInstanceOf(cssInput, HTMLTextAreaElement);
@@ -94,6 +113,8 @@ function createDom(): Dom {
   assertInstanceOf(jsOutputError, HTMLElement);
   assertInstanceOf(jsInput, HTMLTextAreaElement);
 
+  assertInstanceOf(form, HTMLFormElement);
+
   cssOutput.innerHTML = "";
   const cssOutputRoot = cssOutput.attachShadow({ mode: "open" });
 
@@ -102,6 +123,7 @@ function createDom(): Dom {
     cssOutputRoot,
     cssInput,
     cssCode,
+    form,
     jsOutput,
     jsOutputConsole,
     jsOutputError,
@@ -262,6 +284,68 @@ function createConsoleInterceptingProxy(originalConsole: Console): ConsoleProxy 
   };
 }
 
+function writeToLocalStorage(dom: Dom) {
+  const data: Record<string, string> = {};
+  // Does not work for checkboxes or radio buttons correctly, but our form does have any
+  for (const element of dom.form.querySelectorAll("input")) {
+    const name = element.getAttribute("name");
+    const value = element.value;
+    if (name) {
+      data[name] = value;
+    }
+  }
+  for (const element of dom.form.querySelectorAll("textarea")) {
+    const name = element.getAttribute("name");
+    const value = element.value;
+    if (name) {
+      data[name] = value;
+    }
+  }
+  for (const element of dom.form.querySelectorAll("select")) {
+    const name = element.getAttribute("name");
+    const value = element.value;
+    if (name) {
+      data[name] = value;
+    }
+  }
+  localStorage.setItem("formData", JSON.stringify(data));
+}
+
+function loadFromLocalStorage(dom: Dom) {
+  const dataStr = localStorage.getItem("formData");
+  if (!dataStr) {
+    return;
+  }
+  try {
+    const data = JSON.parse(dataStr);
+    // Does not work for checkboxes or radio buttons correctly, but our form does have any
+    for (const element of dom.form.querySelectorAll("input")) {
+      const name = element.getAttribute("name");
+      if (name && name in data) {
+        element.value = data[name];
+      }
+    }
+    for (const element of dom.form.querySelectorAll("textarea")) {
+      const name = element.getAttribute("name");
+      if (name && name in data) {
+        element.value = data[name];
+      }
+    }
+    for (const element of dom.form.querySelectorAll("select")) {
+      const name = element.getAttribute("name");
+      if (name && name in data) {
+        element.value = data[name];
+      }
+    }
+  } catch (e) {
+    console.error("Error loading form data from localStorage:", e);
+  }
+}
+
+function clearLocalStorage() {
+  localStorage.removeItem("formData");
+}
+
 function createFileUrl(name: string) {
   const url = new URL(
     `${XFC_METADATA.urls.context}form/includes/ressource`,
@@ -310,6 +394,7 @@ interface Dom {
   cssInput: HTMLTextAreaElement;
   cssCode: HTMLElement;
   cssOutputRoot: ShadowRoot;
+  form: HTMLFormElement;
   jsOutput: HTMLElement;
   jsOutputError: HTMLElement;
   jsOutputConsole: HTMLElement;
