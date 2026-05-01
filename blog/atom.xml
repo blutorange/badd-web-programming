@@ -2,11 +2,28 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://blutorange.github.io/badd-web-programming/blog/</id>
     <title>Webprogrammierung Blog</title>
-    <updated>2026-04-22T00:00:00.000Z</updated>
+    <updated>2026-05-01T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://blutorange.github.io/badd-web-programming/blog/"/>
     <subtitle>Webprogrammierung Blog</subtitle>
     <icon>https://blutorange.github.io/badd-web-programming/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[Update 01. Mai 2026]]></title>
+        <id>https://blutorange.github.io/badd-web-programming/blog/update-2026-05-01/</id>
+        <link href="https://blutorange.github.io/badd-web-programming/blog/update-2026-05-01/"/>
+        <updated>2026-05-01T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Update der Seite vom 01. Mai 2026]]></summary>
+        <content type="html"><![CDATA[<p>Update der Seite vom 01. Mai 2026</p>
+<ul>
+<li class="">Abschnitt zu Supply-Chain-Angriffen im Kapitel <code>Sicherheit</code> hinzugefügt.</li>
+<li class="">Abschnitt zu <code>Memoization / Optimierung</code> im Kapitel <code>UI-Frameworks</code> beim Abschnitt <code>React</code> hinzugefügt.</li>
+</ul>]]></content>
+        <author>
+            <name>Andre Wachsmuth</name>
+            <uri>https://github.com/blutorange</uri>
+        </author>
+        <category label="Update" term="Update"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Update 22. April 2026]]></title>
         <id>https://blutorange.github.io/badd-web-programming/blog/update-2026-04-22/</id>

@@ -5,8 +5,8 @@
 <meta name="generator" content="Docusaurus v3.10.0">
 <title data-rh="true">Kapitel 8 - Sicherheit | Webprogrammierung</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://blutorange.github.io/badd-web-programming/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://blutorange.github.io/badd-web-programming/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://blutorange.github.io/badd-web-programming/docs/security/"><meta data-rh="true" property="og:locale" content="de"><meta data-rh="true" name="docusaurus_locale" content="de"><meta data-rh="true" name="docsearch:language" content="de"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Kapitel 8 - Sicherheit | Webprogrammierung"><meta data-rh="true" name="description" content="Grundlegende Konzepte der Sicherheit von Webseiten."><meta data-rh="true" property="og:description" content="Grundlegende Konzepte der Sicherheit von Webseiten."><link data-rh="true" rel="icon" href="/badd-web-programming/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://blutorange.github.io/badd-web-programming/docs/security/"><link data-rh="true" rel="alternate" href="https://blutorange.github.io/badd-web-programming/docs/security/" hreflang="de"><link data-rh="true" rel="alternate" href="https://blutorange.github.io/badd-web-programming/docs/security/" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Webprogrammierung - Vorlesung","item":"https://blutorange.github.io/badd-web-programming/docs/web-programming/"},{"@type":"ListItem","position":2,"name":"Kapitel 8 - Sicherheit","item":"https://blutorange.github.io/badd-web-programming/docs/security"}]}</script><link rel="alternate" type="application/rss+xml" href="/badd-web-programming/blog/rss.xml" title="Webprogrammierung RSS Feed">
 <link rel="alternate" type="application/atom+xml" href="/badd-web-programming/blog/atom.xml" title="Webprogrammierung Atom Feed"><link rel="stylesheet" href="/badd-web-programming/assets/css/styles.9995c412.css">
-<script src="/badd-web-programming/assets/js/runtime~main.f5de515d.js" defer="defer"></script>
-<script src="/badd-web-programming/assets/js/main.38eebef1.js" defer="defer"></script>
+<script src="/badd-web-programming/assets/js/runtime~main.479d9f38.js" defer="defer"></script>
+<script src="/badd-web-programming/assets/js/main.affee9ae.js" defer="defer"></script>
 </head>
 <body>
 <svg style="display: none;"><defs>
@@ -69,6 +69,71 @@ aus dem vorigen Kapitel.</p>
 <h2 class="anchor anchorTargetStickyNavbar_SAay" id="header">Header<a href="#header" class="hash-link" aria-label="Direkter Link zur Header" title="Direkter Link zur Header" translate="no">​</a></h2>
 <p>Webbrowser unterstützen verschiedene HTTP-Header, die wir verwenden können, um die
 Sicherheit unserer Webseite zu erhöhen.</p>
+<h2 class="anchor anchorTargetStickyNavbar_SAay" id="supply-chain-angriffe">Supply-Chain-Angriffe<a href="#supply-chain-angriffe" class="hash-link" aria-label="Direkter Link zur Supply-Chain-Angriffe" title="Direkter Link zur Supply-Chain-Angriffe" translate="no">​</a></h2>
+<p>Die Supply-Chain meint die Abhängigkeiten oder Bibliotheken, die wir in unserer Anwendung verwenden. Aufgrund
+komplexer Anforderungen ist es oft kaum möglich, alle Funktionalitäten von Grund auf selber zu implementieren
+(&quot;das Rad neu erfinden&quot;). Wir verwenden oft Bibliotheken, die Aufgaben für uns übernehmen.</p>
+<p>Diese Bibliotheken werden aber von anderen Personen (Drittanbietern) erstellt und gepflegt. Falls ein
+Angreifer sich Zugriff auf diese Bibliothek verschaffen und dort Schadcode einschleusen kann, hat er faktisch
+auch in unserer Anwendung Schadcode eingeschleust.</p>
+<p>Solche Szenarien sind nicht nur hypothetisch,
+<a href="https://medium.com/@krishnasagarrayudu/npm-supply-chain-attacks-a-quick-history-2010-to-2025-bae6077500d3" target="_blank" rel="noopener noreferrer" class="">sondern tatsächlich schon vorgekommen</a>:</p>
+<ul>
+<li class=""><a href="https://www.cisa.gov/news-events/alerts/2021/10/22/malware-discovered-popular-npm-package-ua-parser-js?utm_source=chatgpt.com" target="_blank" rel="noopener noreferrer" class="">ua-parser-js hijack</a> (Oktober 2021)<!-- -->
+<ul>
+<li class="">Der Angreifer hatte Zugriff auf den NPM-Account des Entwicklers und hat eine neue Version veröffentlicht, die
+einen Bitcoin-Miner enthielt und Daten vom Rechner stahl. <code>ua-parser-js</code> parsed User-Agent-Strings wird transitiv
+von vielen anderen Paketen verwendet.</li>
+</ul>
+</li>
+<li class=""><a href="https://jfrog.com/blog/new-compromised-packages-in-largest-npm-attack-in-history/" target="_blank" rel="noopener noreferrer" class="">Large Scale Supply Chain 2025</a> (September 2025)<!-- -->
+<ul>
+<li class="">Der Angreifer hatte Trojaner in etwa 20 verschiedene, weitverbreitete NPM-Pakete eingeschleust.</li>
+</ul>
+</li>
+<li class=""><a href="https://github.com/axios/axios/issues/10636" target="_blank" rel="noopener noreferrer" class="">axios npm supply chain compromise</a> (März 2026)<!-- -->
+<ul>
+<li class="">Der Angreifer hatte Zugriff auf den NPM-Account des Entwicklers und hat eine neue Version veröffentlicht, die
+einen Trojaner enthielt.</li>
+</ul>
+</li>
+</ul>
+<p>Was können wir tun, um uns vor solchen Angriffen zu schützen?</p>
+<p><strong>Reduktion und Auswahl der Abhängigkeiten</strong></p>
+<p>Je weniger Abhängigkeiten wir verwenden, desto kleiner ist die Angriffsfläche. Bevor wir eine
+neue Bibliothek hinzufügen, sollten wir prüfen, ob wir diese wirklich brauchen. Wie viel Arbeit
+erspart diese uns? Wie aufwendig wäre es, wenn wir den Code selber schreiben würden?</p>
+<p>Wir sollten auch prüfen, wie viele Abhängigkeiten die Bibliothek selber hat und solche bevorzugen,
+die möglichst wenig weitere Abhängigkeiten haben.</p>
+<p><strong>Pinnen von Versionen</strong></p>
+<p>Typischerweise werden Version in der <code>package.json</code>-Datei mit einem Caret (<code>^</code>) oder Tilde (<code>~</code>) angegeben, um
+Updates auf die neueste Version zu erlauben.</p>
+<p>Wenn ein Angreifer eine mit Schadcode behaftete neue Version veröffentlicht, dauert es oft nicht lange, bis das
+entdeckt und die Version von NPM gelöscht wird. Falls wir aber die Versionen mit einem Caret oder Tilde angegeben
+haben, kann es sein, dass die betroffene Version in dieser Zeit bereits installiert wurde.</p>
+<p>Hier kann uns das Pinnen von Versionen helfen. Statt <code>^1.2.3</code> oder <code>~1.2.3</code> geben wir die genaue Version <code>1.2.3</code>
+an. Solange wir nicht explizit die Version erhöhen, werden keine neue Versionen heruntergeladen und installiert.</p>
+<p><strong>Deaktivieren von Install-Skripten</strong></p>
+<p>Package-Manager wie NPM oder Yarn erlauben es, dass Pakete sogenannte Install-Skripte enthalten. Diese Skripte
+werden automatisch ausgeführt, wenn das Paket installiert wird. Das hat praktischen Nutzen, ermöglicht aber
+die Ausführung von beliebigem Code von Drittanbietern zu einem Zeitpunkt, wo wir das nicht erwarten würden.</p>
+<p>Daher sollten wir die Ausführung von Install-Skripten standardmäßig deaktivieren. Mittlerweile wurde die
+Ausführung von Skripten bei den meisten Package-Managern bereits standardmäßig deaktiviert.</p>
+<p>Bei NPM in der <code>.npmrc</code>-Datei mit der Option
+<a href="https://docs.npmjs.com/cli/v11/using-npm/config#ignore-scripts" target="_blank" rel="noopener noreferrer" class="">ignore-scripts</a>:</p>
+<div class="language-text codeBlockContainer_ZGJx theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_kX1v"><pre tabindex="0" class="prism-code language-text codeBlock_TAPP thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_AdAo"><div class="token-line" style="color:#393A34"><span class="token plain">ignore-scripts=true</span><br></div></code></pre></div></div>
+<p>Bei Yarn in der <code>.yarnrc.yaml</code>-Datei mit der Option
+<a href="https://yarnpkg.com/configuration/yarnrc#enableScripts" target="_blank" rel="noopener noreferrer" class="">enableScripts</a>. Mit der
+<a href="https://yarnpkg.com/configuration/manifest#dependenciesMeta" target="_blank" rel="noopener noreferrer" class="">dependenciesMeta</a> in der
+<code>package.json</code>-Datei können wir die Ausführung von Skripten für bestimmte Pakete erlauben,
+falls notwendig.</p>
+<div class="language-yaml codeBlockContainer_ZGJx theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_kX1v"><pre tabindex="0" class="prism-code language-yaml codeBlock_TAPP thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_AdAo"><div class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">enableScripts</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token boolean important" style="color:#36acaa">false</span><br></div></code></pre></div></div>
+<p>Bei pnpm in der <code>pnpm-workspace.yaml</code> oder <code>.npmrc</code>-Datei mit der Option
+<a href="https://pnpm.io/settings#dangerouslyallowallbuilds" target="_blank" rel="noopener noreferrer" class="">dangerouslyAllowAllBuilds</a>. Mit
+<a href="https://pnpm.io/settings#allowbuilds" target="_blank" rel="noopener noreferrer" class="">allowBuilds</a> können wir die Ausführung von Skripten
+für bestimmte Pakete erlauben, falls notwendig.</p>
+<div class="language-yaml codeBlockContainer_ZGJx theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_kX1v"><pre tabindex="0" class="prism-code language-yaml codeBlock_TAPP thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_AdAo"><div class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">dangerouslyAllowAllBuilds</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token boolean important" style="color:#36acaa">false</span><br></div></code></pre></div></div>
+<p>Siehe auch <a href="https://pnpm.io/supply-chain-security" target="_blank" rel="noopener noreferrer" class="">pnpm - Mitigating supply chain attacks</a>.</p>
 <h3 class="anchor anchorTargetStickyNavbar_SAay" id="cors">CORS<a href="#cors" class="hash-link" aria-label="Direkter Link zur CORS" title="Direkter Link zur CORS" translate="no">​</a></h3>
 <p>Standardmäßig erlauben Browser es nicht, dass eine Webseite bzw. unser JavaScript-Code
 auf Ressourcen und URLs einer anderen Webseite zugreift. Falls ein Server das erlauben
@@ -226,6 +291,6 @@ herauszufinden.</p>
 Zusätzlich können wir aber auch noch Maßnahmen ergreifen, um den Impakt eines
 XSS-Angriffs zu verringern. Markieren wir sicherheitsrelevante Cookie wie
 Session-Cookies als <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Practical_implementation_guides/Cookies#httponly" target="_blank" rel="noopener noreferrer" class="">HttpOnly</a>,
-erlaubt der Browser nicht mehr den Zugriff per JavaScript.</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_HJkF"><a href="https://github.com/blutorange/badd-web-programming/tree/main/packages/lecture/docs/web-programming/security/index.mdx" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_UohW" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Diese Seite bearbeiten</a></div><div class="col lastUpdated_g62E"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Dokumentation Seiten"><a class="pagination-nav__link pagination-nav__link--prev" href="/badd-web-programming/docs/framework/web-components/"><div class="pagination-nav__sublabel">Zurück</div><div class="pagination-nav__label">Abschnitt 5 - Standardisierung (Native Komponenten)</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/badd-web-programming/docs/exercise/"><div class="pagination-nav__sublabel">Weiter</div><div class="pagination-nav__label">Übungsaufgaben</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_TN1Q thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#https" class="table-of-contents__link toc-highlight">HTTPS</a></li><li><a href="#header" class="table-of-contents__link toc-highlight">Header</a><ul><li><a href="#cors" class="table-of-contents__link toc-highlight">CORS</a></li><li><a href="#hsts" class="table-of-contents__link toc-highlight">HSTS</a></li><li><a href="#csp" class="table-of-contents__link toc-highlight">CSP</a></li></ul></li><li><a href="#xss" class="table-of-contents__link toc-highlight">XSS</a><ul><li><a href="#szenario" class="table-of-contents__link toc-highlight">Szenario</a></li><li><a href="#nonce" class="table-of-contents__link toc-highlight">Nonce</a></li><li><a href="#http-only-cookies" class="table-of-contents__link toc-highlight">HTTP-Only-Cookies</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 Vorlesung Webprogrammierung, Inc. Built with <a href="https://docusaurus.io/" target="_blank" rel="noreferrer noopener no">Docusaurus</a>.</div></div></div></footer></div>
+erlaubt der Browser nicht mehr den Zugriff per JavaScript.</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_HJkF"><a href="https://github.com/blutorange/badd-web-programming/tree/main/packages/lecture/docs/web-programming/security/index.mdx" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_UohW" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Diese Seite bearbeiten</a></div><div class="col lastUpdated_g62E"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Dokumentation Seiten"><a class="pagination-nav__link pagination-nav__link--prev" href="/badd-web-programming/docs/framework/web-components/"><div class="pagination-nav__sublabel">Zurück</div><div class="pagination-nav__label">Abschnitt 5 - Standardisierung (Native Komponenten)</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/badd-web-programming/docs/exercise/"><div class="pagination-nav__sublabel">Weiter</div><div class="pagination-nav__label">Übungsaufgaben</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_TN1Q thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#https" class="table-of-contents__link toc-highlight">HTTPS</a></li><li><a href="#header" class="table-of-contents__link toc-highlight">Header</a></li><li><a href="#supply-chain-angriffe" class="table-of-contents__link toc-highlight">Supply-Chain-Angriffe</a><ul><li><a href="#cors" class="table-of-contents__link toc-highlight">CORS</a></li><li><a href="#hsts" class="table-of-contents__link toc-highlight">HSTS</a></li><li><a href="#csp" class="table-of-contents__link toc-highlight">CSP</a></li></ul></li><li><a href="#xss" class="table-of-contents__link toc-highlight">XSS</a><ul><li><a href="#szenario" class="table-of-contents__link toc-highlight">Szenario</a></li><li><a href="#nonce" class="table-of-contents__link toc-highlight">Nonce</a></li><li><a href="#http-only-cookies" class="table-of-contents__link toc-highlight">HTTP-Only-Cookies</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 Vorlesung Webprogrammierung, Inc. Built with <a href="https://docusaurus.io/" target="_blank" rel="noreferrer noopener no">Docusaurus</a>.</div></div></div></footer></div>
 </body>
 </html>
