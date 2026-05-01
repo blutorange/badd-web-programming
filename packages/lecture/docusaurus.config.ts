@@ -34,7 +34,6 @@ const config: Config = {
   deploymentBranch: "gh-pages",
 
   onBrokenLinks: "throw",
-  onBrokenMarkdownLinks: "warn",
 
   trailingSlash: true,
 
@@ -77,6 +76,12 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
+
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: "throw",      
+    },    
+  },
 
   plugins: [resourceLoaderPlugin, "docusaurus-plugin-image-zoom"],
 
