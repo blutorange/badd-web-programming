@@ -277,6 +277,54 @@ Von links nach rechts:
 5. Erzeugung von DOM-API befehlen, um den Unterschied zu beseitigen (hier: Text mittels [textContent](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent) setzen)
 6. DOM und VDOM sind nun wieder gleich
 
+### Memoization / Optimierung
+
+Betrachten wir nochmal das Zähler-Beispiel:
+
+```jsx
+function Counter({color}) {
+  const [count, setCount] = useState(0);
+  return (
+    <div>
+      <output>Zähler ist <span style={{color}}>{count}</span></output>
+      <button type="button" onClick={() => setCount(count + 1)}>Hochzählen</button>
+    </div>
+  );
+}
+```
+
+Für sich alleine genommen ist das kein Problem. Wenn eine Anwendung aber größer wird, kann die Performanz leiden.
+React rendert die Komponenten oft neu, wenn sich die Properties ändern. Im obigen Beispiel erzeugen wir jedes Mal
+eine neue Funktion für den `onClick`-Handler. Auch wenn die Funktion inhaltlich das Gleiche tut, handelt es sich
+jedes Mal eine neue Instanz. Ähnlich verhält es sich bei dem Inline-Style, jedes Mal wird ein neues Objekt erzeugt.
+
+React bietet hier Funktionen und Hooks an, um solche Probleme zu lösen:
+
+```jsx
+const Counter = memo(function Counter({color}) {
+  const [count, setCount] = useState(0);
+  const countStyle = useMemo(() => ({color}), [color]);
+  const onButtonClick = useCallback(() => setCount(count + 1), [count]);
+  return (
+    <div>
+      <output>Zähler ist <span style={countStyle}>{count}</span></output>
+      <button type="button" onClick={onButtonClick}>Hochzählen</button>
+    </div>
+  );
+});
+```
+
+[useMemo](https://react.dev/reference/react/useMemo) und [useCallback](https://react.dev/reference/react/useCallback)
+sorgen dafür, dass der Wert (Objekt oder Funktion) immer die gleiche Instanz bleibt, solange sich die
+Abhängigkeiten (hier: `color` bzw. `count`) nicht ändern. [memo](https://react.dev/reference/react/memo) sorgt
+dafür, dass die Komponente nur neu gerendert wird, wenn sich die Properties ändern.
+
+Das Problem bei solchen Optimierungen ist, dass der Schreibaufwand höher ist und die Lesbarkeit des Codes leidet.
+Mittlerweile bietet React einen Compiler an, der solche Optimierungen automatisch vornimmt. Technisch ist dieser
+aktuell als Babel-Plugin umgesetzt.
+
+> https://react.dev/learn/react-compiler/introduction
+
 ## Ergebnisse
 
 Nachdem wir uns nun mit den Grundlagen von React vertraut gemacht haben, schauen

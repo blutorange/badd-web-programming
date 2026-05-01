@@ -48,6 +48,89 @@ bei Verwendung von NVD kennen sollten:
 Weitere Datenbanken für CVE sind etwa [cve.org](https://www.cve.org/)
 oder die [Snyk Vulnerability Database](https://security.snyk.io/vuln).
 
+## Supply-Chain-Angriffe
+
+Die Supply-Chain meint die Abhängigkeiten oder Bibliotheken, die wir in unserer Anwendung verwenden. Aufgrund
+komplexer Anforderungen ist es oft kaum möglich, alle Funktionalitäten von Grund auf selber zu implementieren
+("das Rad neu erfinden"). Wir verwenden oft Bibliotheken, die Aufgaben für uns übernehmen.
+
+Diese Bibliotheken werden aber von anderen Personen (Drittanbietern) erstellt und gepflegt. Falls ein
+Angreifer sich Zugriff auf diese Bibliothek verschaffen und dort Schadcode einschleusen kann, hat er faktisch
+auch in unserer Anwendung Schadcode eingeschleust.
+
+Solche Szenarien sind nicht nur hypothetisch,
+[sondern tatsächlich schon vorgekommen](https://medium.com/@krishnasagarrayudu/npm-supply-chain-attacks-a-quick-history-2010-to-2025-bae6077500d3):
+
+* [ua-parser-js hijack](https://www.cisa.gov/news-events/alerts/2021/10/22/malware-discovered-popular-npm-package-ua-parser-js?utm_source=chatgpt.com) (Oktober 2021)
+  * Der Angreifer hatte Zugriff auf den NPM-Account des Entwicklers und hat eine neue Version veröffentlicht, die
+    einen Bitcoin-Miner enthielt und Daten vom Rechner stahl. `ua-parser-js` parsed User-Agent-Strings wird transitiv
+    von vielen anderen Paketen verwendet.
+* [Large Scale Supply Chain 2025](https://jfrog.com/blog/new-compromised-packages-in-largest-npm-attack-in-history/) (September 2025)
+  * Der Angreifer hatte Trojaner in etwa 20 verschiedene, weitverbreitete NPM-Pakete eingeschleust.
+* [axios npm supply chain compromise](https://github.com/axios/axios/issues/10636) (März 2026)
+  * Der Angreifer hatte Zugriff auf den NPM-Account des Entwicklers und hat eine neue Version veröffentlicht, die
+    einen Trojaner enthielt.
+
+Was können wir tun, um uns vor solchen Angriffen zu schützen?
+
+__Reduktion und Auswahl der Abhängigkeiten__
+
+Je weniger Abhängigkeiten wir verwenden, desto kleiner ist die Angriffsfläche. Bevor wir eine
+neue Bibliothek hinzufügen, sollten wir prüfen, ob wir diese wirklich brauchen. Wie viel Arbeit
+erspart diese uns? Wie aufwendig wäre es, wenn wir den Code selber schreiben würden?
+
+Wir sollten auch prüfen, wie viele Abhängigkeiten die Bibliothek selber hat und solche bevorzugen,
+die möglichst wenig weitere Abhängigkeiten haben.
+
+__Pinnen von Versionen__
+
+Typischerweise werden Version in der `package.json`-Datei mit einem Caret (`^`) oder Tilde (`~`) angegeben, um
+Updates auf die neueste Version zu erlauben.
+
+Wenn ein Angreifer eine mit Schadcode behaftete neue Version veröffentlicht, dauert es oft nicht lange, bis das
+entdeckt und die Version von NPM gelöscht wird. Falls wir aber die Versionen mit einem Caret oder Tilde angegeben
+haben, kann es sein, dass die betroffene Version in dieser Zeit bereits installiert wurde.
+
+Hier kann uns das Pinnen von Versionen helfen. Statt `^1.2.3` oder `~1.2.3` geben wir die genaue Version `1.2.3`
+an. Solange wir nicht explizit die Version erhöhen, werden keine neue Versionen heruntergeladen und installiert. 
+
+__Deaktivieren von Install-Skripten__
+
+Package-Manager wie NPM oder Yarn erlauben es, dass Pakete sogenannte Install-Skripte enthalten. Diese Skripte
+werden automatisch ausgeführt, wenn das Paket installiert wird. Das hat praktischen Nutzen, ermöglicht aber
+die Ausführung von beliebigem Code von Drittanbietern zu einem Zeitpunkt, wo wir das nicht erwarten würden.
+
+Daher sollten wir die Ausführung von Install-Skripten standardmäßig deaktivieren. Mittlerweile wurde die
+Ausführung von Skripten bei den meisten Package-Managern bereits standardmäßig deaktiviert.
+
+Bei NPM in der `.npmrc`-Datei mit der Option
+[ignore-scripts](https://docs.npmjs.com/cli/v11/using-npm/config#ignore-scripts):
+
+```text
+ignore-scripts=true
+```
+
+Bei Yarn in der `.yarnrc.yaml`-Datei mit der Option
+[enableScripts](https://yarnpkg.com/configuration/yarnrc#enableScripts). Mit der
+[dependenciesMeta](https://yarnpkg.com/configuration/manifest#dependenciesMeta) in der
+`package.json`-Datei können wir die Ausführung von Skripten für bestimmte Pakete erlauben,
+falls notwendig.
+
+```yaml
+enableScripts: false
+```
+
+Bei pnpm in der `pnpm-workspace.yaml` oder `.npmrc`-Datei mit der Option
+[dangerouslyAllowAllBuilds](https://pnpm.io/settings#dangerouslyallowallbuilds). Mit
+[allowBuilds](https://pnpm.io/settings#allowbuilds) können wir die Ausführung von Skripten
+für bestimmte Pakete erlauben, falls notwendig.
+
+```yaml
+dangerouslyAllowAllBuilds: false
+```
+
+Siehe auch [pnpm - Mitigating supply chain attacks](https://pnpm.io/supply-chain-security).
+
 ## HTTPS
 
 HTTPS hatten wir bereits als abgesichertes Protokoll im Kapitel zu HTTP kennengelernt.
@@ -58,11 +141,10 @@ Für weitere Informationen sieh hierzu den Abschnitt
 <Link to="/docs/http/protocol/#https--tls" rel="noopener noreferrer">HTTP / TLS</Link>
 aus dem vorigen Kapitel.
 
-## Header
+## HTTP-Header
 
 Webbrowser unterstützen verschiedene HTTP-Header, die wir verwenden können, um die
 Sicherheit unserer Webseite zu erhöhen.
-
 
 ### CORS
 
