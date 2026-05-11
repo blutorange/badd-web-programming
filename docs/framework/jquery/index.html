@@ -5,8 +5,8 @@
 <meta name="generator" content="Docusaurus v3.10.1">
 <title data-rh="true">Abschnitt 1 - jQuery | Webprogrammierung</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://blutorange.github.io/badd-web-programming/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://blutorange.github.io/badd-web-programming/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://blutorange.github.io/badd-web-programming/docs/framework/jquery/"><meta data-rh="true" property="og:locale" content="de"><meta data-rh="true" name="docusaurus_locale" content="de"><meta data-rh="true" name="docsearch:language" content="de"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Abschnitt 1 - jQuery | Webprogrammierung"><meta data-rh="true" name="description" content="jQuery, das Schweizer Taschenmesser"><meta data-rh="true" property="og:description" content="jQuery, das Schweizer Taschenmesser"><link data-rh="true" rel="icon" href="/badd-web-programming/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://blutorange.github.io/badd-web-programming/docs/framework/jquery/"><link data-rh="true" rel="alternate" href="https://blutorange.github.io/badd-web-programming/docs/framework/jquery/" hreflang="de"><link data-rh="true" rel="alternate" href="https://blutorange.github.io/badd-web-programming/docs/framework/jquery/" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Webprogrammierung - Vorlesung","item":"https://blutorange.github.io/badd-web-programming/docs/web-programming/"},{"@type":"ListItem","position":2,"name":"Kapitel 7 - UI-Frameworks","item":"https://blutorange.github.io/badd-web-programming/docs/ui-frameworks"},{"@type":"ListItem","position":3,"name":"Abschnitt 1 - jQuery","item":"https://blutorange.github.io/badd-web-programming/docs/framework/jquery"}]}</script><link rel="alternate" type="application/rss+xml" href="/badd-web-programming/blog/rss.xml" title="Webprogrammierung RSS Feed">
 <link rel="alternate" type="application/atom+xml" href="/badd-web-programming/blog/atom.xml" title="Webprogrammierung Atom Feed"><link rel="stylesheet" href="/badd-web-programming/assets/css/styles.9995c412.css">
-<script src="/badd-web-programming/assets/js/runtime~main.4d042650.js" defer="defer"></script>
-<script src="/badd-web-programming/assets/js/main.040f195a.js" defer="defer"></script>
+<script src="/badd-web-programming/assets/js/runtime~main.5a8ccada.js" defer="defer"></script>
+<script src="/badd-web-programming/assets/js/main.00a2e529.js" defer="defer"></script>
 </head>
 <body>
 <svg style="display: none;"><defs>
@@ -198,28 +198,28 @@ wir fest, dass die Bibliothek noch verbreitet ist.</p>
 <p>Statistische Daten finden wir etwa bei <a href="https://w3techs.com/" target="_blank" rel="noopener noreferrer" class="">W3Techs - World Wide Web Technology Surveys</a>,
 konkret auf der Unterseite <a href="https://w3techs.com/technologies/overview/javascript_library" target="_blank" rel="noopener noreferrer" class="">Usage statistics and market shares of JavaScript libraries</a>:</p>
 <blockquote>
-<p>jQuery is used by 74.4% of all the websites [that we monitor]</p>
+<p>jQuery is used by 69.4% of all the websites [that we monitor]</p>
 </blockquote>
 <p>Dies ist bei W3Techs Platz 1 aller JavaScript-Frameworks. Um diese Zahl besser
 einschätzen zu können, muss aber auch erwähnt werden, dass basierend auf den Daten
 der gleichen Seite:</p>
 <blockquote>
-<p>WordPress is used by 43.5% of all the websites [that we monitor]</p>
+<p>WordPress is used by 42.2% of all the websites [that we monitor]</p>
 </blockquote>
 <p><a href="https://developer.wordpress.org/plugins/javascript/" target="_blank" rel="noopener noreferrer" class="">WordPress liefert jQuery</a>
 <a href="https://developer.wordpress.org/themes/basics/including-css-javascript/#default-scripts-included-and-registered-by-wordpress" target="_blank" rel="noopener noreferrer" class="">standardmäßig mit aus.</a></p>
-<p>Ein weiterer interessanter Datenpunkt ist das <a href="https://survey.stackoverflow.co/2024/technology" target="_blank" rel="noopener noreferrer" class="">2024 Developer Survey</a>
+<p>Ein weiterer interessanter Datenpunkt ist das <a href="https://survey.stackoverflow.co/2025/technology" target="_blank" rel="noopener noreferrer" class="">2025 Developer Survey</a>
 von Stack Overflow. Stack Overflow ist ein beliebte Seite, wo Fragen von Programmierern
 gestellt und beantwortet werden. In dieser Umfrage wurden Teilnehmer von Stack Overflow
 gefragt, mit welchen Technologien sie im letzten Jahr gearbeitet haben und im
-nächsten Jahr arbeiten werden. Hier ist <a href="https://survey.stackoverflow.co/2024/technology#1-web-frameworks-and-technologies" target="_blank" rel="noopener noreferrer" class="">React auf Platz 2 mit knapp 40% und
-jQuery auf Platz 3 mit 21%.</a></p>
+nächsten Jahr arbeiten werden. Hier ist <a href="https://survey.stackoverflow.co/2025/technology#1-web-frameworks-and-technologies" target="_blank" rel="noopener noreferrer" class="">React auf Platz 2 mit knapp 45% und
+jQuery auf Platz 3 mit 23%.</a></p>
 <p>Bei <a href="https://stateofjs.com/" target="_blank" rel="noopener noreferrer" class="">State of JavaScript - The annual developer survey of the JavaScript ecosystem</a>
 findet man ähnliche Daten. Das ist eine jährliche Umfrage, an der Entwickler aus
-der ganzen Welt teilnehmen. <a href="https://2024.stateofjs.com/en-US/other-tools/#libraries" target="_blank" rel="noopener noreferrer" class="">Bezüglich jQuery finden</a>
-wir hier, dass nur 17% der Teilnehmer jQuery regelmäßig verwendet. Bei Front-end frameworks,
-die wir uns noch anschauen, <a href="https://2024.stateofjs.com/en-US/libraries/front-end-frameworks/#front_end_frameworks_ratios" target="_blank" rel="noopener noreferrer" class="">wurde etwa</a>
-React von 82% der Teilnehmer schon genutzt, Svelte von 26%.</p>
+der ganzen Welt teilnehmen. <a href="https://2025.stateofjs.com/en-US/other-tools/#libraries" target="_blank" rel="noopener noreferrer" class="">Bezüglich jQuery finden</a>
+wir hier, dass nur 16% der Teilnehmer jQuery regelmäßig verwendet. Bei Front-end frameworks,
+die wir uns noch anschauen, <a href="https://2025.stateofjs.com/en-US/libraries/front-end-frameworks/#front_end_frameworks_ratios" target="_blank" rel="noopener noreferrer" class="">wurde etwa</a>
+React von 85% der Teilnehmer schon genutzt, Vue.js von 52%, Svelte von 27%.</p>
 <p>Um diese Ergebnisse zusammenzufassen: jQuery wird häufig noch im Low-Code-Bereich
 verwendet, wo kleinere Funktionalitäten und Interaktivität umzusetzen ist. Bei komplexeren
 und größeren Webapp erhalten andere UI-Frameworks mehr Verwendung. In den nächsten

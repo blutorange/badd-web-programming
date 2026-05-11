@@ -4,10 +4,24 @@
         <title>Webprogrammierung Blog</title>
         <link>https://blutorange.github.io/badd-web-programming/blog/</link>
         <description>Webprogrammierung Blog</description>
-        <lastBuildDate>Fri, 01 May 2026 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 11 May 2026 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>de</language>
+        <item>
+            <title><![CDATA[Update 11. Mai 2026]]></title>
+            <link>https://blutorange.github.io/badd-web-programming/blog/update-2026-05-11/</link>
+            <guid>https://blutorange.github.io/badd-web-programming/blog/update-2026-05-11/</guid>
+            <pubDate>Mon, 11 May 2026 00:00:00 GMT</pubDate>
+            <description><![CDATA[Update der Seite vom 11. Mai 2026]]></description>
+            <content:encoded><![CDATA[<p>Update der Seite vom 11. Mai 2026</p>
+<ul>
+<li class="">Ideen für die Ping-Pong-Aufgabe hinzugefügt.</li>
+<li class="">Pac-Man-Aufgabe hinzugefügt.</li>
+<li class="">Aktualisierung der Relevanz / Nutzung von jQuery auf aktuellen Datenstand.</li>
+</ul>]]></content:encoded>
+            <category>Update</category>
+        </item>
         <item>
             <title><![CDATA[Update 01. Mai 2026]]></title>
             <link>https://blutorange.github.io/badd-web-programming/blog/update-2026-05-01/</link>
