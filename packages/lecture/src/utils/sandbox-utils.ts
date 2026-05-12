@@ -444,6 +444,7 @@ function transformSvelte(
       const result = svelteCompile(svelteFile, {
         generate: "client",
         runes: true,
+        modernAst: true,
         filename: `${fileName}.svelte`,
         hmr: false,
         dev: false,

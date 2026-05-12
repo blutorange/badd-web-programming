@@ -87,7 +87,7 @@ class HelloWorld extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     // name ist entweder "value" oder "label", nie etwas anderes,
     // da wir nur diese beiden Attribute in observedAttributes definiert haben.
-    console.log(`Attribut ${name} wurde geändert von ${oldValue} zu ${newValue});
+    console.log(`Attribut ${name} wurde geändert von ${oldValue} zu ${newValue}`);
   }
 }
 ```
